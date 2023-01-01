@@ -8,12 +8,25 @@ namespace aaaTgBot.Handlers
     {
         public static async Task Distribute(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            var message = update.Message ?? throw new NotImplementedException();
-
-            if (update.Message.Type == MessageType.Text)
+            var chatId = update.Message.Chat.Id;
+            if (update.Type == UpdateType.Message)
             {
-                await MainHandler.MessageProcessing(message.Chat.Id, message);
+                Console.WriteLine(update.Message.Text.ToString());
+                await MainHandler.MessageProcessing(chatId, update.Message);
             };
+
+            if (update.Type == UpdateType.CallbackQuery)
+            {
+                Console.WriteLine(update.CallbackQuery.Data);
+                await MainHandler.CallbackQueryProcessing(message.chat.id, update.CallbackQuery);
+            };
+
+
+            //if (update.MyChatMember != null)  /// такое иногда бывает, почему хз
+            //{
+            //    Console.WriteLine(update.MyChatMember);
+            //};
+
         }
     }
 }

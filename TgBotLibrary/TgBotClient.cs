@@ -6,7 +6,7 @@ using Telegram.Bot.Types.Enums;
 
 namespace TgBotLibrary
 {
-    public static class Bot
+    public static class TgBotClient
     {
         public static TelegramBotClient BotClient { private set; get; } = null!;
 

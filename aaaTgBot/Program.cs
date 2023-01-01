@@ -2,4 +2,4 @@
 using TgBotLibrary;
 
 
-await Bot.StartBot(AppSettings.BotToken, Distributor.Distribute, null!);
+await TgBotClient.StartBot(AppSettings.BotToken, Distributor.Distribute, null!);
