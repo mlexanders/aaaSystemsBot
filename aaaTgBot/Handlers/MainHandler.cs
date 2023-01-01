@@ -20,13 +20,13 @@ namespace aaaTgBot.Handlers
             await response;
         }
 
-        public static async Task CallbackQueryProcessing(int chatId, CallbackQuery callbackQuery)
+        public static async Task CallbackQueryProcessing(long chatId, CallbackQuery callbackQuery)
         {
             var messageCollector = new MessageCollector(chatId, callbackQuery.Message.MessageId);
 
             Task response = ("@" + callbackQuery.Data) switch
             {
-                InlineButtonsTexts.Forward => messageCollector.SendStartMenu(),
+                InlineButtonsTexts.Forward => messageCollector.SendStartMessage(),
                 _ => NewMethod(TgBotClient.BotClient, chatId, callbackQuery.Message)
             };
 
