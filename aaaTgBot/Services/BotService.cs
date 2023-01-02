@@ -2,10 +2,11 @@
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using TgBotLibrary;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace aaaTgBot.Services
 {
-    public class BotService
+    public class BotService : IBotService
     {
         private readonly long chatId;
         private readonly TelegramBotClient bot;
@@ -18,28 +19,25 @@ namespace aaaTgBot.Services
 
         #region SendMessage
 
-        public async Task SendMessageAsync(string text)
+        public async Task SendMessage(string text)
         {
             await bot.SendTextMessageAsync(chatId, text);
         }
 
-        public async Task SendMessageAsync(string text, IReplyMarkup markup = null)
+        public async Task SendMessage(string text, IReplyMarkup markup)
         {
             await bot.SendTextMessageAsync(chatId, text, replyMarkup: markup);
         }
 
-        public async Task SendMessageAsync(string text, ParseMode? parseMode = null, bool? disableWebPagePreview = null, bool? disableNotification = null, ReplyKeyboardMarkup markup = null)
+        public async Task SendMessage(string text, ParseMode? parseMode = null, bool? disableWebPagePreview = null, bool? disableNotification = null, ReplyKeyboardMarkup markup = null)
         {
             await bot.SendTextMessageAsync(chatId, text, parseMode: parseMode, disableWebPagePreview: disableWebPagePreview, disableNotification: disableNotification, replyMarkup: markup);
         }
         #endregion
 
-        public async Task DeleteMessageAsync(int messageId)
+        public async Task DeleteMessage(int messageId)
         {
             await bot.DeleteMessageAsync(chatId, messageId);
         }
-
-
-
     }
 }

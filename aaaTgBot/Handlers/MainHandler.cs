@@ -24,9 +24,9 @@ namespace aaaTgBot.Handlers
         {
             var messageCollector = new MessageCollector(chatId, callbackQuery.Message.MessageId);
 
-            Task response = ("@" + callbackQuery.Data) switch
+            Task response = callbackQuery.Data switch
             {
-                InlineButtonsTexts.Forward => messageCollector.SendStartMessage(),
+                "@" + InlineButtonsTexts.Forward => messageCollector.TryToStartRegistration(),
                 _ => NewMethod(TgBotClient.BotClient, chatId, callbackQuery.Message)
             };
 

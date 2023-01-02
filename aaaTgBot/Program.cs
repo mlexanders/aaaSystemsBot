@@ -1,5 +1,5 @@
-﻿using aaaTgBot.Handlers;
+﻿using aaaTgBot.Services;
 using TgBotLibrary;
 
 
-await TgBotClient.StartBot(AppSettings.BotToken, Distributor.Distribute, null!);
+await TgBotClient.StartBot(AppSettings.BotToken, DistributionService.Distribute, null!);

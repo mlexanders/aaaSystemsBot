@@ -1,16 +1,19 @@
 ﻿using aaaTgBot.Data;
 using aaaTgBot.Services;
+using Telegram.Bot.Types;
 
 namespace aaaTgBot.Handlers
 {
     public class MessageCollector
     {
         private readonly BotService botService;
+        private readonly long chatId;
         private readonly int messageId;
 
         public MessageCollector(long chatId, int messageId)
         {
             botService = new BotService(chatId);
+            this.chatId = chatId;
             this.messageId = messageId;
         }
 
@@ -18,13 +21,27 @@ namespace aaaTgBot.Handlers
         {
             var buttonsGenerator = new ButtonsGenerator();
             buttonsGenerator.SetInlineButtons(InlineButtonsTexts.Forward);
-            await botService.SendMessageAsync(Texts.StartMessage, buttonsGenerator.GetButtons());
+            await botService.SendMessage(Texts.StartMessage, buttonsGenerator.GetButtons());
         }
 
         public async Task DeleteMessage()
         {
-            await botService.DeleteMessageAsync(messageId);
+            await botService.DeleteMessage(messageId);
         }
+        public async Task TryToStartRegistration()
+        {
+            ////UsersService usersService = SingletontService.GetUsersService();
+            ////var user = await usersService.GetByChatId(chatId);
+            //if (user == null)
+            //{
+            DistributionService.BusyUsersIdAndService.Add(chatId, new RegistrationHandler(chatId));
+            //}
+            //else
+            //{
+            //    await bot.SendMessage("Ты уже зареган");
+            //}
+        }
+
 
         //public Task SendStartMenu()
         //{
