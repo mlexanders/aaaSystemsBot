@@ -10,7 +10,7 @@ namespace aaaTgBot.Handlers
     {
         public RegistrationModel model = new();
         private string registrationMessage;
-        private long chatId;
+        private readonly long chatId;
         private bool isSkipCurrentAction;
 
         public RegistrationHandler(long chatId) : base(new BotService(chatId))
@@ -22,8 +22,7 @@ namespace aaaTgBot.Handlers
         {
             isSkipCurrentAction = registrationMessage.ReplyMarkup?.InlineKeyboard.First().First().CallbackData == "@" + InlineButtonsTexts.SkipInput.Item2;
             
-            this.registrationMessage = registrationMessage.Type == MessageType.Contact ?
-                registrationMessage.Contact.PhoneNumber! : registrationMessage.Text;
+            this.registrationMessage = isSkipCurrentAction ? null : (registrationMessage!.Type! == MessageType.Contact ? registrationMessage!.Contact!.PhoneNumber! : registrationMessage!.Text!);
             await base.ProcessMessage(registrationMessage);
         }
 
