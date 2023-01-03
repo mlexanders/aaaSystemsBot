@@ -14,7 +14,6 @@ namespace aaaTgBot.Services
         {
             var chatId = update.Message is not null ? update.Message.Chat.Id : update.CallbackQuery is not null ? update.CallbackQuery.Message.Chat.Id : throw new NotImplementedException();
 
-
             if (update.Type == UpdateType.Message)
             {
                 Console.WriteLine(update.Message.Type == MessageType.Text ? update.Message.Text.ToString() : update.Message.Type);

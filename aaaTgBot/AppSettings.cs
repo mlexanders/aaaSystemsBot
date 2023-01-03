@@ -1,4 +1,4 @@
-﻿namespace TgBotLibrary
+﻿namespace aaaTgBot
 {
     public static class AppSettings
     {
