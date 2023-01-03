@@ -20,7 +20,7 @@ namespace aaaTgBot.Handlers
 
         public override async Task ProcessMessage(Message registrationMessage)
         {
-            isSkipCurrentAction = registrationMessage.ReplyMarkup?.InlineKeyboard.First().First().CallbackData == InlineButtonsTexts.SkipInput.Item2;
+            isSkipCurrentAction = registrationMessage.ReplyMarkup?.InlineKeyboard.First().First().CallbackData == "@" + InlineButtonsTexts.SkipInput.Item2;
             
             this.registrationMessage = registrationMessage.Type == MessageType.Contact ?
                 registrationMessage.Contact.PhoneNumber! : registrationMessage.Text;
@@ -29,14 +29,17 @@ namespace aaaTgBot.Handlers
 
         protected override void RegistrateProcessing()
         {
-            AddProcessing("Как к вам обращаться? ", () => model.Name = registrationMessage);
-            AddProcessing("Контактный телефон ", () => model.Phone = registrationMessage, button: ButtonsGenerator.GetKeyboardButtonWithPhoneRequest("Отправить телефон"));
+            AddProcessing("Как к вам обращаться?", () => model.Name = registrationMessage);
+            AddProcessing("Контактный телефон", () => model.Phone = registrationMessage, button: ButtonsGenerator.GetKeyboardButtonWithPhoneRequest("Отправить телефон"));
             var bg = new ButtonsGenerator();
             bg.SetInlineButtons(InlineButtonsTexts.SkipInput);
             AddProcessing("Задайте вопрос или опишите вашу проблему", () => model.Additional = registrationMessage, button: bg.GetButtons());
-            if (isSkipCurrentAction) AddProcessing("", () => model.Additional = model.Additional + " / " + registrationMessage, button: bg.GetButtons());
+            while (!isSkipCurrentAction)
+            {
+                AddProcessing("Что то еще?", () => model.Additional = model.Additional + " / " + registrationMessage, button: bg.GetButtons());
+            }
 
-            AddProcessing("", () => model.Phone = registrationMessage, CompleteRegistration);
+            CompleteRegistration();
         }
 
         private async void CompleteRegistration()

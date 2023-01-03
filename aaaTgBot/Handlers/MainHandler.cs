@@ -1,7 +1,5 @@
 ﻿using aaaTgBot.Data;
-using Telegram.Bot;
 using Telegram.Bot.Types;
-using TgBotLibrary;
 
 namespace aaaTgBot.Handlers
 {
@@ -14,7 +12,7 @@ namespace aaaTgBot.Handlers
             Task response = message.Text switch
             {
                 "/start" => messageCollector.SendStartMessage(),
-                _ => NewMethod(TgBotClient.BotClient, chatId, message)
+                _ => messageCollector.SendMessage(Texts.UnknownMessage)
             };
 
             await response;
@@ -27,15 +25,10 @@ namespace aaaTgBot.Handlers
             Task response = callbackQuery.Data switch
             {
                 "@" + InlineButtonsTexts.Forward => messageCollector.TryToStartRegistration(),
-                _ => NewMethod(TgBotClient.BotClient, chatId, callbackQuery.Message)
+                _ => messageCollector.SendMessage(Texts.UnknownMessage)
             };
 
             await response;
-        }
-
-        private static async Task<Message> NewMethod(ITelegramBotClient botClient, long id, Message message)
-        {
-            return await botClient.SendTextMessageAsync(id, message.Text!);
         }
     }
 }

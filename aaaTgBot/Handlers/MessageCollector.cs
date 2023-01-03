@@ -28,24 +28,15 @@ namespace aaaTgBot.Handlers
         {
             await botService.DeleteMessage(messageId);
         }
-        public async Task TryToStartRegistration()
+
+        public async Task SendMessage(string text)
         {
-            ////UsersService usersService = SingletontService.GetUsersService();
-            ////var user = await usersService.GetByChatId(chatId);
-            //if (user == null)
-            //{
-            DistributionService.BusyUsersIdAndService.Add(chatId, new RegistrationHandler(chatId));
-            //}
-            //else
-            //{
-            //    await bot.SendMessage("Ты уже зареган");
-            //}
+            await botService.SendMessage(text);
         }
 
-
-        //public Task SendStartMenu()
-        //{
-        //    //
-        //}
+        public async Task TryToStartRegistration()
+        {
+            DistributionService.BusyUsersIdAndService.Add(chatId, new RegistrationHandler(chatId));
+        }
     }
 }
