@@ -1,6 +1,8 @@
-﻿namespace aaaSystemsCommon.Models
+﻿using aaaSystemsCommon.Interfaces;
+
+namespace aaaSystemsCommon.Models
 {
-    public class Chat
+    public class Chat : IEntity
     {
         public int Id { get; set; }
         public int ChatId { get; set; }
