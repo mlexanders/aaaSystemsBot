@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace aaaSystemsApi.Repository
 {
-    public class BaseCrudRepository<TEntity> where TEntity : class , IEntity
+    public class BaseCrudRepository<TEntity> where TEntity : class, IEntity
     {
         private readonly AppDbContext dbContext;
         private readonly DbSet<TEntity> dbSet;
@@ -22,31 +22,20 @@ namespace aaaSystemsApi.Repository
 
         public virtual async Task Create(List<TEntity> entities)
         {
-            foreach (var entity in entities)
-            {
-                dbContext.Attach(entity);
-                MarkModified(entity);
-            }
-
-            dbSet.AddRange(entities);
+            await dbSet.AddRangeAsync(entities);
             await dbContext.SaveChangesAsync();
-
-            foreach (var entity in entities)
-            {
-                dbContext.Entry(entity).State = EntityState.Detached;
-            }
         }
 
         public virtual async Task<TEntity> ReadFirst(Expression<Func<TEntity, bool>> query, params Expression<Func<TEntity, object>>[] includedProperties)
         {
-            var entity = await IncludProperties(includedProperties).FirstOrDefaultAsync(query);
+            var entity = await IncludeProperties(includedProperties).FirstOrDefaultAsync(query);
             if (entity != null) dbContext.Entry(entity).State = EntityState.Detached;
             return entity;
         }
 
         public virtual async Task<List<TEntity>> Read(Func<TEntity, bool> query = null, params Expression<Func<TEntity, object>>[] includedProperties)
         {
-            var entities = query != null ? IncludProperties(includedProperties).Where(query).ToList() : IncludProperties(includedProperties).ToList();
+            var entities = query != null ? IncludeProperties(includedProperties).Where(query).ToList() : IncludeProperties(includedProperties).ToList();
             foreach (var entity in entities)
             {
                 dbContext.Entry(entity).State = EntityState.Detached;
@@ -104,7 +93,7 @@ namespace aaaSystemsApi.Repository
             }
         }
 
-        protected IQueryable<TEntity> IncludProperties(Expression<Func<TEntity, object>>[] includeProperties)
+        protected IQueryable<TEntity> IncludeProperties(Expression<Func<TEntity, object>>[] includeProperties)
         {
             return includeProperties.Aggregate(dbSet.AsNoTracking(), (query, includeProperty) => query.Include(includeProperty));
         }

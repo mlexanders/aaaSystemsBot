@@ -9,6 +9,6 @@ namespace aaaSystemsApi
         public DbSet<Chat> Chats { get; set; } = null!;
         public DbSet<Message> Messages { get; set; } = null!;
 
-        public AppDbContext(DbContextOptions<AppDbContext> options)  : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
 }

@@ -1,20 +1,19 @@
 ﻿using aaaSystemsApi.Repository;
 using aaaSystemsCommon.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace aaaSystemsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : BaseCrudController<User> 
+    public class UserController : BaseCrudController<User>
     {
-        private readonly BaseCrudRepository<User> repository;
+        public UserController(BaseCrudRepository<User> repository) : base(repository) { }
 
-        public UserController(BaseCrudRepository<User> repository) : base(repository)
+        [HttpGet("GetByChatId")]
+        public async Task<User> GetByChatId(int chatId)
         {
-            this.repository = repository;
+            return await repository.ReadFirst(u => u.ChatId == chatId);
         }
-
     }
 }

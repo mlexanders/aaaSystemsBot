@@ -6,7 +6,7 @@ namespace aaaSystemsApi.Controllers
 {
     public class BaseCrudController<TEntity> : ControllerBase where TEntity : class, IEntity
     {
-        private readonly BaseCrudRepository<TEntity> repository;
+        protected readonly BaseCrudRepository<TEntity> repository;
 
         public BaseCrudController(BaseCrudRepository<TEntity> repository)
         {
@@ -30,7 +30,7 @@ namespace aaaSystemsApi.Controllers
 
         [HttpGet]
         public virtual Task<List<TEntity>> Get()
-        {     
+        {
             return repository.Read();
         }
 
