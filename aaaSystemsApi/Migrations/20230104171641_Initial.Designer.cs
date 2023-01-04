@@ -11,8 +11,8 @@ using aaaSystemsApi;
 namespace aaaSystemsApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230104143536_first")]
-    partial class first
+    [Migration("20230104171641_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,6 +64,9 @@ namespace aaaSystemsApi.Migrations
 
                     b.Property<string>("Additional")
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("ChatId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");

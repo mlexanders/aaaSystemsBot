@@ -5,7 +5,7 @@
 namespace aaaSystemsApi.Migrations
 {
     /// <inheritdoc />
-    public partial class first : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,6 +31,7 @@ namespace aaaSystemsApi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    ChatId = table.Column<long>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     Phone = table.Column<string>(type: "TEXT", nullable: true),
                     Additional = table.Column<string>(type: "TEXT", nullable: true),

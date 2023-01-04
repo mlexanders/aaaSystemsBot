@@ -62,6 +62,9 @@ namespace aaaSystemsApi.Migrations
                     b.Property<string>("Additional")
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("ChatId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 

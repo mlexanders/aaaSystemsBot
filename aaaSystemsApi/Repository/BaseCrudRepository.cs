@@ -6,10 +6,10 @@ namespace aaaSystemsApi.Repository
 {
     public class BaseCrudRepository<TEntity> where TEntity : class , IEntity
     {
-        private readonly DbContext dbContext;
+        private readonly AppDbContext dbContext;
         private readonly DbSet<TEntity> dbSet;
 
-        public BaseCrudRepository(DbContext dbContext)
+        public BaseCrudRepository(AppDbContext dbContext)
         {
             this.dbContext = dbContext;
             dbSet = dbContext.Set<TEntity>();
@@ -62,6 +62,7 @@ namespace aaaSystemsApi.Repository
             await dbContext.SaveChangesAsync();
             dbContext.Entry(entity).State = EntityState.Detached;
         }
+
 
         public virtual Task Delete(int id)
         {
