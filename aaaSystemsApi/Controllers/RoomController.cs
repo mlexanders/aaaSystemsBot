@@ -19,6 +19,5 @@ namespace aaaSystemsApi.Controllers
         {
             return await repository.ReadFirst(c => c.Id == id, m => m.RoomMessages, p => p.Participants);
         }
-        // return await repository.ReadFirst(c => c.Id == id, m => m.RoomMessages != null ? m.RoomMessages : null, p => p.Participants != null);
     }
 }

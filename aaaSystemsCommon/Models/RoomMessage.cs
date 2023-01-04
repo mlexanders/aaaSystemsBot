@@ -1,7 +1,9 @@
 ﻿using aaaSystemsCommon.Interfaces;
+using aaaSystemsCommon.Utils;
 
 namespace aaaSystemsCommon.Models
 {
+    [EntityRoot("RoomMessage")]
     public class RoomMessage : IEntity
     {
         public int Id { get; set; }

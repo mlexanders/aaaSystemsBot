@@ -1,8 +1,10 @@
 ﻿using aaaSystemsCommon.Interfaces;
 using aaaSystemsCommon.Models.Difinitions;
+using aaaSystemsCommon.Utils;
 
 namespace aaaSystemsCommon.Models
 {
+    [EntityRoot("User")]
     public class User : IEntity
     {
         public int Id { get; set; }
