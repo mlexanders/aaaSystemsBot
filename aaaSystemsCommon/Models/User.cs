@@ -10,6 +10,6 @@ namespace aaaSystemsCommon.Models
         public string? Name { get; set; }
         public string? Phone { get; set; }
         public string? Additional { get; set; }
-        public Role Role{ get; set; }
+        public Role Role { get; set; }
     }
 }

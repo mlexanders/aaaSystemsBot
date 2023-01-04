@@ -21,7 +21,7 @@ namespace aaaTgBot.Handlers
         public override async Task ProcessMessage(Message registrationMessage)
         {
             isSkipCurrentAction = registrationMessage.ReplyMarkup?.InlineKeyboard.First().First().CallbackData == "@" + InlineButtonsTexts.SkipInput.Item2;
-            
+
             this.registrationMessage = isSkipCurrentAction ? null : (registrationMessage!.Type! == MessageType.Contact ? registrationMessage!.Contact!.PhoneNumber! : registrationMessage!.Text!);
             await base.ProcessMessage(registrationMessage);
         }

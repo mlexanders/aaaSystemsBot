@@ -2,7 +2,6 @@
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using TgBotLibrary;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace aaaTgBot.Services
 {

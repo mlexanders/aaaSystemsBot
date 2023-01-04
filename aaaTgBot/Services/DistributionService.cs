@@ -17,7 +17,7 @@ namespace aaaTgBot.Services
             if (update.Type == UpdateType.Message)
             {
                 Console.WriteLine(update.Message.Type == MessageType.Text ? update.Message.Text.ToString() : update.Message.Type);
-                
+
                 if (!BusyUsersIdAndService.ContainsKey(chatId)) MainHandler.MessageProcessing(chatId, update.Message);
                 if (BusyUsersIdAndService.ContainsKey(chatId)) BusyUsersIdAndService[chatId].ProcessMessage(update.Message);
             };
