@@ -50,7 +50,29 @@ namespace aaaSystemsApi.Repository
             dbSet.Update(entity);
             await dbContext.SaveChangesAsync();
             dbContext.Entry(entity).State = EntityState.Detached;
+            //dbSet.Update(entity);
+            //dbContext.SaveChanges();
         }
+
+        //public virtual async Task Update(TEntity entityToUpdate)
+        //{
+        //    // Load existing entity from database into change tracker
+        //    var entity = dbSet.AsTracking()
+        //        .FirstOrDefault(x => x.Id == entityToUpdate.Id);
+        //    if (entity is null)
+        //        throw new KeyNotFoundException();
+        //    var entry = dbContext.Entry(entity);
+        //    // Copy (replace) primitive properties
+        //    entry.CurrentValues.SetValues(entityToUpdate);
+        //    // Copy (replace) owned collections
+        //    var ownedCollections = entry.Collections
+        //        .Where(c => c.Metadata.TargetEntityType.IsOwned());
+        //    foreach (var collection in ownedCollections)
+        //    {
+        //        collection.CurrentValue = (System.Collections.IEnumerable)collection.Metadata
+        //            .GetGetter().GetClrValue(entityToUpdate);
+        //    }
+        //}
 
 
         public virtual Task Delete(int id)

@@ -17,7 +17,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 //DI
 builder.Services.AddTransient<BaseCrudRepository<User>>();
-builder.Services.AddTransient<BaseCrudRepository<Chat>>();
+builder.Services.AddTransient<BaseCrudRepository<Room>>();
+builder.Services.AddTransient<BaseCrudRepository<RoomMessage>>();
+builder.Services.AddTransient<BaseCrudRepository<Participant>>();
 
 var app = builder.Build();
 

@@ -30,5 +30,13 @@ namespace aaaTgBot.Handlers
 
             await response;
         }
+
+        //private static Task AddMessageInChat(Message message)
+        //{
+        //    var chat = new Chat()
+        //    {
+                
+        //    };
+        //}
     }
 }
