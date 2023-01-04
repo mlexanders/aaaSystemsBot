@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace aaaSystemsApi.Controllers
 {
-    public class BaseCrudController<TEntity> : ControllerBase where TEntity : class, IEntity
+    public class BaseCrudController<TEntity> : ControllerBase, ICrud<TEntity, int> where TEntity : class, IEntity
     {
         protected readonly BaseCrudRepository<TEntity> repository;
 
@@ -15,14 +15,14 @@ namespace aaaSystemsApi.Controllers
 
 
         [HttpPost]
-        public virtual async Task Create(TEntity entity)
+        public virtual async Task Post(TEntity entity)
         {
             await repository.Create(entity);
         }
 
 
         [HttpPost("Many")]
-        public virtual async Task Create(List<TEntity> entities)
+        public virtual async Task Post(List<TEntity> entities)
         {
             await repository.Create(entities);
         }
@@ -41,11 +41,16 @@ namespace aaaSystemsApi.Controllers
             return await repository.ReadFirst(entity => entity.Id == id);
         }
 
-
         [HttpPatch]
         public virtual async Task Patch(TEntity entity)
         {
             await repository.Update(entity);
+        }
+
+        [HttpDelete]
+        public async Task Delete(int id)
+        {
+            await repository.Delete(id);
         }
     }
 }
