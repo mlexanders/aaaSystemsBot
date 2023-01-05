@@ -12,7 +12,16 @@ namespace aaaTgBot.Services
 
         public static async Task Distribute(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            var chatId = update.Message is not null ? update.Message.Chat.Id : update.CallbackQuery is not null ? update.CallbackQuery.Message.Chat.Id : throw new NotImplementedException();
+            long chatId = default;
+
+            if (update.Message is not null)
+            {
+                chatId = update.Message.Chat.Id;
+            }
+            else if (update.CallbackQuery is not null)
+            {
+                chatId = update.CallbackQuery.Message.Chat.Id;
+            }
 
             if (update.Type == UpdateType.Message)
             {

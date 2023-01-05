@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\aaaSystemsCommon\aaaSystemsCommon.csproj" />
     <ProjectReference Include="..\TgBotLibrary\TgBotLibrary.csproj" />
   </ItemGroup>
 

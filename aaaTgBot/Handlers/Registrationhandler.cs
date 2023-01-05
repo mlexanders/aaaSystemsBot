@@ -1,4 +1,6 @@
-﻿using aaaTgBot.Data;
+﻿using aaaSystemsCommon.Models.Difinitions;
+using aaaTgBot.Data;
+using aaaTgBot.Data.Models;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -45,6 +47,15 @@ namespace aaaTgBot.Handlers
         {
             try
             {
+                var usersService = TransientService.GetUsersService();
+                await usersService.Post(new aaaSystemsCommon.Models.User()
+                {
+                    ChatId = chatId,
+                    Name = model.Name,
+                    Phone = model.Phone,
+                    Additional= model.Additional,
+                    Role = Role.User
+                });
             }
             catch (HttpRequestException)
             {

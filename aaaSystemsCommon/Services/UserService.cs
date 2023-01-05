@@ -3,9 +3,9 @@ using aaaSystemsCommon.Models;
 
 namespace aaaSystemsCommon.Services
 {
-    public class UserService : BaseCRUDService<User>, IUser
+    public class UsersService : BaseCRUDService<User>, IUser
     {
-        public UserService(string backRoot, HttpClient httpClient, string entityRoot = null) : base(backRoot, httpClient, entityRoot) { }
+        public UsersService(string backRoot, HttpClient httpClient, string entityRoot = null) : base(backRoot, httpClient, entityRoot) { }
 
         public async Task<User> GetByChatId(long chatId)
         {

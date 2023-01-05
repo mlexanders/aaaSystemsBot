@@ -1,4 +1,4 @@
-﻿namespace aaaTgBot.Handlers
+﻿namespace aaaTgBot.Data.Models
 {
     public class RegistrationModel
     {
