@@ -1,9 +1,8 @@
-﻿using aaaTgBot.Handlers;
-using Telegram.Bot;
+﻿using Telegram.Bot;
 using Telegram.Bot.Types;
 using TgBotLibrary;
 
-namespace aaaTgBot.Services
+namespace aaaTgBot.Handlers
 {
     public static class UpdateHandler
     {
