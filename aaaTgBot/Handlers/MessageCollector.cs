@@ -35,7 +35,7 @@ namespace aaaTgBot.Handlers
 
         public async Task TryToStartRegistration()
         {
-            DistributionService.BusyUsersIdAndService.Add(chatId, new RegistrationHandler(chatId));
+            UpdateHandler.BusyUsersIdAndService.Add(chatId, new RegistrationHandler(chatId));
         }
     }
 }

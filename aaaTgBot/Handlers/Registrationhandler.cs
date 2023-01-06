@@ -56,10 +56,11 @@ namespace aaaTgBot.Handlers
             }
             catch (HttpRequestException)
             {
+                //TODO
             }
             finally
             {
-                DistributionService.BusyUsersIdAndService.Remove(chatId);
+                UpdateHandler.BusyUsersIdAndService.Remove(chatId);
             }
         }
     }
