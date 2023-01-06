@@ -3,7 +3,7 @@ using aaaSystemsCommon.Utils;
 using System.Net;
 using System.Text;
 
-namespace aaaSystemsCommon.Services
+namespace aaaSystemsCommon.Services.Base
 {
     public class BaseCRUDService<TEntity> : BaseService, ICrud<TEntity, int> where TEntity : class, IEntity
     {

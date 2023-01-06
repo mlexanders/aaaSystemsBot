@@ -1,4 +1,4 @@
-﻿using aaaSystemsCommon.Services;
+﻿using aaaSystemsCommon.Services.CrudServices;
 using System.Net;
 
 namespace aaaTgBot.Services

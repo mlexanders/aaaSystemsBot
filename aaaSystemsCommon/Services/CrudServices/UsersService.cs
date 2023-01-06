@@ -1,7 +1,7 @@
 ﻿using aaaSystemsCommon.Interfaces;
 using aaaSystemsCommon.Models;
 
-namespace aaaSystemsCommon.Services
+namespace aaaSystemsCommon.Services.CrudServices
 {
     public class UsersService : BaseCRUDService<User>, IUser
     {

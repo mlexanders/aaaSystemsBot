@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace aaaSystemsCommon.Services
+namespace aaaSystemsCommon.Services.Base
 {
     public class BaseService
     {
