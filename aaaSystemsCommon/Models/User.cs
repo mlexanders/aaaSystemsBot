@@ -4,7 +4,7 @@ using aaaSystemsCommon.Utils;
 
 namespace aaaSystemsCommon.Models
 {
-    [EntityRoot("User")]
+    [EntityRoot("Users")]
     public class User : IEntity
     {
         public int Id { get; set; }

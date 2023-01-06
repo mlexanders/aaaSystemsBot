@@ -7,9 +7,9 @@ namespace aaaSystemsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoomController : BaseCrudController<Room>, IRoom
+    public class RoomsController : BaseCrudController<Room>, IRoom
     {
-        public RoomController(BaseCrudRepository<Room> repository) : base(repository) { }
+        public RoomsController(BaseCrudRepository<Room> repository) : base(repository) { }
 
         public override async Task<List<Room>> Get()
         {

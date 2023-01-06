@@ -3,7 +3,7 @@ using aaaSystemsCommon.Utils;
 
 namespace aaaSystemsCommon.Models
 {
-    [EntityRoot("Participant")]
+    [EntityRoot("Participants")]
     public class Participant : IEntity
     {
         public int Id { get; set; }

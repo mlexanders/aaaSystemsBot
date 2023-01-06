@@ -7,9 +7,9 @@ namespace aaaSystemsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : BaseCrudController<User>, IUser
+    public class UsersController : BaseCrudController<User>, IUser
     {
-        public UserController(BaseCrudRepository<User> repository) : base(repository) { }
+        public UsersController(BaseCrudRepository<User> repository) : base(repository) { }
 
         [HttpGet("GetByChatId/{chatId}")]
         public async Task<User> GetByChatId(long chatId)

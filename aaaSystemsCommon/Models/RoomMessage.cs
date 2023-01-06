@@ -3,7 +3,7 @@ using aaaSystemsCommon.Utils;
 
 namespace aaaSystemsCommon.Models
 {
-    [EntityRoot("RoomMessage")]
+    [EntityRoot("RoomMessages")]
     public class RoomMessage : IEntity
     {
         public int Id { get; set; }
