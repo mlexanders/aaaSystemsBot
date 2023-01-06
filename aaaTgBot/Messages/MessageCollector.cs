@@ -1,15 +1,11 @@
-﻿using aaaTgBot.Services;
-
-namespace aaaTgBot.Handlers
+﻿namespace aaaTgBot.Handlers
 {
-    public partial class MessageCollector // extended class for working with messageId
+    public class MessageCollector : MessageCollectorBase
     {
         private readonly int messageId;
 
-        public MessageCollector(long chatId, int messageId)
+        public MessageCollector(long chatId, int messageId) : base(chatId)
         {
-            botService = new BotService(chatId);
-            this.chatId = chatId;
             this.messageId = messageId;
         }
 

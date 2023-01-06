@@ -4,12 +4,12 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace aaaTgBot.Handlers
 {
-    public partial class MessageCollector // Base msg collector
+    public class MessageCollectorBase
     {
-        private readonly BotService botService;
-        private readonly long chatId;
+        protected readonly BotService botService;
+        protected readonly long chatId;
 
-        public MessageCollector(long chatId)
+        public MessageCollectorBase(long chatId)
         {
             botService = new BotService(chatId);
             this.chatId = chatId;
