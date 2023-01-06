@@ -9,7 +9,7 @@ namespace aaaSystemsCommon.Services
 
         public async Task<User> GetByChatId(long chatId)
         {
-            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{Root}/ByChatId/{chatId}");
+            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{Root}/GetByChatId/{chatId}");
             return await Deserialize<User>(httpResponse);
         }
     }
