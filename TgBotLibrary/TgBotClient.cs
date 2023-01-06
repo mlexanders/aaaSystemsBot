@@ -33,7 +33,7 @@ namespace TgBotLibrary
             while (true) { Thread.Sleep(int.MaxValue); }
         }
 
-        static Task BaseHandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        private static Task BaseHandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             var ErrorMessage = exception switch
             {
