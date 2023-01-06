@@ -1,5 +1,4 @@
 ﻿using aaaSystemsCommon.Models.Difinitions;
-using aaaTgBot.Data;
 using aaaTgBot.Data.Models;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
@@ -10,37 +9,35 @@ namespace aaaTgBot.Handlers
 {
     public class RegistrationHandler : BaseSpecialHandler
     {
-        public RegistrationModel model = new();
+        private RegistrationModel model;
         private string registrationMessage;
         private readonly long chatId;
-        private bool isSkipCurrentAction;
 
         public RegistrationHandler(long chatId) : base(new BotService(chatId))
         {
+            model = new();
             this.chatId = chatId;
         }
 
         public override async Task ProcessMessage(Message registrationMessage)
         {
-            isSkipCurrentAction = registrationMessage.ReplyMarkup?.InlineKeyboard.First().First().CallbackData == "@" + InlineButtonsTexts.SkipInput.Item2;
+            this.registrationMessage = registrationMessage.Type switch
+            {
+                MessageType.Contact => registrationMessage.Contact!.PhoneNumber!,
+                MessageType.Text => registrationMessage.Text!,
+                _ => null!
+            };
 
-            this.registrationMessage = isSkipCurrentAction ? null : (registrationMessage!.Type! == MessageType.Contact ? registrationMessage!.Contact!.PhoneNumber! : registrationMessage!.Text!);
-            await base.ProcessMessage(registrationMessage);
+            if (registrationMessage is null)
+                currentTask.Start();
+            else 
+                await base.ProcessMessage(registrationMessage);
         }
 
         protected override void RegistrateProcessing()
         {
             AddProcessing("Как к вам обращаться?", () => model.Name = registrationMessage);
-            AddProcessing("Контактный телефон", () => model.Phone = registrationMessage, button: ButtonsGenerator.GetKeyboardButtonWithPhoneRequest("Отправить телефон"));
-            var bg = new ButtonsGenerator();
-            bg.SetInlineButtons(InlineButtonsTexts.SkipInput);
-            AddProcessing("Задайте вопрос или опишите вашу проблему", () => model.Additional = registrationMessage, button: bg.GetButtons());
-            while (!isSkipCurrentAction)
-            {
-                AddProcessing("Что то еще?", () => model.Additional = model.Additional + " / " + registrationMessage, button: bg.GetButtons());
-            }
-
-            CompleteRegistration();
+            AddProcessing("Контактный телефон", () => model.Phone = registrationMessage, CompleteRegistration, button: ButtonsGenerator.GetKeyboardButtonWithPhoneRequest("Отправить телефон"));
         }
 
         private async void CompleteRegistration()
