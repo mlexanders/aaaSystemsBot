@@ -1,4 +1,4 @@
-﻿namespace aaaTgBot.Handlers
+﻿namespace aaaTgBot.Messages
 {
     public class MessageCollector : MessageCollectorBase
     {

@@ -1,8 +1,9 @@
 ﻿using aaaTgBot.Data;
+using aaaTgBot.Handlers;
 using aaaTgBot.Services;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace aaaTgBot.Handlers
+namespace aaaTgBot.Messages
 {
     public class MessageCollectorBase
     {

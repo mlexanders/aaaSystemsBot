@@ -1,4 +1,5 @@
 ﻿using aaaSystemsApi.Repository;
+using aaaSystemsCommon.Interfaces;
 using aaaSystemsCommon.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace aaaSystemsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoomController : BaseCrudController<Room>
+    public class RoomController : BaseCrudController<Room>, IRoom
     {
         public RoomController(BaseCrudRepository<Room> repository) : base(repository) { }
 

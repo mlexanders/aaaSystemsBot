@@ -1,5 +1,6 @@
 ﻿using aaaSystemsCommon.Interfaces;
 using aaaSystemsCommon.Models;
+using aaaSystemsCommon.Services.Base;
 
 namespace aaaSystemsCommon.Services.CrudServices
 {
