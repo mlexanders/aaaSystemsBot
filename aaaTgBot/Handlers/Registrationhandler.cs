@@ -1,5 +1,6 @@
 ﻿using aaaSystemsCommon.Models.Difinitions;
 using aaaTgBot.Data.Models;
+using aaaTgBot.Messages;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -54,7 +55,7 @@ namespace aaaTgBot.Handlers
                     Additional= model.Additional,
                     Role = Role.User
                 });
-                await new MessageCollector(chatId).SendUserInfo(markup: new ReplyKeyboardRemove()) ;
+                await new MessageCollectorBase(chatId).SendUserInfo(markup: new ReplyKeyboardRemove()) ;
             }
             catch (HttpRequestException)
             {
