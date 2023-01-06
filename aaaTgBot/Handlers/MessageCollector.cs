@@ -1,12 +1,9 @@
-﻿using aaaTgBot.Data;
-using aaaTgBot.Services;
+﻿using aaaTgBot.Services;
 
 namespace aaaTgBot.Handlers
 {
-    public class MessageCollector
+    public partial class MessageCollector // extended class for working with messageId
     {
-        private readonly BotService botService;
-        private readonly long chatId;
         private readonly int messageId;
 
         public MessageCollector(long chatId, int messageId)
@@ -16,26 +13,11 @@ namespace aaaTgBot.Handlers
             this.messageId = messageId;
         }
 
-        public async Task SendStartMessage()
-        {
-            var buttonsGenerator = new ButtonsGenerator();
-            buttonsGenerator.SetInlineButtons(InlineButtonsTexts.Forward);
-            await botService.SendMessage(Texts.StartMessage, buttonsGenerator.GetButtons());
-        }
+        //TODO : EditMessage
 
         public async Task DeleteMessage()
         {
             await botService.DeleteMessage(messageId);
-        }
-
-        public async Task SendMessage(string text)
-        {
-            await botService.SendMessage(text);
-        }
-
-        public async Task TryToStartRegistration()
-        {
-            UpdateHandler.BusyUsersIdAndService.Add(chatId, new RegistrationHandler(chatId));
         }
     }
 }

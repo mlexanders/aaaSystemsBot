@@ -12,7 +12,7 @@ namespace aaaTgBot.Handlers
             Task response = message.Text switch
             {
                 "/start" => messageCollector.SendStartMessage(),
-                _ => messageCollector.SendMessage(Texts.UnknownMessage)
+                _ => messageCollector.SendInfoMessage(),
             };
 
             await response;

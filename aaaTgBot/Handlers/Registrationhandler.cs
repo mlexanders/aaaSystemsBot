@@ -3,6 +3,7 @@ using aaaTgBot.Data.Models;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 using TgBotLibrary;
 
 namespace aaaTgBot.Handlers
@@ -53,6 +54,7 @@ namespace aaaTgBot.Handlers
                     Additional= model.Additional,
                     Role = Role.User
                 });
+                await new MessageCollector(chatId).SendUserInfo(markup: new ReplyKeyboardRemove()) ;
             }
             catch (HttpRequestException)
             {
