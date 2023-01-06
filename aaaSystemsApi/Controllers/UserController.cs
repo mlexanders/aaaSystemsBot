@@ -11,7 +11,7 @@ namespace aaaSystemsApi.Controllers
     {
         public UserController(BaseCrudRepository<User> repository) : base(repository) { }
 
-        [HttpGet("GetByChatId")]
+        [HttpGet("GetByChatId/{chatId}")]
         public async Task<User> GetByChatId(long chatId)
         {
             return await repository.ReadFirst(u => u.ChatId == chatId);
