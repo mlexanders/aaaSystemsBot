@@ -1,5 +1,6 @@
 ﻿using aaaTgBot.Data;
 using aaaTgBot.Messages;
+using aaaTgBot.Services;
 using Telegram.Bot.Types;
 
 namespace aaaTgBot.Handlers
@@ -10,13 +11,20 @@ namespace aaaTgBot.Handlers
         {
             var messageCollector = new MessageCollector(chatId, message.MessageId);
 
-            Task response = message.Text switch
+            if (RoomDistributor.BusyUsers.Contains(chatId))  // TODO
             {
-                "/start" => messageCollector.SendStartMessage(),
-                _ => messageCollector.SendInfoMessage(),
-            };
+                await RoomDistributor.AddMessageRoom(chatId, message); 
+            }
+            else
+            {
+                Task response = message.Text switch
+                {
+                    "/start" => messageCollector.SendStartMessage(),
+                    _ => messageCollector.TryToStartRegistration(),
+                };
 
-            await response;
+                await response;
+            }
         }
 
         public static async Task CallbackQueryProcessing(long chatId, CallbackQuery callbackQuery)
@@ -26,10 +34,25 @@ namespace aaaTgBot.Handlers
             Task response = callbackQuery.Data switch
             {
                 "@" + InlineButtonsTexts.Forward => messageCollector.TryToStartRegistration(),
-                _ => messageCollector.SendMessage(Texts.UnknownMessage)
-            };
+                "@" + InlineButtonsTexts.Write => messageCollector.SendInfoMessageAndGoToRoom(callbackQuery.Message), //TODO: не оченеь название...
+                "@" + InlineButtonsTexts.Rooms => messageCollector.SendListRoom(),
+                _ => SpecialProcessing(chatId, callbackQuery.Data, messageCollector)
+            };;
 
             await response;
+        }
+
+        private static Task SpecialProcessing(long chatId, string? message, MessageCollector mc)
+        {
+            if (string.IsNullOrWhiteSpace(message)) return Task.CompletedTask;
+
+            if (message.Contains($"GetRoom"))
+            {
+                var a = string.Join("", message.Where(c => char.IsDigit(c)));
+                var chatIdClient = Convert.ToInt64(new string(a));
+                return mc.GoToRoom(chatId, chatIdClient); //TODO
+            }
+            return Task.CompletedTask;
         }
     }
 }

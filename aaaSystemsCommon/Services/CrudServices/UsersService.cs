@@ -13,5 +13,11 @@ namespace aaaSystemsCommon.Services.CrudServices
             HttpResponseMessage httpResponse = await httpClient.GetAsync($"{Root}/GetByChatId/{chatId}");
             return await Deserialize<User>(httpResponse);
         }
+
+        public async Task<List<User>> Admins()
+        {
+            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{Root}/Admins");
+            return await Deserialize<List<User>>(httpResponse);
+        }
     }
 }

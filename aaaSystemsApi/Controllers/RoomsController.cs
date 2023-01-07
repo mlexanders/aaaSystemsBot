@@ -20,5 +20,11 @@ namespace aaaSystemsApi.Controllers
         {
             return await repository.ReadFirst(c => c.Id == id, m => m.RoomMessages, p => p.Participants);
         }
+
+        [HttpGet("GetByChatId{chatId}")]
+        public async Task<Room> GetByChatId(long chatId)
+        {
+            return await repository.ReadFirst(r => r.ChatId == chatId, m => m.RoomMessages, p => p.Participants);
+        }
     }
 }

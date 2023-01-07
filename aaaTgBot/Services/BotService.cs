@@ -38,5 +38,10 @@ namespace aaaTgBot.Services
         {
             await bot.DeleteMessageAsync(chatId, messageId);
         }
+
+        public async Task Forward(long chatId, long fromChatId, int messageId)
+        {
+            await bot.ForwardMessageAsync(chatId, fromChatId, messageId);
+        }
     }
 }

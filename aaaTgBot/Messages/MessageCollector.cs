@@ -1,4 +1,8 @@
-﻿namespace aaaTgBot.Messages
+﻿using aaaSystemsCommon.Utils;
+using aaaTgBot.Data;
+using aaaTgBot.Services;
+
+namespace aaaTgBot.Messages
 {
     public class MessageCollector : MessageCollectorBase
     {
@@ -14,6 +18,17 @@
         public async Task DeleteMessage()
         {
             await botService.DeleteMessage(messageId);
+        }
+
+        public async Task GoToRoom(long chatId, long chatIdClient)
+        {
+            var roomService = TransientService.GetRoomsService();
+            var room = await roomService.GetByChatId(chatIdClient);
+
+            foreach (var msg in room.RoomMessages)
+            {
+                await botService.Forward(chatId, chatIdClient, msg.MessageId);
+            }
         }
     }
 }
