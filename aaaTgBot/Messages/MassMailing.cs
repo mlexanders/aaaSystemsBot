@@ -1,4 +1,5 @@
 ﻿using aaaSystemsCommon.Utils;
+using aaaTgBot.Services;
 using Telegram.Bot;
 using TgBotLibrary;
 using User = aaaSystemsCommon.Models.User;
@@ -16,9 +17,13 @@ namespace aaaTgBot.Messages
                       $"Сообщает: \n" +
                       $"{text}";
 
+            var bg = new ButtonsGenerator();
+            bg.SetInlineButtons(($"↪ Загрузить диалог", $"GetRoom:{client.ChatId}"));
+
+
             foreach (var chatId in chatIds)
             {
-                await bot.SendTextMessageAsync(chatId, msg);
+                await bot.SendTextMessageAsync(chatId, msg, replyMarkup: bg.GetButtons()); ;
             }
         }
     }
