@@ -29,10 +29,8 @@ namespace aaaTgBot.Messages
         public async Task SendInfoMessageAndGoToRoom(Message message)
         {
             await botService.SendMessage(Texts.InfoMessage);
-            if (message is not null) 
-            {
-                await RoomDistributor.CreateRoom(chatId, message); // msg не тот
-            }
+
+            UpdateHandler.BusyUsersIdAndService.Add(message.Chat.Id, new RoomHandler(message.Chat.Id));
         }
 
         public async Task SendUserInfo(long? otherChatId = null, IReplyMarkup markup = null!)

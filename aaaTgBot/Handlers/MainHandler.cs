@@ -5,18 +5,17 @@ using Telegram.Bot.Types;
 
 namespace aaaTgBot.Handlers
 {
-    public static class MainHandler
+    public class MainHandler
     {
         public static async Task MessageProcessing(long chatId, Message message)
         {
             var messageCollector = new MessageCollector(chatId, message.MessageId);
 
-            if (RoomDistributor.BusyUsers.Contains(chatId))  // TODO
-            {
-                await RoomDistributor.AddMessageRoom(chatId, message); 
-            }
-            else
-            {
+            //if (RoomDistributor.BusyUsers.Contains(chatId))  // TODO
+            //{
+            //}
+            //else
+            //{
                 Task response = message.Text switch
                 {
                     "/start" => messageCollector.SendStartMessage(),
@@ -24,7 +23,7 @@ namespace aaaTgBot.Handlers
                 };
 
                 await response;
-            }
+            //}
         }
 
         public static async Task CallbackQueryProcessing(long chatId, CallbackQuery callbackQuery)

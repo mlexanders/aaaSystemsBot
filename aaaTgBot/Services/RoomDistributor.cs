@@ -1,16 +1,23 @@
 ﻿using aaaSystemsCommon.Models;
+using aaaTgBot.Handlers;
 using aaaTgBot.Messages;
 using Telegram.Bot.Types;
+using TgBotLibrary;
 
 namespace aaaTgBot.Services
 {
-    internal class RoomDistributor
+    public class RoomHandler : IHandler
     {
-        public static List<long> BusyUsers = new();
-        public static async Task<Room> CreateRoom(long chatId, Message message)
-        {
-            if (!BusyUsers.Contains(chatId)) BusyUsers.Add(chatId);
+        private readonly long chatId;
 
+        public RoomHandler(long chatId)
+        {
+            this.chatId = chatId;
+            //UpdateHandler.BusyUsersIdAndService.Add(chatId, this);
+        }
+
+        public async Task ProcessMessage(Message message)
+        {
             var roomsService = TransientService.GetRoomsService();
             var userService = TransientService.GetUsersService();
             
@@ -41,7 +48,7 @@ namespace aaaTgBot.Services
                 await AddMessageRoom(chatId, message);
             }
 
-            return await roomsService.GetByChatId(chatId);
+            //return await roomsService.GetByChatId(chatId);
         }
 
         public static async Task<Room> AddMessageRoom(long chatId, Message message)
