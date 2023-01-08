@@ -2,6 +2,7 @@
 using aaaSystemsCommon.Utils;
 using aaaTgBot.Data;
 using aaaTgBot.Handlers;
+using User = aaaSystemsCommon.Models.User;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -86,23 +87,22 @@ namespace aaaTgBot.Messages
         {
             var roomService = TransientService.GetRoomsService();
             var userService = TransientService.GetUsersService();
+            var bg = new ButtonsGenerator();
+
             var rooms = await roomService.Get();
 
-            var bg = new ButtonsGenerator();
-            aaaSystemsCommon.Models.User user = default!;
-
-            string msg = null!;
-
-            foreach (var room in rooms)
+            if (rooms != null)
             {
-                user = await userService.GetByChatId(room.ChatId);
+                string msg = null!;
+                User user = null!;
 
-                bg.SetInlineButtons(($"↪ {user.Name} - {user.Phone}", $"GetRoom:{user.ChatId}"));
-                msg += $"{user.GetInfo()} \n";
-            }
+                foreach (var room in rooms)
+                {
+                    user = await userService.Get(room.ClientId);
 
-            if (msg != null)
-            {
+                    bg.SetInlineButtons(($"↪ {user.Name} - {user.Phone}", $"GetRoom:{user.ChatId}"));
+                    msg += $"{user.GetInfo()} \n";
+                }
                 await botService.SendMessage(msg, bg.GetButtons());
             }
         } 
