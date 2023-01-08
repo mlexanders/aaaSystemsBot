@@ -1,6 +1,5 @@
 ﻿using aaaTgBot.Data;
 using aaaTgBot.Messages;
-using aaaTgBot.Services;
 using Telegram.Bot.Types;
 
 namespace aaaTgBot.Handlers
@@ -11,19 +10,13 @@ namespace aaaTgBot.Handlers
         {
             var messageCollector = new MessageCollector(chatId, message.MessageId);
 
-            //if (RoomDistributor.BusyUsers.Contains(chatId))  // TODO
-            //{
-            //}
-            //else
-            //{
-                Task response = message.Text switch
-                {
-                    "/start" => messageCollector.SendStartMessage(),
-                    _ => messageCollector.TryToStartRegistration(),
-                };
+            Task response = message.Text switch
+            {
+                "/start" => messageCollector.SendStartMessage(),
+                _ => messageCollector.TryToStartRegistration(),
+            };
 
-                await response;
-            //}
+            await response;
         }
 
         public static async Task CallbackQueryProcessing(long chatId, CallbackQuery callbackQuery)
