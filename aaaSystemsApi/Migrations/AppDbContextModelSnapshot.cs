@@ -42,7 +42,7 @@ namespace aaaSystemsApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ChatId")
+                    b.Property<long>("ChatId")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("ClientId")
@@ -62,7 +62,7 @@ namespace aaaSystemsApi.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("MessageId")
+                    b.Property<int>("MessageId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("RoomId")

@@ -11,8 +11,8 @@ using aaaSystemsApi;
 namespace aaaSystemsApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230104222217_Initial")]
-    partial class Initial
+    [Migration("20230108175230_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,7 +45,7 @@ namespace aaaSystemsApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ChatId")
+                    b.Property<long>("ChatId")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("ClientId")
@@ -65,7 +65,7 @@ namespace aaaSystemsApi.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("MessageId")
+                    b.Property<int>("MessageId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("RoomId")
