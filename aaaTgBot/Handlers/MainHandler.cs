@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace aaaTgBot.Handlers
 {
-    public class MainHandler
+    public static class MainHandler
     {
         public static async Task MessageProcessing(long chatId, Message message)
         {
