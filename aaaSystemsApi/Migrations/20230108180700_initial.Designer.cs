@@ -11,7 +11,7 @@ using aaaSystemsApi;
 namespace aaaSystemsApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230108175230_initial")]
+    [Migration("20230108180700_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -48,7 +48,7 @@ namespace aaaSystemsApi.Migrations
                     b.Property<long>("ChatId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("ClientId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

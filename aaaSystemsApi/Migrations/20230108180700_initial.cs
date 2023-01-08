@@ -18,7 +18,7 @@ namespace aaaSystemsApi.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ChatId = table.Column<long>(type: "INTEGER", nullable: false),
-                    ClientId = table.Column<long>(type: "INTEGER", nullable: false)
+                    ClientId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

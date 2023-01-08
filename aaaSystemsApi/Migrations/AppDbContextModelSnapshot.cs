@@ -45,7 +45,7 @@ namespace aaaSystemsApi.Migrations
                     b.Property<long>("ChatId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("ClientId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
