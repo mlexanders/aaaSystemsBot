@@ -1,9 +1,9 @@
 ﻿using aaaSystemsCommon.Models;
 using aaaSystemsCommon.Models.Difinitions;
 using aaaSystemsCommon.Services.CrudServices;
+using aaaTgBot.Data.Exceptions;
 using aaaTgBot.Messages;
 using aaaTgBot.Services;
-using System.Runtime.Serialization;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using TgBotLibrary;
@@ -174,80 +174,6 @@ namespace aaaTgBot.Handlers
         private Task<Room> GetCurrentRoom()
         {
             return roomsService.GetByChatId(chatId);
-        }
-    }
-
-    [Serializable]
-    internal class RoomNotFound : Exception
-    {
-        public RoomNotFound()
-        {
-        }
-
-        public RoomNotFound(string? message) : base(message)
-        {
-        }
-
-        public RoomNotFound(string? message, Exception? innerException) : base(message, innerException)
-        {
-        }
-
-        protected RoomNotFound(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-    }
-
-    [Serializable]
-    internal class UserNotFound : Exception
-    {
-        private long id;
-
-        public UserNotFound()
-        {
-        }
-
-        public UserNotFound(long id)
-        {
-            this.id = id;
-        }
-
-        public UserNotFound(string? message) : base(message)
-        {
-        }
-
-        public UserNotFound(string? message, Exception? innerException) : base(message, innerException)
-        {
-        }
-
-        protected UserNotFound(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-    }
-
-    [Serializable]
-    public class ParticipantNotFound : Exception
-    {
-        public long ChatId { get; }
-
-        public ParticipantNotFound()
-        {
-        }
-
-        public ParticipantNotFound(string? message) : base(message)
-        {
-        }
-
-        public ParticipantNotFound(long id)
-        {
-            ChatId = id;
-        }
-
-        public ParticipantNotFound(string? message, Exception? innerException) : base(message, innerException)
-        {
-        }
-
-        protected ParticipantNotFound(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
         }
     }
 }
