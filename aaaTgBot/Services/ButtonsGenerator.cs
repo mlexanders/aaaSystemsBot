@@ -6,7 +6,7 @@ namespace aaaTgBot.Services
     {
         private readonly List<List<InlineKeyboardButton>> returnsButtons = new();
 
-        public static ReplyKeyboardMarkup GetKeyboardButtonWithPhoneRequest(string buttonText) => new (KeyboardButton.WithRequestContact(buttonText));
+        public static ReplyKeyboardMarkup GetKeyboardButtonWithPhoneRequest(string buttonText) => new(KeyboardButton.WithRequestContact(buttonText));
 
         public InlineKeyboardMarkup GetButtons()
         {

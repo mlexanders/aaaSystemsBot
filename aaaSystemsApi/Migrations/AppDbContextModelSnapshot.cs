@@ -26,7 +26,7 @@ namespace aaaSystemsApi.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("UserID")
+                    b.Property<long>("UserChatId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -42,10 +42,10 @@ namespace aaaSystemsApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ChatId")
+                    b.Property<long>("ChatId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("ClientId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -59,17 +59,23 @@ namespace aaaSystemsApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<long>("ChatId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("MessageId")
+                    b.Property<string>("From")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MessageId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("RoomId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Text")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 

@@ -13,7 +13,7 @@ namespace aaaTgBot.Handlers
             Task response = message.Text switch
             {
                 "/start" => messageCollector.SendStartMessage(),
-                _ => messageCollector.SendInfoMessage(),
+                _ => messageCollector.TryToStartRegistration(),
             };
 
             await response;
@@ -26,10 +26,32 @@ namespace aaaTgBot.Handlers
             Task response = callbackQuery.Data switch
             {
                 "@" + InlineButtonsTexts.Forward => messageCollector.TryToStartRegistration(),
-                _ => messageCollector.SendMessage(Texts.UnknownMessage)
+                "@" + InlineButtonsTexts.Write => messageCollector.JoinToRoom(callbackQuery.Message, callbackQuery.Message.Chat.Id),
+                "@" + InlineButtonsTexts.Rooms => messageCollector.SendRoomList(),
+                _ => SpecialProcessing(callbackQuery, messageCollector)
             };
-
             await response;
+        }
+
+        private static Task SpecialProcessing(CallbackQuery callbackQuery, MessageCollector mc)
+        {
+            var data = callbackQuery.Data;
+            if (string.IsNullOrWhiteSpace(data)) return Task.CompletedTask;
+
+            if (data.Contains("SendMessagesRoom"))
+            {
+                var clientChatId = Convert.ToInt64(string.Join("", data.Where(c => char.IsDigit(c))));
+                return mc.SendMessagesRoom(callbackQuery.Message.Chat.Id, clientChatId); //TODO
+            }
+            else if (data.Contains("JoinToRoom"))
+            {
+                var clientChatId = Convert.ToInt64(string.Join("", data.Where(c => char.IsDigit(c))));
+                return mc.JoinToRoom(callbackQuery.Message, clientChatId); //TODO
+            }
+            else
+            {
+                return Task.CompletedTask;
+            }
         }
     }
 }
