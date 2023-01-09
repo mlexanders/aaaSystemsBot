@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace aaaSystemsApi.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -71,7 +71,9 @@ namespace aaaSystemsApi.Migrations
                     MessageId = table.Column<int>(type: "INTEGER", nullable: false),
                     ChatId = table.Column<long>(type: "INTEGER", nullable: false),
                     DateTime = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    RoomId = table.Column<int>(type: "INTEGER", nullable: false)
+                    RoomId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Text = table.Column<string>(type: "TEXT", nullable: true),
+                    From = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
