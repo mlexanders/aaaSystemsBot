@@ -149,6 +149,10 @@ namespace aaaTgBot.Messages
                     {
                         await handler.ProcessMessage(message);
                     }
+                    else
+                    {
+                        await botService.SendMessage("Собеседник завершил диалог");
+                    }
                 }
                 else if (user.Role is Role.User)
                 {
