@@ -18,12 +18,20 @@ namespace aaaTgBot.Messages
                       $"{text}";
 
             var bg = new ButtonsGenerator();
-            bg.SetInlineButtons(($"↪ Загрузить диалог", $"GetRoom:{client.ChatId}"));
+            bg.SetInlineButtons(($"↪ Загрузить диалог", $"SendMessagesRoom:{client.ChatId}"));
 
 
             foreach (var chatId in chatIds)
             {
-                await bot.SendTextMessageAsync(chatId, msg, replyMarkup: bg.GetButtons()); ;
+                bot.SendTextMessageAsync(chatId, msg, replyMarkup: bg.GetButtons());
+            }
+        }
+
+        public static async Task SendMessages(List<long> chatIds, string text)
+        {
+            foreach (var chatId in chatIds)
+            {
+                bot.SendTextMessageAsync(chatId, text);
             }
         }
     }

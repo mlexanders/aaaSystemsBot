@@ -35,14 +35,22 @@ namespace TgBotLibrary
 
         private static Task BaseHandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
-            var ErrorMessage = exception switch
+            try
             {
-                ApiRequestException apiRequestException
-                    => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
-                _ => exception.ToString()
-            };
+                var ErrorMessage = exception switch
+                {
+                    ApiRequestException apiRequestException
+                        => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
+                    _ => exception.ToString()
+                };
+                Console.WriteLine(ErrorMessage);
 
-            Console.WriteLine(ErrorMessage);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             return Task.CompletedTask;
         }
     }

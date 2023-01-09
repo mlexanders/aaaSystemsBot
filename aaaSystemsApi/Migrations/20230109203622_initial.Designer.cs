@@ -11,7 +11,7 @@ using aaaSystemsApi;
 namespace aaaSystemsApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230108180700_initial")]
+    [Migration("20230109203622_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -29,7 +29,7 @@ namespace aaaSystemsApi.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("UserID")
+                    b.Property<long>("UserChatId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -62,6 +62,9 @@ namespace aaaSystemsApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<long>("ChatId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
@@ -69,9 +72,6 @@ namespace aaaSystemsApi.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("RoomId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

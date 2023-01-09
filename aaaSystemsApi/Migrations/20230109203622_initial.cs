@@ -48,7 +48,7 @@ namespace aaaSystemsApi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UserID = table.Column<long>(type: "INTEGER", nullable: false),
+                    UserChatId = table.Column<long>(type: "INTEGER", nullable: false),
                     RoomId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -69,7 +69,7 @@ namespace aaaSystemsApi.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     MessageId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
+                    ChatId = table.Column<long>(type: "INTEGER", nullable: false),
                     DateTime = table.Column<DateTime>(type: "TEXT", nullable: false),
                     RoomId = table.Column<int>(type: "INTEGER", nullable: false)
                 },

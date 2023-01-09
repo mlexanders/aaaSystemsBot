@@ -26,25 +26,32 @@ namespace aaaTgBot.Handlers
             Task response = callbackQuery.Data switch
             {
                 "@" + InlineButtonsTexts.Forward => messageCollector.TryToStartRegistration(),
-                "@" + InlineButtonsTexts.Write => messageCollector.SendInfoMessageAndGoToRoom(callbackQuery.Message), //TODO: не оченеь название...
-                "@" + InlineButtonsTexts.Rooms => messageCollector.SendListRoom(),
-                _ => SpecialProcessing(chatId, callbackQuery.Data, messageCollector)
-            };;
-
+                "@" + InlineButtonsTexts.Write => messageCollector.JoinToRoom(callbackQuery.Message, callbackQuery.Message.Chat.Id),
+                "@" + InlineButtonsTexts.Rooms => messageCollector.SendRoomList(),
+                _ => SpecialProcessing(callbackQuery, messageCollector)
+            };
             await response;
         }
 
-        private static Task SpecialProcessing(long chatId, string? message, MessageCollector mc)
+        private static Task SpecialProcessing(CallbackQuery callbackQuery, MessageCollector mc)
         {
-            if (string.IsNullOrWhiteSpace(message)) return Task.CompletedTask;
+            var data = callbackQuery.Data;
+            if (string.IsNullOrWhiteSpace(data)) return Task.CompletedTask;
 
-            if (message.Contains($"GetRoom"))
+            if (data.Contains("SendMessagesRoom"))
             {
-                var a = string.Join("", message.Where(c => char.IsDigit(c)));
-                var chatIdClient = Convert.ToInt64(new string(a));
-                return mc.GoToRoom(chatId, chatIdClient); //TODO
+                var clientChatId = Convert.ToInt64(string.Join("", data.Where(c => char.IsDigit(c))));
+                return mc.SendMessagesRoom(callbackQuery.Message.Chat.Id, clientChatId); //TODO
             }
-            return Task.CompletedTask;
+            else if (data.Contains("JoinToRoom"))
+            {
+                var clientChatId = Convert.ToInt64(string.Join("", data.Where(c => char.IsDigit(c))));
+                return mc.JoinToRoom(callbackQuery.Message, clientChatId); //TODO
+            }
+            else
+            {
+                return Task.CompletedTask;
+            }
         }
     }
 }

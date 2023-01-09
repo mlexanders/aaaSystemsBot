@@ -39,9 +39,14 @@ namespace aaaTgBot.Services
             await bot.DeleteMessageAsync(chatId, messageId);
         }
 
-        public async Task Forward(long chatId, long fromChatId, int messageId)
+        public Task Forward(long chatId, long fromChatId, int messageId, bool? disableNotification = null)
         {
-            await bot.ForwardMessageAsync(chatId, fromChatId, messageId);
+            return bot.ForwardMessageAsync(chatId, fromChatId, messageId, disableNotification: disableNotification);
+        }
+
+        public async Task FromBotMessage(string text, IReplyMarkup markup)
+        {
+            await bot.SendTextMessageAsync(chatId, $"<b>От : {await bot.GetMeAsync()}</b> \n {text}", ParseMode.Html, replyMarkup: markup);
         }
     }
 }

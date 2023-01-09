@@ -15,6 +15,6 @@ namespace aaaSystemsCommon.Utils
                    GetFormatString("Роль", user.Role.ToString());
         }
 
-        public static string GetFormatString(string tittle, string? arg, string emoji = null) => ($"\t{tittle + ":"!, -11} {arg, 8} {emoji}\n");
+        public static string GetFormatString(string tittle, string? arg, string emoji = null) => ($"\t{tittle + ":"!,-11} {arg,8} {emoji}\n");
     }
 }

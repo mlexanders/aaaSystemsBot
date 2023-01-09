@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aaaTgBot", "aaaTgBot\aaaTgB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TgBotLibrary", "TgBotLibrary\TgBotLibrary.csproj", "{8AFAC988-AD0F-4CAB-AD78-5E924E68FF83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaaSystemsCommon", "aaaSystemsCommon\aaaSystemsCommon.csproj", "{4FB6343A-6372-4FA5-BCA5-969408A1CEC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aaaSystemsCommon", "aaaSystemsCommon\aaaSystemsCommon.csproj", "{4FB6343A-6372-4FA5-BCA5-969408A1CEC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaaSystemsApi", "aaaSystemsApi\aaaSystemsApi.csproj", "{0768D25F-F495-417F-BF9E-E75DA47F63DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aaaSystemsApi", "aaaSystemsApi\aaaSystemsApi.csproj", "{0768D25F-F495-417F-BF9E-E75DA47F63DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

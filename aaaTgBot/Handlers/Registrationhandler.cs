@@ -32,7 +32,7 @@ namespace aaaTgBot.Handlers
 
             if (registrationMessage is null)
                 currentTask.Start();
-            else 
+            else
                 await base.ProcessMessage(registrationMessage);
         }
 
@@ -52,10 +52,10 @@ namespace aaaTgBot.Handlers
                     ChatId = chatId,
                     Name = model.Name,
                     Phone = model.Phone,
-                    Additional= model.Additional,
+                    Additional = model.Additional,
                     Role = Role.User
                 });
-                await new MessageCollectorBase(chatId).SendUserInfo(markup: new ReplyKeyboardRemove()) ;
+                await new MessageCollectorBase(chatId).SendUserInfo(markup: new ReplyKeyboardRemove());
             }
             catch (HttpRequestException)
             {

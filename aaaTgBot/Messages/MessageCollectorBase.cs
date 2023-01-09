@@ -2,10 +2,10 @@
 using aaaSystemsCommon.Utils;
 using aaaTgBot.Data;
 using aaaTgBot.Handlers;
-using User = aaaSystemsCommon.Models.User;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
+using User = aaaSystemsCommon.Models.User;
 
 namespace aaaTgBot.Messages
 {
@@ -27,20 +27,12 @@ namespace aaaTgBot.Messages
             await botService.SendMessage(Texts.StartMessage, buttonsGenerator.GetButtons());
         }
 
-        public async Task SendInfoMessageAndGoToRoom(Message message)
-        {
-            await botService.SendMessage(Texts.InfoMessage);
-
-            UpdateHandler.BusyUsersIdAndService.Add(message.Chat.Id, new RoomHandler(message.Chat.Id));
-        }
-
         public async Task SendUserInfo(long? otherChatId = null, IReplyMarkup markup = null!)
         {
             var user = await TransientService.GetUsersService().GetByChatId(otherChatId ?? chatId);
             var msg = user.GetInfo();
             await botService.SendMessage(msg, markup);
         }
-
 
         public async Task SendMessage(string text)
         {
@@ -68,7 +60,7 @@ namespace aaaTgBot.Messages
             {
                 await SendMenu();
             }
-            else
+            else if (user.Role is Role.User)
             {
                 await SendSubmitAnApplication();
             }
@@ -82,8 +74,7 @@ namespace aaaTgBot.Messages
             await botService.SendMessage("Что бы вы хотели узнать?", bg.GetButtons());
         }
 
-
-        public async Task SendListRoom()
+        public async Task SendRoomList()
         {
             var roomService = TransientService.GetRoomsService();
             var userService = TransientService.GetUsersService();
@@ -91,7 +82,7 @@ namespace aaaTgBot.Messages
 
             var rooms = await roomService.Get();
 
-            if (rooms != null)
+            if (rooms.Any())
             {
                 string msg = null!;
                 User user = null!;
@@ -100,12 +91,87 @@ namespace aaaTgBot.Messages
                 {
                     user = await userService.Get(room.ClientId);
 
-                    bg.SetInlineButtons(($"↪ {user.Name} - {user.Phone}", $"GetRoom:{user.ChatId}"));
-                    msg += $"{user.GetInfo()} \n";
+                    bg.SetInlineButtons(($"↪ {user.Name} - {user.Phone}", $"SendMessagesRoom:{user.ChatId}"));
+                    msg += $"- {user.Name} \n";
                 }
                 await botService.SendMessage(msg, bg.GetButtons());
             }
-        } 
+            else
+            {
+                await botService.SendMessage(Texts.NoApplications);
+            }
+        }
+
+        public async Task SendMessagesRoom(long chatId, long clientChatId)
+        {
+            var roomService = TransientService.GetRoomsService();
+            var userservice = TransientService.GetUsersService();
+            var room = await roomService.GetByChatId(clientChatId);
+
+            if (room != null)
+            {
+                if (room.RoomMessages != null)
+                {
+                    foreach (var msg in room.RoomMessages)
+                    {
+                         botService.Forward(chatId, clientChatId, msg.MessageId, true); // без await работает, иначе код 400
+                    }
+                    //await botService.Forward(chatId, clientChatId, 3057, true);
+                }
+                else
+                {
+                    await botService.SendMessage("Сообщений пока нет");
+                }
+                var bg = new ButtonsGenerator();
+                bg.SetInlineButtons((InlineButtonsTexts.Write, $"JoinToRoom:{clientChatId}"));
+
+                var user = await userservice.Get(room.ClientId);
+                await botService.FromBotMessage(Texts.InfoMessageForAdmin(user.Name ?? " Без имени 🙅‍"), bg.GetButtons());
+            }
+            else
+            {
+                await botService.SendMessage("Комната не найдена");
+            }
+        }
+
+        public async Task JoinToRoom(Message message, long clientChatId)
+        {
+            var usersService = TransientService.GetUsersService();
+            var user = await usersService.GetByChatId(chatId);
+
+            try
+            {
+                if (user.Role is Role.Admin)
+                {
+                    await botService.SendMessage(Texts.InfoMessageForAdmin("name"));
+
+                    if (UpdateHandler.BusyUsersIdAndService.TryGetValue(clientChatId, out var handler))
+                    {
+                        await handler.ProcessMessage(message);
+                    }
+                }
+                else if (user.Role is Role.User)
+                {
+                    await botService.SendMessage(Texts.InfoMessageForAdmin("name"));
+                    if (UpdateHandler.BusyUsersIdAndService.TryGetValue(clientChatId, out var handler))
+                    {
+                        await handler.ProcessMessage(message);
+                    }
+                    else
+                    {
+                        UpdateHandler.BusyUsersIdAndService.Add(chatId, new RoomHandler(chatId));
+                    }
+                }
+            }
+            catch (ArgumentException e) //TODO : exceptions
+            {
+                Console.WriteLine(e);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
         #endregion
     }
 }
