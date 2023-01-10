@@ -27,12 +27,20 @@ namespace aaaTgBot.Messages
             }
         }
 
-        public static async Task SendMessages(List<long> chatIds, string text)
+        public static async Task SendMessageToUsers(List<long> chatIds, string text)
         {
             foreach (var chatId in chatIds)
             {
                 bot.SendTextMessageAsync(chatId, text);
             }
         }
+
+        //public static async Task SendMessages(long chatId, List<string> messages, bool? disableNotification = null)
+        //{
+        //    foreach (var message in messages)
+        //    {
+        //        _ = bot.SendTextMessageAsync(chatId, message, disableNotification: disableNotification);
+        //    }
+        //}
     }
 }

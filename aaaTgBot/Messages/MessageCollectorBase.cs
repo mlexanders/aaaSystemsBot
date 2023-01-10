@@ -1,6 +1,7 @@
 ﻿using aaaSystemsCommon.Models.Difinitions;
 using aaaSystemsCommon.Utils;
 using aaaTgBot.Data;
+using aaaTgBot.Data.Exceptions;
 using aaaTgBot.Handlers;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
@@ -13,6 +14,7 @@ namespace aaaTgBot.Messages
     {
         protected readonly BotService botService;
         protected readonly long chatId;
+        private object message;
 
         public MessageCollectorBase(long chatId)
         {
@@ -104,33 +106,35 @@ namespace aaaTgBot.Messages
 
         public async Task SendMessagesRoom(long chatId, long clientChatId)
         {
-            var roomService = TransientService.GetRoomsService();
-            var userservice = TransientService.GetUsersService();
-            var room = await roomService.GetByChatId(clientChatId);
-
-            if (room != null)
+            try
             {
-                if (room.RoomMessages != null)
-                {
-                    foreach (var msg in room.RoomMessages)
-                    {
-                         botService.Forward(chatId, clientChatId, msg.MessageId, true); // без await работает, иначе код 400
-                    }
-                    //await botService.Forward(chatId, clientChatId, 3057, true);
-                }
-                else
-                {
-                    await botService.SendMessage("Сообщений пока нет");
-                }
                 var bg = new ButtonsGenerator();
-                bg.SetInlineButtons((InlineButtonsTexts.Write, $"JoinToRoom:{clientChatId}"));
+                var roomService = TransientService.GetRoomsService();
+                var userservice = TransientService.GetUsersService();
+                var room = await roomService.GetByChatId(clientChatId) ?? throw new RoomNotFound("Комната не найдена");
+
+                if (!(room.RoomMessages != null && room.RoomMessages.Any())) throw new MessageNotFound("Сообщений пока нет");
+                
+                var tasks = new List<Task>();
+
+                foreach (var msg in room.RoomMessages)
+                {
+                    tasks.Add(botService.Forward(chatId, msg.ChatId, msg.MessageId, true));
+                }
+                Task.WaitAll(tasks.ToArray());
+
+                bg.SetInlineButtons((InlineButtonsTexts.Write, $"JoinToRoom:{clientChatId}")); // TODO: callback data
 
                 var user = await userservice.Get(room.ClientId);
                 await botService.FromBotMessage(Texts.InfoMessageForAdmin(user.Name ?? " Без имени 🙅‍"), bg.GetButtons());
             }
-            else
+            catch (RoomNotFound e)
             {
-                await botService.SendMessage("Комната не найдена");
+                await botService.SendMessage(e.Message);
+            }
+            catch(MessageNotFound e)
+            {
+                await botService.SendMessage(e.Message);
             }
         }
 
@@ -143,10 +147,9 @@ namespace aaaTgBot.Messages
             {
                 if (user.Role is Role.Admin)
                 {
-                    await botService.SendMessage(Texts.InfoMessageForAdmin("name"));
-
                     if (UpdateHandler.BusyUsersIdAndService.TryGetValue(clientChatId, out var handler))
                     {
+                        await botService.SendMessage(Texts.InfoMessageForAdmin("name"));
                         await handler.ProcessMessage(message);
                     }
                     else
@@ -157,6 +160,7 @@ namespace aaaTgBot.Messages
                 else if (user.Role is Role.User)
                 {
                     await botService.SendMessage(Texts.InfoMessageForAdmin("name"));
+
                     if (UpdateHandler.BusyUsersIdAndService.TryGetValue(clientChatId, out var handler))
                     {
                         await handler.ProcessMessage(message);

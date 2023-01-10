@@ -31,11 +31,11 @@ namespace aaaTgBot.Handlers
         public async Task ProcessMessage(Message message)
         {
             if (message == null) return;
-            if (message.From != null && message.From.IsBot) return; // кто то из админов откликнулся
 
             try
             {
                 await TryCheck(message.Chat.Id);
+                if (message.From != null && message.From.IsBot) return; // кто то из админов откликнулся / кто то вошел в чат
 
                 var notificate = NotificateOther(message);
 
@@ -64,18 +64,10 @@ namespace aaaTgBot.Handlers
             {
                 await CreateRoom();
             }
-        }
-
-        private async Task AddMessage(Message message)
-        {
-            await roomMessagesService.Post(new RoomMessage()
+            catch(Exception e)
             {
-                MessageId = message.MessageId,
-                RoomId = CurrentRoom.Id,
-                ChatId = message.Chat.Id,
-                Text = message.Text ?? "null", //TODO : text
-                From = message.From?.Username
-            });
+                Console.WriteLine(e);
+            }
         }
 
         private async Task CreateRoom()
@@ -86,15 +78,10 @@ namespace aaaTgBot.Handlers
 
         private async Task TryCheck(long id)
         {
-            var userT = userService.GetByChatId(id);
             CurrentRoom = await GetCurrentRoom() ?? throw new RoomNotFound();
+            var user = (await userService.GetByChatId(id)) ?? throw new UserNotFound(id);
 
-            if (await userT == null) throw new UserNotFound(id);
-            if (CurrentRoom.Participants != null)
-            {
-                var p = CurrentRoom.Participants.Find(u => u.UserChatId == id);  //TODO : _
-                if (id != chatId && p == null) throw new ParticipantNotFound(id);
-            }
+            if (user.Role is Role.Admin) await AddToRoom(id);
         }
 
         private async Task ForwardMessage(Message message)
@@ -104,7 +91,7 @@ namespace aaaTgBot.Handlers
             if (CurrentRoom.Participants != null && chatId == message.Chat.Id)
             {
                 var participantsId = CurrentRoom.Participants.Select(p => p.UserChatId).ToList();
-                await MassMailing.SendMessages(participantsId, message.Text!);
+                await MassMailing.SendMessageToUsers(participantsId, message.Text!);
             }
             else
             {
@@ -127,12 +114,12 @@ namespace aaaTgBot.Handlers
 
         private async Task RemoveFromRoom(long id)
         {
-            var user = await userService.GetByChatId(id);
-            if (user == null) throw new UserNotFound(id);
+            var participant = await participantsService.GetByChatId(id);
 
-            while (await participantsService.Get(user.Id) != null)
+            while (participant != null)
             {
-                await participantsService.Delete(user.Id);
+                await participantsService.Delete(participant.Id);
+                participant = await participantsService.GetByChatId(id);
             }
 
             if (UpdateHandler.BusyUsersIdAndService.ContainsKey(id)) UpdateHandler.BusyUsersIdAndService.Remove(id);
@@ -157,6 +144,17 @@ namespace aaaTgBot.Handlers
             {
                 await MassMailing.SendNotificateMessage(listIds, await user, message.Text ?? throw new("Message is nullll"));
             }
+        }
+        private async Task AddMessage(Message message)
+        {
+            await roomMessagesService.Post(new RoomMessage()
+            {
+                MessageId = message.MessageId,
+                RoomId = CurrentRoom.Id,
+                ChatId = message.Chat.Id,
+                Text = message.Text ?? "null", //TODO : text
+                From = message.From?.Username
+            });
         }
 
         private async Task SendMessage(Message message)

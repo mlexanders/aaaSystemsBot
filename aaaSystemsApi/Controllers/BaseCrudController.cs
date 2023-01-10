@@ -47,7 +47,7 @@ namespace aaaSystemsApi.Controllers
             await repository.Update(entity);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
             await repository.Delete(id);
