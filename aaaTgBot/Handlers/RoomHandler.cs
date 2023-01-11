@@ -54,7 +54,7 @@ namespace aaaTgBot.Handlers
             }
             catch (UserNotFound)
             {
-                await (new MessageCollectorBase(message.Chat.Id).TryToStartRegistration());
+                await (new MessageCollectorBase(message.Chat.Id).SendUnknownUserMessage());
             }
             catch (ParticipantNotFound e)
             {
@@ -135,9 +135,9 @@ namespace aaaTgBot.Handlers
 
             try
             {
-                var inDialog = CurrentRoom.Participants ?? throw new();
+                var inDialog = UpdateHandler.BusyUsersIdAndService.Where(u => u.Key != chatId).Select(u => u.Key).ToList();
 
-                var idsNotToBeRemoved = new HashSet<long>(inDialog.Select(p => p.UserChatId));
+                var idsNotToBeRemoved = new HashSet<long>(inDialog);
                 listIds?.RemoveAll(item => idsNotToBeRemoved.Contains(item));
             }
             finally
@@ -145,6 +145,7 @@ namespace aaaTgBot.Handlers
                 await MassMailing.SendNotificateMessage(listIds, await user, message.Text ?? throw new("Message is nullll"));
             }
         }
+
         private async Task AddMessage(Message message)
         {
             await roomMessagesService.Post(new RoomMessage()
