@@ -140,11 +140,11 @@ namespace aaaTgBot.Messages
 
         public async Task JoinToRoom(Message message, long clientChatId)
         {
-            var usersService = TransientService.GetUsersService();
-            var user = await usersService.GetByChatId(chatId);
-
             try
             {
+                var usersService = TransientService.GetUsersService();
+                var user = await usersService.GetByChatId(chatId) ?? throw new UserNotFound(chatId);
+                
                 if (user.Role is Role.Admin)
                 {
                     if (UpdateHandler.BusyUsersIdAndService.TryGetValue(clientChatId, out var handler))
@@ -174,6 +174,10 @@ namespace aaaTgBot.Messages
             catch (ArgumentException e) //TODO : exceptions
             {
                 Console.WriteLine(e);
+            }
+            catch (UserNotFound e)
+            {
+                await TryToStartRegistration();
             }
             catch (Exception e)
             {

@@ -38,20 +38,11 @@ namespace aaaTgBot.Handlers
             var data = callbackQuery.Data;
             if (string.IsNullOrWhiteSpace(data)) return Task.CompletedTask;
 
-            if (data.Contains("SendMessagesRoom"))
-            {
-                var clientChatId = Convert.ToInt64(string.Join("", data.Where(c => char.IsDigit(c))));
-                return mc.SendMessagesRoom(callbackQuery.Message.Chat.Id, clientChatId); //TODO
-            }
-            else if (data.Contains("JoinToRoom"))
-            {
-                var clientChatId = Convert.ToInt64(string.Join("", data.Where(c => char.IsDigit(c))));
-                return mc.JoinToRoom(callbackQuery.Message, clientChatId); //TODO
-            }
-            else
-            {
-                return Task.CompletedTask;
-            }
+            var clientChatId = Convert.ToInt64(string.Join("", data.Where(c => char.IsDigit(c))));
+            
+            if (data.Contains("SendMessagesRoom")) return mc.SendMessagesRoom(callbackQuery.Message.Chat.Id, clientChatId);
+            else if (data.Contains("JoinToRoom")) return mc.JoinToRoom(callbackQuery.Message, clientChatId); 
+            else return Task.CompletedTask;
         }
     }
 }
