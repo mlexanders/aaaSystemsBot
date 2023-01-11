@@ -30,10 +30,8 @@ namespace aaaTgBot.Handlers
                 _ => null!
             };
 
-            if (registrationMessage is null)
-                currentTask.Start();
-            else
-                await base.ProcessMessage(registrationMessage);
+            if (registrationMessage is null) currentTask.Start();
+            else await base.ProcessMessage(registrationMessage);
         }
 
         protected override void RegistrateProcessing()
