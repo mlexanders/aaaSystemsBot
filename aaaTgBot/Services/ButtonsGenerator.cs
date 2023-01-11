@@ -29,5 +29,7 @@ namespace aaaTgBot.Services
                 returnsButtons.Add(createLine(lineMarkup));
             }
         }
+
+        public void SetGoBackButton(string callback = "/start") => SetInlineButtons(("↪ Назад", callback));
     }
 }

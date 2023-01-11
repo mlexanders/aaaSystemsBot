@@ -5,6 +5,10 @@
         public const string Forward = "Далее";
         public const string Write = "Написать 🎁";
         public const string Rooms = "Заявки";
-        public static (string, string) SkipInput = ("Пропустить", "registration-пропустить");
+    }
+
+    public static class SpecialCallbacks
+    {
+        public const string Menu = "menu";
     }
 }

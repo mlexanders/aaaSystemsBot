@@ -1,4 +1,5 @@
 ﻿using Telegram.Bot;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using TgBotLibrary;
@@ -37,6 +38,14 @@ namespace aaaTgBot.Services
         public async Task DeleteMessage(int messageId)
         {
             await bot.DeleteMessageAsync(chatId, messageId);
+        }
+        public async Task EditMessage(int messageId, string text, IReplyMarkup? markup = null)
+        {
+            try
+            {
+                await bot.EditMessageTextAsync(chatId, messageId, text, replyMarkup: (InlineKeyboardMarkup)markup);
+            }
+            catch { }
         }
 
         public Task Forward(long chatId, long fromChatId, int messageId, bool? disableNotification = null)
