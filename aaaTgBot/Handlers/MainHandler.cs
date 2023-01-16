@@ -34,15 +34,15 @@ namespace aaaTgBot.Handlers
             await response;
         }
 
-        private static Task SpecialProcessing(CallbackQuery callbackQuery, MessageCollector mc)
+        private static Task SpecialProcessing(CallbackQuery callbackQuery, MessageCollector messageCollector)
         {
             var data = callbackQuery.Data;
             if (string.IsNullOrWhiteSpace(data)) return Task.CompletedTask;
 
             var clientChatId = Convert.ToInt64(string.Join("", data.Where(c => char.IsDigit(c))));
             
-            if (data.Contains("SendMessagesRoom")) return mc.SendMessagesRoom(callbackQuery.Message.Chat.Id, clientChatId);
-            else if (data.Contains("JoinToRoom")) return mc.JoinToRoom(callbackQuery.Message, clientChatId); 
+            if (data.Contains("SendMessagesRoom")) return messageCollector.SendMessagesRoom(callbackQuery.Message.Chat.Id, clientChatId);
+            else if (data.Contains("JoinToRoom")) return messageCollector.JoinToRoom(callbackQuery.Message, clientChatId); 
             else return Task.CompletedTask;
         }
     }

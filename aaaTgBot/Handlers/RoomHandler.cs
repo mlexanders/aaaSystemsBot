@@ -30,8 +30,6 @@ namespace aaaTgBot.Handlers
 
         public async Task ProcessMessage(Message message)
         {
-            if (message == null) return;
-
             try
             {
                 await TryCheck(message.Chat.Id);
