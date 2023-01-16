@@ -41,7 +41,7 @@ namespace aaaTgBot.Messages
             await EditToMenu(user);
         }
 
-        public async Task EditToMenu(User user)
+        private async Task EditToMenu(User user)
         {
             var bg = new ButtonsGenerator();
 
@@ -75,12 +75,12 @@ namespace aaaTgBot.Messages
                 foreach (var room in rooms)
                 {
                     user = await userService.Get(room.ClientId);
-                    
+
                     buttonGenerator.SetInlineButtons(($"↪ {user.Name} - {user.Phone}", $"SendMessagesRoom:{user.ChatId}"));
                     msg += $"- {user.Name} \n";
                 }
 
-                buttonGenerator.SetGoBackButton(SpecialCallbacks.Menu);
+                buttonGenerator.SetGoBackButton(InlineButtonsTexts.Menu);
                 await botService.EditMessage(messageId, msg, buttonGenerator.GetButtons());
             }
             else

@@ -15,7 +15,6 @@ namespace aaaTgBot.Handlers
         private readonly long chatId;
         private readonly RoomsService roomsService;
         private readonly UsersService userService;
-        private readonly ParticipantsService participantsService;
         private readonly RoomMessagesService roomMessagesService;
         private Room CurrentRoom = null!;
 
@@ -24,7 +23,6 @@ namespace aaaTgBot.Handlers
             this.chatId = chatId;
             roomsService = TransientService.GetRoomsService();
             userService = TransientService.GetUsersService();
-            participantsService = TransientService.GetParticipantsService();
             roomMessagesService = TransientService.GetRoomMessagesService();
         }
 
@@ -44,8 +42,8 @@ namespace aaaTgBot.Handlers
                         "/leave" => RemoveFromRoom(message.Chat.Id),
                         _ => ForwardMessage(message)
                     };
-                    await AddMessage(message);
 
+                    await AddMessage(message);
                     await notificate;
                     await processing;
                 }
@@ -56,13 +54,13 @@ namespace aaaTgBot.Handlers
             }
             catch (ParticipantNotFound e)
             {
-                await AddToRoom(e.ChatId);
+                AddToRoom(e.ChatId);
             }
             catch (RoomNotFound)
             {
                 await CreateRoom();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
             }
@@ -79,47 +77,36 @@ namespace aaaTgBot.Handlers
             CurrentRoom = await GetCurrentRoom() ?? throw new RoomNotFound();
             var user = (await userService.GetByChatId(id)) ?? throw new UserNotFound(id);
 
-            if (user.Role is Role.Admin) await AddToRoom(id);
+            if (user.Role is Role.Admin) AddToRoom(id);
         }
 
         private async Task ForwardMessage(Message message)
         {
-            CurrentRoom = await GetCurrentRoom();
+            var userT = userService.GetByChatId(message.Chat.Id);
 
-            if (CurrentRoom.Participants != null && chatId == message.Chat.Id)
+            var busyId = new[] { chatId, message.Chat.Id };
+            var recipientsId = UpdateHandler.BusyUsersIdAndService.Where(b => b.Value == this && !busyId.Contains(b.Key)).Select(b => b.Key).ToList();
+
+            if ((await userT).Role is Role.Admin)
             {
-                var participantsId = CurrentRoom.Participants.Select(p => p.UserChatId).ToList();
-                await MassMailing.SendMessageToUsers(participantsId, message.Text!);
+                await SendMessageToClient(message);
             }
             else
             {
-                var user = await userService.GetByChatId(message.Chat.Id);
-                if (user.Role is Role.Admin) await SendMessage(message);
+                await MassMailing.SendMessageToUsers(recipientsId, message.Text!);
             }
         }
 
-        private async Task AddToRoom(long id)
+        private void AddToRoom(long id)
         {
             if (!UpdateHandler.BusyUsersIdAndService.ContainsKey(id))
             {
                 UpdateHandler.BusyUsersIdAndService.Add(id, this);
             }
-            if (await participantsService.GetByChatId(id) == null)
-            {
-                await participantsService.Post(new Participant() { UserChatId = id, RoomId = CurrentRoom.Id });
-            }
         }
 
         private async Task RemoveFromRoom(long id)
         {
-            var participant = await participantsService.GetByChatId(id);
-
-            while (participant != null)
-            {
-                await participantsService.Delete(participant.Id);
-                participant = await participantsService.GetByChatId(id);
-            }
-
             if (UpdateHandler.BusyUsersIdAndService.ContainsKey(id)) UpdateHandler.BusyUsersIdAndService.Remove(id);
             else throw new NotImplementedException("Сервис не найден");
             await SendMessage(id, "Вы вышли из чата, сообщения больше не будут доставлены");
@@ -156,7 +143,7 @@ namespace aaaTgBot.Handlers
             });
         }
 
-        private async Task SendMessage(Message message)
+        private async Task SendMessageToClient(Message message)
         {
             var mc = new MessageCollectorBase(chatId);
             await mc.SendMessage(message.Text ?? "пустая смс-ка : -)");

@@ -13,7 +13,8 @@ namespace aaaTgBot.Handlers
             Task response = message.Text switch
             {
                 "/start" => messageCollector.SendStartMessage(),
-                _ => messageCollector.TryToStartRegistration(),
+                "/menu" => messageCollector.SendMenu(),
+                _ => messageCollector.SendUnknownMessage(),
             };
 
             await response;
@@ -25,12 +26,13 @@ namespace aaaTgBot.Handlers
 
             Task response = callbackQuery.Data switch
             {
-                "@" + InlineButtonsTexts.Forward => messageCollector.TryToStartRegistration(),
-                "@" + SpecialCallbacks.Menu => messageCollector.EditToMenu(),
+                "@" + InlineButtonsTexts.Registration => messageCollector.TryToStartRegistration(),
+                "@" + InlineButtonsTexts.Menu => messageCollector.EditToMenu(),
                 "@" + InlineButtonsTexts.Rooms => messageCollector.EditToRoomList(),
                 "@" + InlineButtonsTexts.Write => messageCollector.JoinToRoom(callbackQuery.Message, callbackQuery.Message.Chat.Id),
                 _ => SpecialProcessing(callbackQuery, messageCollector)
             };
+
             await response;
         }
 
@@ -40,9 +42,9 @@ namespace aaaTgBot.Handlers
             if (string.IsNullOrWhiteSpace(data)) return Task.CompletedTask;
 
             var clientChatId = Convert.ToInt64(string.Join("", data.Where(c => char.IsDigit(c))));
-            
+
             if (data.Contains("SendMessagesRoom")) return messageCollector.SendMessagesRoom(callbackQuery.Message.Chat.Id, clientChatId);
-            else if (data.Contains("JoinToRoom")) return messageCollector.JoinToRoom(callbackQuery.Message, clientChatId); 
+            else if (data.Contains("JoinToRoom")) return messageCollector.JoinToRoom(callbackQuery.Message, clientChatId);
             else return Task.CompletedTask;
         }
     }

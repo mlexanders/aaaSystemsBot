@@ -6,7 +6,6 @@ using aaaTgBot.Handlers;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
-using User = aaaSystemsCommon.Models.User;
 
 namespace aaaTgBot.Messages
 {
@@ -24,7 +23,7 @@ namespace aaaTgBot.Messages
         public async Task SendStartMessage()
         {
             var buttonsGenerator = new ButtonsGenerator();
-            buttonsGenerator.SetInlineButtons(InlineButtonsTexts.Forward);
+            buttonsGenerator.SetInlineButtons(InlineButtonsTexts.Registration);
             await botService.SendMessage(Texts.StartMessage, buttonsGenerator.GetButtons());
         }
 
@@ -39,12 +38,24 @@ namespace aaaTgBot.Messages
         {
             await botService.SendMessage(text);
         }
-       
+
         public async Task SendUnknownUserMessage()
         {
             var button = new ButtonsGenerator();
-            button.SetInlineButtons((InlineButtonsTexts.Forward));
+            button.SetInlineButtons((InlineButtonsTexts.Registration));
             await botService.SendMessage(Texts.UnknownUser, button.GetButtons());
+        }
+
+        public async Task SendUnknownMessage()
+        {
+            var button = new ButtonsGenerator();
+            button.SetInlineButtons((InlineButtonsTexts.Menu));
+            await botService.SendMessage(Texts.UnknownMessage, button.GetButtons());
+        }
+
+        public async Task SendMenu()
+        {
+            await SendStartMessage();
         }
 
         public async Task JoinToRoom(Message message, long clientChatId)
@@ -53,7 +64,7 @@ namespace aaaTgBot.Messages
             {
                 var usersService = TransientService.GetUsersService();
                 var user = await usersService.GetByChatId(chatId) ?? throw new UserNotFound(chatId);
-                
+
                 if (user.Role is Role.Admin)
                 {
                     if (UpdateHandler.BusyUsersIdAndService.TryGetValue(clientChatId, out var handler))
@@ -68,7 +79,7 @@ namespace aaaTgBot.Messages
                 }
                 else if (user.Role is Role.User)
                 {
-                    await botService.SendMessage(Texts.InfoMessageForAdmin("name"));
+                    await botService.SendMessage(Texts.InfoMessage);
 
                     if (UpdateHandler.BusyUsersIdAndService.TryGetValue(clientChatId, out var handler))
                     {
@@ -84,9 +95,9 @@ namespace aaaTgBot.Messages
             {
                 Console.WriteLine(e);
             }
-            catch (UserNotFound e)
+            catch (UserNotFound)
             {
-             //   await TryToStartRegistration(); TODO : ref to registration
+                //   await TryToStartRegistration(); TODO : ref to registration
             }
             catch (Exception e)
             {
