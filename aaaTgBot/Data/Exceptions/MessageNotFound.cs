@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace aaaTgBot.Messages
+namespace aaaTgBot.Data.Exceptions
 {
     [Serializable]
     internal class MessageNotFound : Exception

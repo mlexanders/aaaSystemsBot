@@ -23,7 +23,7 @@ namespace aaaTgBot.Messages
 
             foreach (var chatId in chatIds)
             {
-                bot.SendTextMessageAsync(chatId, msg, replyMarkup: bg.GetButtons());
+                await bot.SendTextMessageAsync(chatId, msg, replyMarkup: bg.GetButtons());
             }
         }
 
@@ -31,16 +31,8 @@ namespace aaaTgBot.Messages
         {
             foreach (var chatId in chatIds)
             {
-                bot.SendTextMessageAsync(chatId, text);
+                await bot.SendTextMessageAsync(chatId, text);
             }
         }
-
-        //public static async Task SendMessages(long chatId, List<string> messages, bool? disableNotification = null)
-        //{
-        //    foreach (var message in messages)
-        //    {
-        //        _ = bot.SendTextMessageAsync(chatId, message, disableNotification: disableNotification);
-        //    }
-        //}
     }
 }

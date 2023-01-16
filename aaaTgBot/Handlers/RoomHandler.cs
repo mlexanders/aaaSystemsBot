@@ -151,7 +151,7 @@ namespace aaaTgBot.Handlers
                 MessageId = message.MessageId,
                 RoomId = CurrentRoom.Id,
                 ChatId = message.Chat.Id,
-                Text = message.Text ?? "null", //TODO : text
+                Text = message.Text,
                 From = message.From?.Username
             });
         }

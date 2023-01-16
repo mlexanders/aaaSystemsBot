@@ -14,7 +14,6 @@ namespace aaaTgBot.Messages
     {
         protected readonly BotService botService;
         protected readonly long chatId;
-        private object message;
 
         public MessageCollectorBase(long chatId)
         {
@@ -41,17 +40,12 @@ namespace aaaTgBot.Messages
             await botService.SendMessage(text);
         }
        
-        
-        #region PleaseFix
-
         public async Task SendUnknownUserMessage()
         {
             var button = new ButtonsGenerator();
             button.SetInlineButtons((InlineButtonsTexts.Forward));
             await botService.SendMessage(Texts.UnknownUser, button.GetButtons());
         }
-
-       
 
         public async Task JoinToRoom(Message message, long clientChatId)
         {
@@ -65,7 +59,7 @@ namespace aaaTgBot.Messages
                     if (UpdateHandler.BusyUsersIdAndService.TryGetValue(clientChatId, out var handler))
                     {
                         await botService.SendMessage(Texts.InfoMessageForAdmin("name"));
-                        await handler.ProcessMessage(message);
+                        await handler.ProcessMessage(message); // возможно это не нужно, тк в основном обработчике дальше вызов ProcessMessage
                     }
                     else
                     {
@@ -99,6 +93,5 @@ namespace aaaTgBot.Messages
                 Console.WriteLine(e);
             }
         }
-        #endregion
     }
 }
