@@ -33,8 +33,6 @@ namespace aaaTgBot.Handlers
                 await TryCheck(message.Chat.Id);
                 if (message.From != null && message.From.IsBot) return; // кто то из админов откликнулся / кто то вошел в чат
 
-                var notificate = NotificateOther(message);
-
                 if (message.Type == MessageType.Text)
                 {
                     Task processing = message.Text switch
@@ -43,9 +41,9 @@ namespace aaaTgBot.Handlers
                         _ => ForwardMessage(message)
                     };
 
-                    await AddMessage(message);
-                    await notificate;
                     await processing;
+                    await AddMessage(message);
+                    await NotificateOther(message);
                 }
             }
             catch (UserNotFound)
@@ -93,7 +91,7 @@ namespace aaaTgBot.Handlers
             }
             else
             {
-                await MassMailing.SendMessageToUsers(recipientsId, message.Text!);
+                await MassMailing.ForwardMessageToUsers(recipientsId, message);
             }
         }
 
@@ -114,20 +112,22 @@ namespace aaaTgBot.Handlers
 
         private async Task NotificateOther(Message message)
         {
-            var user = userService.GetByChatId(chatId);
             CurrentRoom = await GetCurrentRoom();
-            var listIds = (await userService.Admins()).Select(a => a.ChatId).ToList();
+            var adminsIds = (await userService.Admins()).Select(a => a.ChatId).ToList();
+
+            if (adminsIds.Contains(message.Chat.Id)) return;
 
             try
             {
                 var inDialog = UpdateHandler.BusyUsersIdAndService.Where(u => u.Key != chatId).Select(u => u.Key).ToList();
 
                 var idsNotToBeRemoved = new HashSet<long>(inDialog);
-                listIds?.RemoveAll(item => idsNotToBeRemoved.Contains(item));
+                adminsIds?.RemoveAll(item => idsNotToBeRemoved.Contains(item));
             }
             finally
             {
-                await MassMailing.SendNotificateMessage(listIds, await user, message.Text ?? throw new("Message is nullll"));
+                var user = await userService.GetByChatId(chatId);
+                await MassMailing.SendNotificateMessage(adminsIds, user, message.Text ?? throw new("Message is nullll"));
             }
         }
 
