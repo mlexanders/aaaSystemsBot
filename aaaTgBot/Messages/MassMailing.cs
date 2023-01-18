@@ -27,14 +27,6 @@ namespace aaaTgBot.Messages
             }
         }
 
-        public static async Task SendMessageToUsers(List<long> chatIds, string text)
-        {
-            foreach (var chatId in chatIds)
-            {
-                await bot.SendTextMessageAsync(chatId, text);
-            }
-        }
-
         public static async Task ForwardMessageToUsers(List<long> chatIds, Message message)
         {
             foreach (var chatId in chatIds)

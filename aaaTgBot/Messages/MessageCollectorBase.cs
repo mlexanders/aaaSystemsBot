@@ -71,7 +71,7 @@ namespace aaaTgBot.Messages
                     {
                         var client = await usersService.GetByChatId(clientChatId);
                         await botService.SendMessage(Texts.InfoMessageForAdmin(client.Name));
-                        await handler.ProcessMessage(message); 
+                        await handler.ProcessMessage(message);
                     }
                     else
                     {
