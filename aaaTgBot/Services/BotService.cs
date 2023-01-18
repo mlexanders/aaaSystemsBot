@@ -20,41 +20,55 @@ namespace aaaTgBot.Services
 
         public async Task SendMessage(string text)
         {
-            await bot.SendTextMessageAsync(chatId, text);
+            await SaveExecute(bot.SendTextMessageAsync(chatId, text));
         }
 
         public async Task SendMessage(string text, IReplyMarkup markup)
         {
-            await bot.SendTextMessageAsync(chatId, text, replyMarkup: markup);
+            await SaveExecute(bot.SendTextMessageAsync(chatId, text, replyMarkup: markup));
         }
 
         public async Task SendMessage(string text, ParseMode? parseMode = null, bool? disableWebPagePreview = null, bool? disableNotification = null, ReplyKeyboardMarkup markup = null)
         {
-            await bot.SendTextMessageAsync(chatId, text, parseMode: parseMode, disableWebPagePreview: disableWebPagePreview, disableNotification: disableNotification, replyMarkup: markup);
+            await SaveExecute(bot.SendTextMessageAsync(
+                chatId,
+                text,
+                parseMode: parseMode,
+                disableWebPagePreview: disableWebPagePreview,
+                disableNotification: disableNotification,
+                replyMarkup: markup));
         }
         #endregion
 
         public async Task DeleteMessage(int messageId)
         {
-            await bot.DeleteMessageAsync(chatId, messageId);
+            await SaveExecute(bot.DeleteMessageAsync(chatId, messageId));
         }
         public async Task EditMessage(int messageId, string text, IReplyMarkup? markup = null)
         {
-            try
-            {
-                await bot.EditMessageTextAsync(chatId, messageId, text, replyMarkup: (InlineKeyboardMarkup)markup);
-            }
-            catch { }
+            await SaveExecute(bot.EditMessageTextAsync(chatId, messageId, text, replyMarkup: (InlineKeyboardMarkup)markup));
         }
 
-        public Task Forward(long chatId, long fromChatId, int messageId, bool? disableNotification = null)
+        public async Task Forward(long chatId, long fromChatId, int messageId, bool? disableNotification = null)
         {
-            return bot.ForwardMessageAsync(chatId, fromChatId, messageId, disableNotification: disableNotification);
+            await SaveExecute(bot.ForwardMessageAsync(chatId, fromChatId, messageId, disableNotification: disableNotification));
         }
 
         public async Task FromBotMessage(string text, IReplyMarkup markup)
         {
-            await bot.SendTextMessageAsync(chatId, $"<b>От : {await bot.GetMeAsync()}</b> \n {text}", ParseMode.Html, replyMarkup: markup);
+            await SaveExecute(bot.SendTextMessageAsync(chatId, $"<b>От : {await bot.GetMeAsync()}</b> \n {text}", ParseMode.Html, replyMarkup: markup));
+        }
+
+        private static async Task SaveExecute(Task task)
+        {
+            try
+            {
+                await task;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e); //TODO:  logger
+            }
         }
     }
 }
