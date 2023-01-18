@@ -69,8 +69,9 @@ namespace aaaTgBot.Messages
                 {
                     if (UpdateHandler.BusyUsersIdAndService.TryGetValue(clientChatId, out var handler))
                     {
-                        await botService.SendMessage(Texts.InfoMessageForAdmin("name"));
-                        await handler.ProcessMessage(message); // возможно это не нужно, тк в основном обработчике дальше вызов ProcessMessage
+                        var client = await usersService.GetByChatId(clientChatId);
+                        await botService.SendMessage(Texts.InfoMessageForAdmin(client.Name));
+                        await handler.ProcessMessage(message); 
                     }
                     else
                     {

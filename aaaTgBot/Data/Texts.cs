@@ -9,6 +9,6 @@
         public const string NoApplications = "Заявок пока нет";
         public const string UnknownUser = "Пользователь не найден";
 
-        public static string InfoMessageForAdmin(string name) => $"Отправьте сообщение, оно будет доставлено {name}";
+        public static string InfoMessageForAdmin(string? name) => $"Отправьте сообщение, оно будет доставлено {name ?? "'❓"}";
     }
 }

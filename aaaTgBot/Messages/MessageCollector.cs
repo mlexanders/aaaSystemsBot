@@ -75,7 +75,6 @@ namespace aaaTgBot.Messages
                 foreach (var room in rooms)
                 {
                     user = await userService.Get(room.ClientId);
-
                     buttonGenerator.SetInlineButtons(($"↪ {user.Name} - {user.Phone}", $"SendMessagesRoom:{user.ChatId}"));
                     msg += $"- {user.Name} \n";
                 }
@@ -111,7 +110,7 @@ namespace aaaTgBot.Messages
                 bg.SetGoBackButton(InlineButtonsTexts.Rooms);
 
                 var user = await userservice.Get(room.ClientId);
-                await botService.FromBotMessage(Texts.InfoMessageForAdmin(user.Name ?? " Без имени 🙅‍"), bg.GetButtons());
+                await botService.FromBotMessage(Texts.InfoMessageForAdmin(user.Name), bg.GetButtons());
             }
             catch (RoomNotFound e)
             {
@@ -122,8 +121,6 @@ namespace aaaTgBot.Messages
                 await botService.SendMessage(e.Message);
             }
         }
-
-
         #endregion ForAdmins
     }
 }
