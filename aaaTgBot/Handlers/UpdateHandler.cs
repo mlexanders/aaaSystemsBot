@@ -12,16 +12,15 @@ namespace aaaTgBot.Handlers
         public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             LogService.LogUpdate(update);
-            long chatId = default;
             if (update.Message is not null)
             {
-                chatId = update.Message.Chat.Id;
+                var chatId = update.Message.Chat.Id;
                 if (!BusyUsersIdAndService.ContainsKey(chatId)) await MainHandler.MessageProcessing(chatId, update.Message);
                 if (BusyUsersIdAndService.ContainsKey(chatId)) BusyUsersIdAndService[chatId].ProcessMessage(update.Message);
             }
             else if (update.CallbackQuery is not null)
             {
-                chatId = update.CallbackQuery.Message != null ? update.CallbackQuery.Message.Chat.Id : throw new NotImplementedException();
+                var chatId = update.CallbackQuery.Message != null ? update.CallbackQuery.Message.Chat.Id : throw new NotImplementedException();
                 if (!BusyUsersIdAndService.ContainsKey(chatId)) await MainHandler.CallbackQueryProcessing(chatId, update.CallbackQuery);
                 if (BusyUsersIdAndService.ContainsKey(chatId)) BusyUsersIdAndService[chatId].ProcessMessage(update.CallbackQuery.Message);
             }
