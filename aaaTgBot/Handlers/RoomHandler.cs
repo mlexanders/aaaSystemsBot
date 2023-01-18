@@ -10,7 +10,7 @@ using TgBotLibrary;
 
 namespace aaaTgBot.Handlers
 {
-    public class RoomHandler : IHandler
+    public class RoomHandler : ISpecialHandler
     {
         private readonly long chatId;
         private readonly RoomsService roomsService;

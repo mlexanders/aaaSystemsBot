@@ -3,7 +3,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TgBotLibrary
 {
-    public abstract class BaseSpecialHandler : IHandler
+    public abstract class BaseSpecialHandler : ISpecialHandler
     {
         protected Task currentTask;
         protected CancellationTokenSource сancellationToken;

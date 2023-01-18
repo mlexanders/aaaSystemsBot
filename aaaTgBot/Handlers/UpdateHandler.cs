@@ -6,7 +6,7 @@ namespace aaaTgBot.Handlers
 {
     public static class UpdateHandler
     {
-        public static Dictionary<long, IHandler> BusyUsersIdAndService { get; set; } = new();
+        public static Dictionary<long, ISpecialHandler> BusyUsersIdAndService { get; set; } = new();
 
         public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
