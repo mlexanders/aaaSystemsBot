@@ -1,6 +1,7 @@
 ﻿using aaaSystemsCommon.Utils;
 using aaaTgBot.Services;
 using Telegram.Bot;
+using Telegram.Bot.Types;
 using TgBotLibrary;
 using User = aaaSystemsCommon.Models.User;
 
@@ -20,18 +21,17 @@ namespace aaaTgBot.Messages
             var bg = new ButtonsGenerator();
             bg.SetInlineButtons(($"↪ Загрузить диалог", $"SendMessagesRoom:{client.ChatId}"));
 
-
             foreach (var chatId in chatIds)
             {
-                bot.SendTextMessageAsync(chatId, msg, replyMarkup: bg.GetButtons());
+                await bot.SendTextMessageAsync(chatId, msg, replyMarkup: bg.GetButtons());
             }
         }
 
-        public static async Task SendMessages(List<long> chatIds, string text)
+        public static async Task ForwardMessageToUsers(List<long> chatIds, Message message)
         {
             foreach (var chatId in chatIds)
             {
-                bot.SendTextMessageAsync(chatId, text);
+                await bot.ForwardMessageAsync(chatId, message.Chat.Id, message.MessageId, true);
             }
         }
     }

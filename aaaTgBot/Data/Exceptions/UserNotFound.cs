@@ -5,15 +5,21 @@ namespace aaaTgBot.Data.Exceptions
     [Serializable]
     internal class UserNotFound : Exception
     {
-        private long id;
+        public long ChatId { get; private set; }
+        public long Id { get; private set; }
 
         public UserNotFound()
         {
         }
 
-        public UserNotFound(long id)
+        public UserNotFound(long ChatId)
         {
-            this.id = id;
+            this.ChatId = ChatId;
+        }
+
+        public UserNotFound(int id)
+        {
+            this.Id = id;
         }
 
         public UserNotFound(string? message) : base(message)

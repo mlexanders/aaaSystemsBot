@@ -30,10 +30,8 @@ namespace aaaTgBot.Handlers
                 _ => null!
             };
 
-            if (registrationMessage is null)
-                currentTask.Start();
-            else
-                await base.ProcessMessage(registrationMessage);
+            if (registrationMessage is null) currentTask.Start();
+            else await base.ProcessMessage(registrationMessage);
         }
 
         protected override void RegistrateProcessing()
@@ -64,6 +62,9 @@ namespace aaaTgBot.Handlers
             finally
             {
                 UpdateHandler.BusyUsersIdAndService.Remove(chatId);
+
+                var messageCollector = new MessageCollectorBase(chatId);
+                await messageCollector.SendMenu();
             }
         }
     }
