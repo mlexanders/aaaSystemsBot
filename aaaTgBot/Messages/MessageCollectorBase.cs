@@ -94,15 +94,15 @@ namespace aaaTgBot.Messages
             }
             catch (ArgumentException e) //TODO : exceptions
             {
-                Console.WriteLine(e);
+                LogService.LogError(e.Message);
             }
-            catch (UserNotFound)
+            catch (UserNotFound e)
             {
-                //   await TryToStartRegistration(); TODO : ref to registration
+                LogService.LogWarn("UserNotFound" + e.Message);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                LogService.LogError(e.Message);
             }
         }
     }

@@ -60,7 +60,7 @@ namespace aaaTgBot.Handlers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                LogService.LogError(e.Message);
             }
         }
 

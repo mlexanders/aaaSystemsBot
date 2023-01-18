@@ -1,6 +1,7 @@
 ﻿using aaaTgBot;
 using aaaTgBot.Handlers;
+using aaaTgBot.Services;
 using TgBotLibrary;
 
-
-await TgBotClient.StartBot(AppSettings.BotToken, UpdateHandler.HandleUpdateAsync, null!);
+BaseBotSettings.SetSettings(AppSettings.BotToken, AppSettings.BackRoot);
+await TgBotClient.StartBot(UpdateHandler.HandleUpdateAsync, null!);
