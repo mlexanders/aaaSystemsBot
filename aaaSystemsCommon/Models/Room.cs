@@ -7,9 +7,7 @@ namespace aaaSystemsCommon.Models
     public class Room : IEntity<int>
     {
         public int Id { get; set; }
-        public List<RoomMessage>? RoomMessages { get; set; } = new();
         public long UserId { get; set; }
-        //public int RoomId { get; set; }
-        //public User? User { get; set; }
+        public List<RoomMessage>? RoomMessages { get; set; } = new();
     }
 }
