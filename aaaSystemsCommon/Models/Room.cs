@@ -11,6 +11,7 @@ namespace aaaSystemsCommon.Models
         public int Id { get; set; }
         public List<RoomMessage>? RoomMessages { get; set; } = new();
         public long UserId { get; set; }
+        //public int RoomId { get; set; }
         //public User? User { get; set; }
     }
 }

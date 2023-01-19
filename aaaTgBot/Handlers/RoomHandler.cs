@@ -60,32 +60,32 @@ namespace aaaTgBot.Handlers
             }
             catch (Exception e)
             {
-                LogService.LogError(e.Message);
+              LogService.LogError(e.Message);
             }
         }
 
         private async Task CreateRoom()
         {
-            var user = await userService.GetByChatId(chatId);
-            await roomsService.Post(new Room() { ChatId = chatId, ClientId = user.Id });
+            var user = await userService.Get(chatId);
+            await roomsService.Post(new Room() { UserId =  user.Id});
         }
 
         private async Task TryCheck(long id)
         {
             CurrentRoom = await GetCurrentRoom() ?? throw new RoomNotFound();
-            var user = (await userService.GetByChatId(id)) ?? throw new UserNotFound(id);
+            var user = (await userService.Get(id)) ?? throw new UserNotFound(id);
 
             if (user.Role is Role.Admin) AddToRoom(id);
         }
 
         private async Task ForwardMessage(Message message)
         {
-            var userT = userService.GetByChatId(message.Chat.Id);
+            var user = await userService.Get(message.Chat.Id);
 
             var busyId = new[] { chatId, message.Chat.Id };
             var recipientsId = UpdateHandler.BusyUsersIdAndService.Where(b => b.Value == this && !busyId.Contains(b.Key)).Select(b => b.Key).ToList();
 
-            if ((await userT).Role is Role.Admin)
+            if (user.Role is Role.Admin)
             {
                 await SendMessageToClient(message);
             }
@@ -103,17 +103,30 @@ namespace aaaTgBot.Handlers
             }
         }
 
-        private async Task RemoveFromRoom(long id)
+        private async Task RemoveFromRoom(long id) //TODO : реализация
         {
-            if (UpdateHandler.BusyUsersIdAndService.ContainsKey(id)) UpdateHandler.BusyUsersIdAndService.Remove(id);
-            else throw new NotImplementedException("Сервис не найден");
-            await SendMessage(id, "Вы вышли из чата, сообщения больше не будут доставлены");
+            if (id == chatId)
+            {
+                var notificate = new List<Task>();
+                foreach (var keyValue in UpdateHandler.BusyUsersIdAndService)
+                {
+                    if (keyValue.Value.Equals(this)) UpdateHandler.BusyUsersIdAndService.Remove(keyValue.Key);
+                    notificate.Add(SendMessage(keyValue.Key, "Собеседник вышел из комнаты"));
+                }
+                Task.WaitAll(notificate.ToArray());
+            }
+            else
+            {
+                if (UpdateHandler.BusyUsersIdAndService.ContainsKey(id)) UpdateHandler.BusyUsersIdAndService.Remove(id);
+                else throw new NotImplementedException("Сервис не найден");
+                await SendMessage(id, "Вы вышли из чата, сообщения больше не будут доставлены");
+            }
         }
 
         private async Task NotificateOther(Message message)
         {
             CurrentRoom = await GetCurrentRoom();
-            var adminsIds = (await userService.Admins()).Select(a => a.ChatId).ToList();
+            var adminsIds = (await userService.Admins()).Select(a => a.Id).ToList();
 
             if (adminsIds.Contains(message.Chat.Id)) return;
 
@@ -126,7 +139,7 @@ namespace aaaTgBot.Handlers
             }
             finally
             {
-                var user = await userService.GetByChatId(chatId);
+                var user = await userService.Get(chatId);
                 await MassMailing.SendNotificateMessage(adminsIds, user, message.Text ?? throw new("Message is nullll"));
             }
         }
@@ -135,9 +148,9 @@ namespace aaaTgBot.Handlers
         {
             await roomMessagesService.Post(new RoomMessage()
             {
-                MessageId = message.MessageId,
+                Id = message.MessageId,
+                UserId = message.Chat.Id,
                 RoomId = CurrentRoom.Id,
-                ChatId = message.Chat.Id,
                 Text = message.Text,
                 From = message.From?.Username
             });

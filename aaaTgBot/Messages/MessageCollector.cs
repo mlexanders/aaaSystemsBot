@@ -23,7 +23,7 @@ namespace aaaTgBot.Messages
 
         public async Task TryToStartRegistration()
         {
-            var user = await TransientService.GetUsersService().GetByChatId(chatId);
+            var user = await TransientService.GetUsersService().Get(chatId);
 
             if (user == null)
             {
@@ -37,8 +37,9 @@ namespace aaaTgBot.Messages
 
         public async Task EditToMenu()
         {
-            var user = await TransientService.GetUsersService().GetByChatId(chatId);
-            await EditToMenu(user);
+            var user = await TransientService.GetUsersService().Get(chatId);
+            if (user != null) await EditToMenu(user);
+            else await TryToStartRegistration(); // TODO
         }
 
         private async Task EditToMenu(User user)
@@ -74,8 +75,8 @@ namespace aaaTgBot.Messages
 
                 foreach (var room in rooms)
                 {
-                    user = await userService.Get(room.ClientId);
-                    buttonGenerator.SetInlineButtons(($"↪ {user.Name} - {user.Phone}", $"SendMessagesRoom:{user.ChatId}"));
+                    user = await userService.Get(room.UserId);
+                    buttonGenerator.SetInlineButtons(($"↪ {user.Name} - {user.Phone}", $"SendMessagesRoom:{user.Id}"));
                     msg += $"- {user.Name} \n";
                 }
 
@@ -103,13 +104,13 @@ namespace aaaTgBot.Messages
 
                 foreach (var msg in room.RoomMessages)
                 {
-                    await botService.Forward(chatId, msg.ChatId, msg.MessageId, true);
+                    await botService.Forward(chatId, msg.UserId, msg.Id, true);
                 }
 
                 bg.SetInlineButtons((InlineButtonsTexts.Write, $"JoinToRoom:{clientChatId}")); // TODO: callback data
                 bg.SetGoBackButton(InlineButtonsTexts.Rooms);
 
-                var user = await userservice.Get(room.ClientId);
+                var user = await userservice.Get(room.UserId);
                 await botService.FromBotMessage(Texts.InfoMessageForAdmin(user.Name), bg.GetButtons());
             }
             catch (RoomNotFound e)

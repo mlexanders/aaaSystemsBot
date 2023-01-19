@@ -11,8 +11,8 @@ using aaaSystemsApi;
 namespace aaaSystemsApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230119193603_Initial")]
-    partial class Initial
+    [Migration("20230119220952_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,7 +48,7 @@ namespace aaaSystemsApi.Migrations
                     b.Property<string>("From")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("RoomId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
@@ -69,7 +69,6 @@ namespace aaaSystemsApi.Migrations
             modelBuilder.Entity("aaaSystemsCommon.Models.User", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -99,7 +98,9 @@ namespace aaaSystemsApi.Migrations
                 {
                     b.HasOne("aaaSystemsCommon.Models.Room", null)
                         .WithMany("RoomMessages")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("aaaSystemsCommon.Models.User", null)
                         .WithMany()

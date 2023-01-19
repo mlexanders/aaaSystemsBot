@@ -47,10 +47,9 @@ namespace aaaTgBot.Handlers
                 var usersService = TransientService.GetUsersService();
                 await usersService.Post(new aaaSystemsCommon.Models.User()
                 {
-                    ChatId = chatId,
+                    Id = chatId,
                     Name = model.Name,
                     Phone = model.Phone,
-                    Additional = model.Additional,
                     Role = Role.User
                 });
                 await new MessageCollectorBase(chatId).SendUserInfo(markup: new ReplyKeyboardRemove());

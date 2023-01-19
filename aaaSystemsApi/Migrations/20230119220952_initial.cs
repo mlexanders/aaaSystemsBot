@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace aaaSystemsApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,8 +15,7 @@ namespace aaaSystemsApi.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<long>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     Phone = table.Column<string>(type: "TEXT", nullable: true),
                     Role = table.Column<int>(type: "INTEGER", nullable: false)
@@ -53,7 +53,7 @@ namespace aaaSystemsApi.Migrations
                     Text = table.Column<string>(type: "TEXT", nullable: true),
                     From = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<long>(type: "INTEGER", nullable: false),
-                    RoomId = table.Column<int>(type: "INTEGER", nullable: true)
+                    RoomId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,7 +62,8 @@ namespace aaaSystemsApi.Migrations
                         name: "FK_RoomMessages_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RoomMessages_Users_UserId",
                         column: x => x.UserId,

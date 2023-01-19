@@ -17,17 +17,32 @@ namespace aaaSystemsApi
             //    .Property(b => b.DateTime)
             //    .HasDefaultValueSql("getdate()");
 
-            modelBuilder.Entity<Room>()
-                .HasOne<User>()
-                .WithMany()
+            //modelBuilder.Entity<Room>()
+            //    .HasOne<User>()
+            //    .WithMany()
+            //    .HasForeignKey(u => u.UserId)
+            //    .OnDelete(DeleteBehavior.NoAction); //TODO
+
+            modelBuilder.Entity<User>()
+                .HasMany<Room>()
+                .WithOne()
                 .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.NoAction); //TODO
+
 
             modelBuilder.Entity<RoomMessage>()
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.NoAction); //TODO 
+
+            modelBuilder.Entity<User>().Property(u => u.Id)
+                .ValueGeneratedNever();
+
+            //modelBuilder.Entity<Room>()
+            //    .HasMany<RoomMessage>()
+            //    .WithOne()
+            //    .OnDelete(DeleteBehavior.NoAction); //TODO 
         }
     }
 }

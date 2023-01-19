@@ -21,7 +21,7 @@ namespace aaaTgBot.Messages
             LogService.LogInfo(msg);
 
             var bg = new ButtonsGenerator();
-            bg.SetInlineButtons(($"↪ Загрузить диалог", $"SendMessagesRoom:{client.ChatId}"));
+            bg.SetInlineButtons(($"↪ Загрузить диалог", $"SendMessagesRoom:{client.Id}"));
 
             foreach (var chatId in chatIds)
             {
