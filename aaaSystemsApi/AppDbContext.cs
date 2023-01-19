@@ -21,13 +21,13 @@ namespace aaaSystemsApi
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(u => u.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.NoAction); //TODO
 
             modelBuilder.Entity<RoomMessage>()
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(u => u.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.NoAction); //TODO 
         }
     }
 }
