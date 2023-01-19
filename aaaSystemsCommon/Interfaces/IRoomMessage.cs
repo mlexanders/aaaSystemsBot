@@ -3,5 +3,5 @@
 namespace aaaSystemsCommon.Interfaces
 {
     public interface IRoomMessage : ICrud<RoomMessage, int>
-    {}
+    { }
 }

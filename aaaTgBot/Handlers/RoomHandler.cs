@@ -60,14 +60,14 @@ namespace aaaTgBot.Handlers
             }
             catch (Exception e)
             {
-              LogService.LogError(e.Message);
+                LogService.LogError(e.Message);
             }
         }
 
         private async Task CreateRoom()
         {
             var user = await userService.Get(chatId);
-            await roomsService.Post(new Room() { UserId =  user.Id});
+            await roomsService.Post(new Room() { UserId = user.Id });
         }
 
         private async Task TryCheck(long id)

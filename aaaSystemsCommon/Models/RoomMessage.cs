@@ -1,6 +1,5 @@
 ﻿using aaaSystemsCommon.Interfaces;
 using aaaSystemsCommon.Utils;
-using System.ComponentModel.DataAnnotations;
 
 namespace aaaSystemsCommon.Models
 {

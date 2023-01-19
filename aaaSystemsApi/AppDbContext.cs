@@ -13,22 +13,11 @@ namespace aaaSystemsApi
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<RoomMessage>()
-            //    .Property(b => b.DateTime)
-            //    .HasDefaultValueSql("getdate()");
-
-            //modelBuilder.Entity<Room>()
-            //    .HasOne<User>()
-            //    .WithMany()
-            //    .HasForeignKey(u => u.UserId)
-            //    .OnDelete(DeleteBehavior.NoAction); //TODO
-
             modelBuilder.Entity<User>()
                 .HasMany<Room>()
                 .WithOne()
                 .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.NoAction); //TODO
-
 
             modelBuilder.Entity<RoomMessage>()
                 .HasOne<User>()
@@ -38,11 +27,6 @@ namespace aaaSystemsApi
 
             modelBuilder.Entity<User>().Property(u => u.Id)
                 .ValueGeneratedNever();
-
-            //modelBuilder.Entity<Room>()
-            //    .HasMany<RoomMessage>()
-            //    .WithOne()
-            //    .OnDelete(DeleteBehavior.NoAction); //TODO 
         }
     }
 }
