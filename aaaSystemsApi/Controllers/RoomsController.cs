@@ -7,9 +7,9 @@ namespace aaaSystemsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoomsController : BaseCrudController<Room>, IRoom
+    public class RoomsController : BaseCrudController<Room, int>, IRoom
     {
-        public RoomsController(BaseCrudRepository<Room> repository) : base(repository) { }
+        public RoomsController(RoomRepository repository) : base(repository) { }
 
         public override async Task<List<Room>> Get()
         {
@@ -24,7 +24,7 @@ namespace aaaSystemsApi.Controllers
         [HttpGet("GetByChatId{chatId}")]
         public async Task<Room> GetByChatId(long chatId)
         {
-            return await repository.ReadFirst(r => r.ChatId == chatId, m => m.RoomMessages);
+            return await repository.ReadFirst(r => r.Id == chatId, m => m.RoomMessages);
         }
     }
 }

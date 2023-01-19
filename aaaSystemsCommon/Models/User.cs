@@ -5,13 +5,11 @@ using aaaSystemsCommon.Utils;
 namespace aaaSystemsCommon.Models
 {
     [EntityRoot("Users")]
-    public class User : IEntity
+    public class User : IEntity<long>
     {
-        public int Id { get; set; }
-        public long ChatId { get; set; }
+        public long Id { get; set; }
         public string? Name { get; set; }
         public string? Phone { get; set; }
-        public string? Additional { get; set; }
         public Role Role { get; set; }
     }
 }

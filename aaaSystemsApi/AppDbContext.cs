@@ -10,5 +10,24 @@ namespace aaaSystemsApi
         public DbSet<RoomMessage> RoomMessages { get; set; } = null!;
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //modelBuilder.Entity<RoomMessage>()
+            //    .Property(b => b.DateTime)
+            //    .HasDefaultValueSql("getdate()");
+
+            modelBuilder.Entity<Room>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<RoomMessage>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }

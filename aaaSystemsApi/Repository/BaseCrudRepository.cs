@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace aaaSystemsApi.Repository
 {
-    public class BaseCrudRepository<TEntity> where TEntity : class, IEntity
+    public class BaseCrudRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         private readonly AppDbContext dbContext;
         private readonly DbSet<TEntity> dbSet;
@@ -52,9 +52,9 @@ namespace aaaSystemsApi.Repository
             dbContext.Entry(entity).State = EntityState.Detached;
         }
 
-        public virtual Task Delete(int id)
+        public virtual Task Delete(TKey id)
         {
-            return Delete(entity => entity.Id == id);
+            return Delete(entity => entity.Id.Equals(id));
         }
 
         public virtual async Task Delete(Func<TEntity, bool> query)

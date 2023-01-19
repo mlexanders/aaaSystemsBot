@@ -11,8 +11,8 @@ using aaaSystemsApi;
 namespace aaaSystemsApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230117165535_deleteParticipants")]
-    partial class deleteParticipants
+    [Migration("20230119193603_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,13 +26,12 @@ namespace aaaSystemsApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("ChatId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ClientId")
+                    b.Property<long>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Rooms");
                 });
@@ -43,41 +42,34 @@ namespace aaaSystemsApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("ChatId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("From")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("MessageId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("RoomId")
+                    b.Property<int?>("RoomId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("RoomMessages");
                 });
 
             modelBuilder.Entity("aaaSystemsCommon.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Additional")
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("ChatId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -94,12 +86,25 @@ namespace aaaSystemsApi.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("aaaSystemsCommon.Models.Room", b =>
+                {
+                    b.HasOne("aaaSystemsCommon.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("aaaSystemsCommon.Models.RoomMessage", b =>
                 {
                     b.HasOne("aaaSystemsCommon.Models.Room", null)
                         .WithMany("RoomMessages")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("RoomId");
+
+                    b.HasOne("aaaSystemsCommon.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
