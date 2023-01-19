@@ -24,7 +24,7 @@ namespace aaaSystemsApi.Controllers
         [HttpGet("GetByChatId{chatId}")]
         public async Task<Room> GetByChatId(long chatId)
         {
-            return await repository.ReadFirst(r => r.Id == chatId, m => m.RoomMessages);
+            return await repository.ReadFirst(r => r.UserId == chatId, m => m.RoomMessages);
         }
     }
 }
