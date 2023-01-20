@@ -8,15 +8,9 @@ namespace aaaSystemsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : BaseCrudController<User>, IUser
+    public class UsersController : BaseCrudController<User, long>, IUser
     {
-        public UsersController(BaseCrudRepository<User> repository) : base(repository) { }
-
-        [HttpGet("GetByChatId/{chatId}")]
-        public async Task<User> GetByChatId(long chatId)
-        {
-            return await repository.ReadFirst(u => u.ChatId == chatId);
-        }
+        public UsersController(UserRepository repository) : base(repository) { }
 
         [HttpGet("Admins")]
         public async Task<List<User>> Admins()

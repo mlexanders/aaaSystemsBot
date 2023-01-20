@@ -1,7 +1,7 @@
 ﻿namespace aaaSystemsCommon.Interfaces
 {
-    public interface IEntity
+    public interface IEntity<TKey>
     {
-        int Id { get; }
+        TKey Id { get; }
     }
 }

@@ -5,11 +5,11 @@ using System.Text;
 
 namespace aaaSystemsCommon.Services.Base
 {
-    public class BaseCRUDService<TEntity> : BaseService, ICrud<TEntity, int> where TEntity : class, IEntity
+    public class BaseCRUDService<TEntity, TKey> : BaseService, ICrud<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         public BaseCRUDService(string backRoot, HttpClient httpClient, string entityRoot = null) : base(entityRoot ?? typeof(TEntity).GetRoot(), backRoot, httpClient) { }
 
-        public virtual async Task<TEntity> Get(int key)
+        public virtual async Task<TEntity> Get(TKey key)
         {
             HttpResponseMessage httpResponse = await httpClient.GetAsync(Root + "/" + key);
             return await Deserialize<TEntity>(httpResponse);
@@ -47,7 +47,7 @@ namespace aaaSystemsCommon.Services.Base
             if (!httpResponse.IsSuccessStatusCode) throw new ErrorResponseException(httpResponse.StatusCode, await httpResponse.Content.ReadAsStringAsync());
         }
 
-        public virtual async Task Delete(int key)
+        public virtual async Task Delete(TKey key)
         {
             HttpResponseMessage httpResponse = await httpClient.DeleteAsync(Root + "/" + key);
             if (!httpResponse.IsSuccessStatusCode) throw new ErrorResponseException(httpResponse.StatusCode, await httpResponse.Content.ReadAsStringAsync());

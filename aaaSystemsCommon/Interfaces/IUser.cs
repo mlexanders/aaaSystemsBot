@@ -2,9 +2,8 @@
 
 namespace aaaSystemsCommon.Interfaces
 {
-    public interface IUser : ICrud<User, int>
+    public interface IUser : ICrud<User, long>
     {
-        Task<User> GetByChatId(long chatId);
         Task<List<User>> Admins();
     }
 }

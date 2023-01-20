@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace aaaSystemsApi.Controllers
 {
-    public class BaseCrudController<TEntity> : ControllerBase, ICrud<TEntity, int> where TEntity : class, IEntity
+    public class BaseCrudController<TEntity, TKey> : ControllerBase, ICrud<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
-        protected readonly BaseCrudRepository<TEntity> repository;
+        protected readonly BaseCrudRepository<TEntity, TKey> repository;
 
-        public BaseCrudController(BaseCrudRepository<TEntity> repository)
+        public BaseCrudController(BaseCrudRepository<TEntity, TKey> repository)
         {
             this.repository = repository;
         }
@@ -36,9 +36,9 @@ namespace aaaSystemsApi.Controllers
 
 
         [HttpGet("{id}")]
-        public virtual async Task<TEntity> Get(int id)
+        public virtual async Task<TEntity> Get(TKey id)
         {
-            return await repository.ReadFirst(entity => entity.Id == id);
+            return await repository.ReadFirst(entity => entity.Id.Equals(id));
         }
 
         [HttpPatch]
@@ -48,7 +48,7 @@ namespace aaaSystemsApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task Delete(TKey id)
         {
             await repository.Delete(id);
         }
