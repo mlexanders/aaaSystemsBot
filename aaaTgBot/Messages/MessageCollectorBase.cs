@@ -98,7 +98,7 @@ namespace aaaTgBot.Messages
             }
             catch (UserNotFound e)
             {
-                LogService.LogWarn("UserNotFound" + e.Message);
+                LogService.LogWarn($"UserNotFound : {e.Message}");
             }
             catch (Exception e)
             {

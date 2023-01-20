@@ -27,7 +27,6 @@ namespace aaaTgBot.Messages
             {
                 await bot.SendTextMessageAsync(chatId, msg, replyMarkup: bg.GetButtons());
             }
-
         }
 
         public static async Task ForwardMessageToUsers(List<long> chatIds, Message message)
