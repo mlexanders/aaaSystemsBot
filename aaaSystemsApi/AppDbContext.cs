@@ -16,14 +16,12 @@ namespace aaaSystemsApi
             modelBuilder.Entity<User>()
                 .HasMany<Room>()
                 .WithOne()
-                .HasForeignKey(u => u.UserId)
-                .OnDelete(DeleteBehavior.NoAction); //TODO
+                .HasForeignKey(u => u.UserId);
 
             modelBuilder.Entity<RoomMessage>()
                 .HasOne<User>()
                 .WithMany()
-                .HasForeignKey(u => u.UserId)
-                .OnDelete(DeleteBehavior.NoAction); //TODO 
+                .HasForeignKey(u => u.UserId);
 
             modelBuilder.Entity<User>().Property(u => u.Id)
                 .ValueGeneratedNever();

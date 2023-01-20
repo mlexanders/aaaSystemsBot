@@ -111,7 +111,7 @@ namespace aaaTgBot.Handlers
                 foreach (var keyValue in UpdateHandler.BusyUsersIdAndService)
                 {
                     if (keyValue.Value.Equals(this)) UpdateHandler.BusyUsersIdAndService.Remove(keyValue.Key);
-                    notificate.Add(SendMessage(keyValue.Key, "Собеседник вышел из комнаты"));
+                    if (keyValue.Key != chatId) notificate.Add(SendMessage(keyValue.Key, "Собеседник вышел из комнаты"));
                 }
                 Task.WaitAll(notificate.ToArray());
             }
@@ -119,8 +119,8 @@ namespace aaaTgBot.Handlers
             {
                 if (UpdateHandler.BusyUsersIdAndService.ContainsKey(id)) UpdateHandler.BusyUsersIdAndService.Remove(id);
                 else throw new NotImplementedException("Сервис не найден");
-                await SendMessage(id, "Вы вышли из чата, сообщения больше не будут доставлены");
             }
+            await SendMessage(id, "Вы вышли из чата, сообщения больше не будут доставлены");
         }
 
         private async Task NotificateOther(Message message)

@@ -87,7 +87,7 @@ namespace aaaSystemsApi.Migrations
                     b.HasOne("aaaSystemsCommon.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -102,7 +102,7 @@ namespace aaaSystemsApi.Migrations
                     b.HasOne("aaaSystemsCommon.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
