@@ -92,7 +92,7 @@ namespace aaaTgBot.Messages
                     }
                 }
             }
-            catch (ArgumentException e) //TODO : exceptions
+            catch (ArgumentException e)
             {
                 LogService.LogError(e.Message);
             }

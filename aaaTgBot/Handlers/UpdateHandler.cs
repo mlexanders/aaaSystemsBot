@@ -12,6 +12,7 @@ namespace aaaTgBot.Handlers
         public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             LogService.LogUpdate(update);
+
             if (update.Message is not null)
             {
                 var chatId = update.Message.Chat.Id;
@@ -24,10 +25,6 @@ namespace aaaTgBot.Handlers
                 if (!BusyUsersIdAndService.ContainsKey(chatId)) await MainHandler.CallbackQueryProcessing(chatId, update.CallbackQuery);
                 if (BusyUsersIdAndService.ContainsKey(chatId)) BusyUsersIdAndService[chatId].ProcessMessage(update.CallbackQuery.Message);
             }
-            else if (update.MyChatMember is not null)
-            {
-                //TODO :StopSending
-            };
         }
     }
 }
