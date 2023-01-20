@@ -144,9 +144,9 @@ namespace aaaTgBot.Handlers
             }
         }
 
-        private async Task AddMessage(Message message)
+        private Task AddMessage(Message message)
         {
-            await roomMessagesService.Post(new RoomMessage()
+            return roomMessagesService.Post(new RoomMessage()
             {
                 Id = message.MessageId,
                 UserId = message.Chat.Id,
