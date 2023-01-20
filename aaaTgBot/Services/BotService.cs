@@ -67,7 +67,7 @@ namespace aaaTgBot.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e); //TODO:  logger
+                LogService.LogError(e.Message);
             }
         }
     }

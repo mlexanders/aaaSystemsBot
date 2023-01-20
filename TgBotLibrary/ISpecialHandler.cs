@@ -2,7 +2,7 @@
 
 namespace TgBotLibrary
 {
-    public interface IHandler
+    public interface ISpecialHandler
     {
         Task ProcessMessage(Message message);
     }

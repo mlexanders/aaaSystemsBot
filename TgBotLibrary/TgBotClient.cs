@@ -1,4 +1,5 @@
-﻿using Telegram.Bot;
+﻿using aaaTgBot.Services;
+using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -10,11 +11,10 @@ namespace TgBotLibrary
     {
         public static TelegramBotClient BotClient { private set; get; } = null!;
 
-        public static async Task StartBot(
-            string botToken, Func<ITelegramBotClient, Update, CancellationToken, Task> HandleUpdateAsync,
+        public static async Task StartBot(Func<ITelegramBotClient, Update, CancellationToken, Task> HandleUpdateAsync,
             Func<ITelegramBotClient, Exception, CancellationToken, Task> HandlePollingErrorAsync)
         {
-            BotClient = new TelegramBotClient(botToken);
+            BotClient = new TelegramBotClient(BaseBotSettings.BotToken);
 
             ReceiverOptions receiverOptions = new()
             {
@@ -28,7 +28,7 @@ namespace TgBotLibrary
             );
 
             var me = await BotClient.GetMeAsync();
-            Console.WriteLine($"Start listening for @{me.Username}");
+            LogService.LogStart(me.Username);
 
             while (true) { Thread.Sleep(int.MaxValue); }
         }
@@ -43,12 +43,12 @@ namespace TgBotLibrary
                         => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
                     _ => exception.ToString()
                 };
-                Console.WriteLine(ErrorMessage);
+                LogService.LogError(ErrorMessage);
 
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                LogService.LogWarn(e.Message);
             }
 
             return Task.CompletedTask;

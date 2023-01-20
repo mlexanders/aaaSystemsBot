@@ -1,6 +1,5 @@
 using aaaSystemsApi;
 using aaaSystemsApi.Repository;
-using aaaSystemsCommon.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,9 +15,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 //DI
-builder.Services.AddTransient<BaseCrudRepository<User>>();
-builder.Services.AddTransient<BaseCrudRepository<Room>>();
-builder.Services.AddTransient<BaseCrudRepository<RoomMessage>>();
+builder.Services.AddTransient<UserRepository>();
+builder.Services.AddTransient<RoomRepository>();
+builder.Services.AddTransient<RoomMessageRepository>();
 
 var app = builder.Build();
 

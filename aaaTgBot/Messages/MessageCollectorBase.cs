@@ -29,7 +29,7 @@ namespace aaaTgBot.Messages
 
         public async Task SendUserInfo(long? otherChatId = null, IReplyMarkup markup = null!)
         {
-            var user = await TransientService.GetUsersService().GetByChatId(otherChatId ?? chatId);
+            var user = await TransientService.GetUsersService().Get(otherChatId ?? chatId);
             var msg = user.GetInfo();
             await botService.SendMessage(msg, markup);
         }
@@ -63,13 +63,13 @@ namespace aaaTgBot.Messages
             try
             {
                 var usersService = TransientService.GetUsersService();
-                var user = await usersService.GetByChatId(chatId) ?? throw new UserNotFound(chatId);
+                var user = await usersService.Get(chatId) ?? throw new UserNotFound(chatId);
 
                 if (user.Role is Role.Admin)
                 {
                     if (UpdateHandler.BusyUsersIdAndService.TryGetValue(clientChatId, out var handler))
                     {
-                        var client = await usersService.GetByChatId(clientChatId);
+                        var client = await usersService.Get(clientChatId);
                         await botService.SendMessage(Texts.InfoMessageForAdmin(client.Name));
                         await handler.ProcessMessage(message);
                     }
@@ -94,15 +94,15 @@ namespace aaaTgBot.Messages
             }
             catch (ArgumentException e) //TODO : exceptions
             {
-                Console.WriteLine(e);
+                LogService.LogError(e.Message);
             }
-            catch (UserNotFound)
+            catch (UserNotFound e)
             {
-                //   await TryToStartRegistration(); TODO : ref to registration
+                LogService.LogWarn($"UserNotFound : {e.Message}");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                LogService.LogError(e.Message);
             }
         }
     }
