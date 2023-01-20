@@ -31,24 +31,26 @@ namespace aaaTgBot.Handlers
             try
             {
                 await TryCheck(message.Chat.Id);
+
                 if (message.From != null && message.From.IsBot) return; // кто то из админов откликнулся / кто то вошел в чат
 
                 if (message.Type == MessageType.Text)
                 {
+                    await NotificateOther(message);
+
                     Task processing = message.Text switch
                     {
                         "/leave" => RemoveFromRoom(message.Chat.Id),
                         _ => ForwardMessage(message)
                     };
 
-                    await processing;
                     await AddMessage(message);
-                    await NotificateOther(message);
+                    await processing;
                 }
             }
             catch (UserNotFound)
             {
-                await (new MessageCollectorBase(message.Chat.Id).SendUnknownUserMessage());
+                await new MessageCollectorBase(message.Chat.Id).SendUnknownUserMessage();
             }
             catch (ParticipantNotFound e)
             {
@@ -125,9 +127,7 @@ namespace aaaTgBot.Handlers
 
         private async Task NotificateOther(Message message)
         {
-            CurrentRoom = await GetCurrentRoom();
             var adminsIds = (await userService.Admins()).Select(a => a.Id).ToList();
-
             if (adminsIds.Contains(message.Chat.Id)) return;
 
             try
