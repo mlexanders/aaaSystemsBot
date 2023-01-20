@@ -41,7 +41,8 @@ namespace aaaTgBot.Services
             }
             else if (update.MyChatMember != null)
             {
-                LogInfo($"ChatId: {update.MyChatMember.Chat.Id} | UserName: {update.MyChatMember.From.Username}");
+                LogInfo($"ChatId - {update.MyChatMember.NewChatMember.Status}:" +
+                        $" {update.MyChatMember.Chat.Id} | UserName: {update.MyChatMember.From.Username}");
             }
         }
 

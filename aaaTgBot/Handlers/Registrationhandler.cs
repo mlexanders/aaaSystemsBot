@@ -54,9 +54,10 @@ namespace aaaTgBot.Handlers
                 });
                 await new MessageCollectorBase(chatId).SendUserInfo(markup: new ReplyKeyboardRemove());
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException e)
             {
-                //TODO
+                LogService.LogServerNotFound(e.Message);
+                await bot.SendMessage("Ошибка");
             }
             finally
             {

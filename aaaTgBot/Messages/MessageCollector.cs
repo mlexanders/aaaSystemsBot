@@ -35,11 +35,9 @@ namespace aaaTgBot.Messages
             }
         }
 
-        public async Task EditToMenu()
+        public Task EditToMenu()
         {
-            var user = await TransientService.GetUsersService().Get(chatId);
-            if (user != null) await EditToMenu(user);
-            else await TryToStartRegistration(); // TODO
+            return TryToStartRegistration();
         }
 
         private async Task EditToMenu(User user)
