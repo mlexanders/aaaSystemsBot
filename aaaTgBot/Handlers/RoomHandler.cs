@@ -1,176 +1,192 @@
-﻿using aaaSystemsCommon.Models;
-using aaaSystemsCommon.Models.Difinitions;
-using aaaSystemsCommon.Services.CrudServices;
+﻿using aaaSystemsCommon.Models.Difinitions;
+using aaaSystemsCommon.Models;
 using aaaTgBot.Data.Exceptions;
 using aaaTgBot.Messages;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using TgBotLibrary;
+using User = aaaSystemsCommon.Models.User;
+using aaaSystemsCommon.Services.CrudServices;
 
 namespace aaaTgBot.Handlers
 {
     public class RoomHandler : ISpecialHandler
     {
-        private readonly long chatId;
-        private readonly RoomsService roomsService;
-        private readonly UsersService userService;
         private readonly RoomMessagesService roomMessagesService;
-        private Room CurrentRoom = null!;
+        private readonly SendersFactory sendersFactory;
+        public readonly long clientChatId;
+        private int? roomId;
 
-        public RoomHandler(long chatId)
+        public RoomHandler(long clientChatId)
         {
-            this.chatId = chatId;
-            roomsService = TransientService.GetRoomsService();
-            userService = TransientService.GetUsersService();
             roomMessagesService = TransientService.GetRoomMessagesService();
+            this.clientChatId = clientChatId;
+            sendersFactory = new (this);
         }
 
         public async Task ProcessMessage(Message message)
         {
             try
             {
-                await TryCheck(message.Chat.Id);
+                var sender = await sendersFactory.GetSender(message.Chat.Id);
 
-                if (message.From != null && message.From.IsBot) return; // кто то из админов откликнулся / кто то вошел в чат
+                await TryCheck(sender);
+                if (message.From != null && message.From.IsBot) return;
 
-                if (message.Type == MessageType.Text)
+                Task processing = message switch
                 {
-                    await NotificateOther(message);
+                    { Text: "/leave" } => sender.Remove(),
+                    _ => sender.Update(message)
+                };
 
-                    Task processing = message.Text switch
-                    {
-                        "/leave" => RemoveFromRoom(message.Chat.Id),
-                        _ => ForwardMessage(message)
-                    };
-
-                    await AddMessage(message);
-                    await processing;
-                }
+                await processing;
+                await SaveMessage(message);
+                //notificateAdministrators????
             }
             catch (UserNotFound)
             {
-                await new MessageCollectorBase(message.Chat.Id).SendUnknownUserMessage();
-            }
-            catch (ParticipantNotFound e)
-            {
-                AddToRoom(e.ChatId);
+                throw new NotImplementedException(); // goto registration
             }
             catch (RoomNotFound)
             {
-                await CreateRoom();
-            }
-            catch (Exception e)
-            {
-                LogService.LogError(e.Message);
+                await CreateRoom(message);
             }
         }
 
-        private async Task CreateRoom()
+        private Task TryCheck(Sender sender)
         {
-            var user = await userService.Get(chatId);
-            await roomsService.Post(new Room() { UserId = user.Id });
+            if (roomId == null) throw new RoomNotFound();
+            if (sender.user.Role is Role.Admin) sender.Add();
+            return Task.CompletedTask;
         }
 
-        private async Task TryCheck(long id)
+        Task Notify()
         {
-            CurrentRoom = await GetCurrentRoom() ?? throw new RoomNotFound();
-            var user = (await userService.Get(id)) ?? throw new UserNotFound(id);
-
-            if (user.Role is Role.Admin) AddToRoom(id);
+            throw new NotImplementedException();
         }
 
-        private async Task ForwardMessage(Message message)
+        #region OlderMethods
+
+        private async Task CreateRoom(Message message) // TODO : 
         {
-            var user = await userService.Get(message.Chat.Id);
+            var roomsService = TransientService.GetRoomsService();
+            var room = await roomsService.GetByChatId(message.Chat.Id);
 
-            var busyId = new[] { chatId, message.Chat.Id };
-            var recipientsId = UpdateHandler.BusyUsersIdAndService.Where(b => b.Value == this && !busyId.Contains(b.Key)).Select(b => b.Key).ToList();
-
-            if (user.Role is Role.Admin)
+            if (room == null)
             {
-                await SendMessageToClient(message);
+                await roomsService.Post(new Room() { UserId = message.Chat.Id });
             }
             else
             {
-                await MassMailing.ForwardMessageToUsers(recipientsId, message);
+                room = await roomsService.GetByChatId(message.Chat.Id);
+                roomId = room.Id;
             }
+            LogService.LogInfo($"Создана комната\n  chatId: {message.Chat.Id}\n roomId: {room.Id}");
         }
 
-        private void AddToRoom(long id)
-        {
-            if (!UpdateHandler.BusyUsersIdAndService.ContainsKey(id))
-            {
-                UpdateHandler.BusyUsersIdAndService.Add(id, this);
-            }
-        }
 
-        private async Task RemoveFromRoom(long id) //TODO : реализация
-        {
-            if (id == chatId)
-            {
-                var notificate = new List<Task>();
-                foreach (var keyValue in UpdateHandler.BusyUsersIdAndService)
-                {
-                    if (keyValue.Value.Equals(this)) UpdateHandler.BusyUsersIdAndService.Remove(keyValue.Key);
-                    if (keyValue.Key != chatId) notificate.Add(SendMessage(keyValue.Key, "Собеседник вышел из комнаты"));
-                }
-                Task.WaitAll(notificate.ToArray());
-            }
-            else
-            {
-                if (UpdateHandler.BusyUsersIdAndService.ContainsKey(id)) UpdateHandler.BusyUsersIdAndService.Remove(id);
-                else throw new NotImplementedException("Сервис не найден");
-            }
-            await SendMessage(id, "Вы вышли из чата, сообщения больше не будут доставлены");
-        }
-
-        private async Task NotificateOther(Message message)
-        {
-            var adminsIds = (await userService.Admins()).Select(a => a.Id).ToList();
-            if (adminsIds.Contains(message.Chat.Id)) return;
-
-            try
-            {
-                var inDialog = UpdateHandler.BusyUsersIdAndService.Where(u => u.Key != chatId).Select(u => u.Key).ToList();
-
-                var idsNotToBeRemoved = new HashSet<long>(inDialog);
-                adminsIds?.RemoveAll(item => idsNotToBeRemoved.Contains(item));
-            }
-            finally
-            {
-                var user = await userService.Get(chatId);
-                await MassMailing.SendNotificateMessage(adminsIds, user, message.Text ?? throw new("Message is nullll"));
-            }
-        }
-
-        private Task AddMessage(Message message)
+        private Task SaveMessage(Message message)
         {
             return roomMessagesService.Post(new RoomMessage()
             {
                 Id = message.MessageId,
                 UserId = message.Chat.Id,
-                RoomId = CurrentRoom.Id,
+                RoomId = roomId ?? throw new RoomNotFound(),
                 Text = message.Text,
                 From = message.From?.Username
             });
         }
+        #endregion
+    }
+    //interface IObservable
+    //}
+
+    interface ISender
+    {
+        Task Update(Message message);
+        Task Remove();
+        void Add();
+    }
+
+    public abstract class Sender : ISender
+    {
+        protected readonly RoomHandler handler;
+        public readonly User user;
+
+        protected long ChatId { get; set; }
+
+        protected Sender(User user, RoomHandler handler)
+        {
+            this.user = user;
+            ChatId = user.Id;
+            this.handler = handler;
+        }
+
+        public virtual void Add()
+        {
+            if (!UpdateHandler.BusyUsersIdAndService.ContainsKey(ChatId))
+            {
+                UpdateHandler.BusyUsersIdAndService.Add(ChatId, handler);
+            }
+        }
+
+        public abstract Task Remove();
+
+        public abstract Task Update(Message message);
+    }
+
+    public class Admin : Sender
+    {
+        public Admin(User user, RoomHandler handler) : base(user, handler) { }
+
+        public override Task Remove()
+        {
+            if (UpdateHandler.BusyUsersIdAndService.ContainsKey(ChatId))
+                UpdateHandler.BusyUsersIdAndService.Remove(ChatId);
+            else throw new NotImplementedException("Сервис не найден");
+            return Task.CompletedTask;
+        }
+
+        public override async Task Update(Message message)
+        {
+            await SendMessageToClient(message);
+        }
 
         private async Task SendMessageToClient(Message message)
         {
+            var mc = new MessageCollectorBase(handler.clientChatId);
+            await mc.SendMessage(message.Text ?? "");
+        }
+    }
+
+    public class Client : Sender
+    {
+        public Client(User user, RoomHandler handler) : base(user, handler) { }
+
+        public override Task Remove()
+        {
+            var notificate = new List<Task>();
+            foreach (var keyValue in UpdateHandler.BusyUsersIdAndService)
+            {
+                if (keyValue.Value.Equals(handler)) UpdateHandler.BusyUsersIdAndService.Remove(keyValue.Key);
+                if (keyValue.Key != ChatId) notificate.Add(SendMessage(keyValue.Key, "Собеседник вышел из комнаты"));
+            }
+            Task.WaitAll(notificate.ToArray());
+            return Task.CompletedTask; // TODO : fix is Task.WaitAll(notificate.ToArray());
+        }
+
+        public override async Task Update(Message message)
+        {
+            var busyId = new[] { handler.clientChatId, message.Chat.Id };
+            var recipientsId = UpdateHandler.BusyUsersIdAndService.Where(b => b.Value == this && !busyId.Contains(b.Key)).Select(b => b.Key).ToList();
+
+            await MassMailing.ForwardMessageToUsers(recipientsId, message);
+        }
+
+        private async Task SendMessage(long chatId, string text)
+        {
             var mc = new MessageCollectorBase(chatId);
-            await mc.SendMessage(message.Text ?? "пустая смс-ка : -)");
-        }
-
-        private async Task SendMessage(long id, string text)
-        {
-            var mc = new MessageCollectorBase(id);
-            await mc.SendMessage(text ?? "пустая смс-ка : -)");
-        }
-
-        private Task<Room> GetCurrentRoom()
-        {
-            return roomsService.GetByChatId(chatId);
+            await mc.SendMessage(text);
         }
     }
 }
