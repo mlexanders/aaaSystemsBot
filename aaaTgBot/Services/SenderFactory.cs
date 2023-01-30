@@ -2,6 +2,7 @@
 using aaaSystemsCommon.Services.CrudServices;
 using aaaTgBot.Data.Exceptions;
 using aaaTgBot.Handlers;
+using Telegram.Bot.Requests;
 
 namespace aaaTgBot.Services
 {
@@ -10,6 +11,7 @@ namespace aaaTgBot.Services
         private readonly UsersService usersService;
         private readonly RoomHandler handler;
         private Dictionary<long, Sender> senders;
+        public Dictionary<long, Sender> Senders { get { return senders; } }
 
         public SendersFactory(RoomHandler handler)
         {

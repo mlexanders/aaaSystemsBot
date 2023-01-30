@@ -11,21 +11,22 @@ namespace aaaTgBot.Messages
     {
         private static readonly TelegramBotClient bot = TgBotClient.BotClient;
 
-        public static async Task SendNotificateMessage(List<long> chatIds, User client, string text)
+        public static async Task SendNotificateMessage(List<long> chatIds, User client, Message message)
         {
             var msg = $" Обращение \n" +
                       $"{client.GetInfo()} \n" +
-                      $"Сообщает: \n" +
-                      $"{text}";
+                      $"Сообщает: \n";
 
             LogService.LogInfo(msg);
 
             var bg = new ButtonsGenerator();
             bg.SetInlineButtons(($"↪ Загрузить диалог", $"SendMessagesRoom:{client.Id}"));
+            bg.SetInlineButtons(($"↪ Написать", $"JoinToRoom:{client.Id}"));
 
             foreach (var chatId in chatIds)
             {
                 await bot.SendTextMessageAsync(chatId, msg, replyMarkup: bg.GetButtons());
+                await bot.ForwardMessageAsync(chatId, message.Chat.Id, message.MessageId);
             }
         }
 

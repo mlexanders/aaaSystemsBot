@@ -7,6 +7,8 @@ using Telegram.Bot.Types;
 using TgBotLibrary;
 using User = aaaSystemsCommon.Models.User;
 using aaaSystemsCommon.Services.CrudServices;
+using Telegram.Bot.Types.Enums;
+using Telegram.Bot;
 
 namespace aaaTgBot.Handlers
 {
@@ -41,7 +43,7 @@ namespace aaaTgBot.Handlers
 
                 await processing;
                 await SaveMessage(message);
-                //notificateAdministrators????
+                if (sender.user.Role == Role.User) await Notify(message);
             }
             catch (UserNotFound)
             {
@@ -60,12 +62,14 @@ namespace aaaTgBot.Handlers
             return Task.CompletedTask;
         }
 
-        Task Notify()
+        private async Task Notify(Message message)
         {
-            throw new NotImplementedException();
-        }
+            var usersService = TransientService.GetUsersService();
+            var adminsIds = (await usersService.Admins()).Select(u => u.Id).Where(id => !UpdateHandler.BusyUsersIdAndService.ContainsKey(id)).ToList();
+            var client = await usersService.Get(clientChatId);
 
-        #region OlderMethods
+            await MassMailing.SendNotificateMessage(adminsIds, client, message);
+        }
 
         private async Task CreateRoom(Message message) // TODO : 
         {
@@ -76,14 +80,11 @@ namespace aaaTgBot.Handlers
             {
                 await roomsService.Post(new Room() { UserId = message.Chat.Id });
             }
-            else
-            {
-                room = await roomsService.GetByChatId(message.Chat.Id);
-                roomId = room.Id;
-            }
+
+            room = await roomsService.GetByChatId(message.Chat.Id);
+            roomId = room.Id;
             LogService.LogInfo($"Создана комната\n  chatId: {message.Chat.Id}\n roomId: {room.Id}");
         }
-
 
         private Task SaveMessage(Message message)
         {
@@ -96,10 +97,7 @@ namespace aaaTgBot.Handlers
                 From = message.From?.Username
             });
         }
-        #endregion
     }
-    //interface IObservable
-    //}
 
     interface ISender
     {
@@ -155,7 +153,17 @@ namespace aaaTgBot.Handlers
         private async Task SendMessageToClient(Message message)
         {
             var mc = new MessageCollectorBase(handler.clientChatId);
-            await mc.SendMessage(message.Text ?? "");
+            var bot = TgBotClient.BotClient;
+
+            Task response = message.Type switch
+            {
+                MessageType.Photo => bot.SendPhotoAsync(handler.clientChatId, message.Photo.First().FileId, message.Caption),
+                MessageType.Text => mc.SendMessage(message.Text ?? ""),
+                MessageType.Voice => bot.SendVoiceAsync(handler.clientChatId, message.Voice.FileId),
+                _ => new Task( () => LogService.LogWarn("Необработанное сообщение"))
+
+            };
+            await response;
         }
     }
 
@@ -178,7 +186,7 @@ namespace aaaTgBot.Handlers
         public override async Task Update(Message message)
         {
             var busyId = new[] { handler.clientChatId, message.Chat.Id };
-            var recipientsId = UpdateHandler.BusyUsersIdAndService.Where(b => b.Value == this && !busyId.Contains(b.Key)).Select(b => b.Key).ToList();
+            var recipientsId = UpdateHandler.BusyUsersIdAndService.Where(b => b.Value == handler && !busyId.Contains(b.Key)).Select(b => b.Key).ToList();
 
             await MassMailing.ForwardMessageToUsers(recipientsId, message);
         }
