@@ -1,14 +1,14 @@
-﻿using aaaSystemsCommon.Models.Difinitions;
-using aaaSystemsCommon.Models;
+﻿using aaaSystemsCommon.Models;
+using aaaSystemsCommon.Models.Difinitions;
+using aaaSystemsCommon.Services.CrudServices;
 using aaaTgBot.Data.Exceptions;
 using aaaTgBot.Messages;
 using aaaTgBot.Services;
+using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using TgBotLibrary;
 using User = aaaSystemsCommon.Models.User;
-using aaaSystemsCommon.Services.CrudServices;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot;
 
 namespace aaaTgBot.Handlers
 {
@@ -23,7 +23,7 @@ namespace aaaTgBot.Handlers
         {
             roomMessagesService = TransientService.GetRoomMessagesService();
             this.clientChatId = clientChatId;
-            sendersFactory = new (this);
+            sendersFactory = new(this);
         }
 
         public async Task ProcessMessage(Message message)
@@ -32,7 +32,8 @@ namespace aaaTgBot.Handlers
             {
                 var sender = await sendersFactory.GetSender(message.Chat.Id);
 
-                await TryCheck(sender);
+                if (roomId == null) throw new RoomNotFound();
+                if (sender.user.Role is Role.Admin) sender.Add();
                 if (message.From != null && message.From.IsBot) return;
 
                 Task processing = message switch
@@ -47,19 +48,12 @@ namespace aaaTgBot.Handlers
             }
             catch (UserNotFound)
             {
-                throw new NotImplementedException(); // goto registration
+
             }
             catch (RoomNotFound)
             {
                 await CreateRoom(message);
             }
-        }
-
-        private Task TryCheck(Sender sender)
-        {
-            if (roomId == null) throw new RoomNotFound();
-            if (sender.user.Role is Role.Admin) sender.Add();
-            return Task.CompletedTask;
         }
 
         private async Task Notify(Message message)
@@ -99,7 +93,7 @@ namespace aaaTgBot.Handlers
         }
     }
 
-    interface ISender
+    public interface ISender
     {
         Task Update(Message message);
         Task Remove();
@@ -140,9 +134,11 @@ namespace aaaTgBot.Handlers
         public override Task Remove()
         {
             if (UpdateHandler.BusyUsersIdAndService.ContainsKey(ChatId))
+            {
                 UpdateHandler.BusyUsersIdAndService.Remove(ChatId);
-            else throw new NotImplementedException("Сервис не найден");
-            return Task.CompletedTask;
+                return Task.CompletedTask;
+            }
+            throw new NotImplementedException("Сервис не найден");
         }
 
         public override async Task Update(Message message)
@@ -160,7 +156,7 @@ namespace aaaTgBot.Handlers
                 MessageType.Photo => bot.SendPhotoAsync(handler.clientChatId, message.Photo.First().FileId, message.Caption),
                 MessageType.Text => mc.SendMessage(message.Text ?? ""),
                 MessageType.Voice => bot.SendVoiceAsync(handler.clientChatId, message.Voice.FileId),
-                _ => new Task( () => LogService.LogWarn("Необработанное сообщение"))
+                _ => new Task(() => LogService.LogWarn("Необработанное сообщение"))
 
             };
             await response;

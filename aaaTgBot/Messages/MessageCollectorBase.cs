@@ -1,10 +1,6 @@
-﻿using aaaSystemsCommon.Models.Difinitions;
-using aaaSystemsCommon.Utils;
+﻿using aaaSystemsCommon.Utils;
 using aaaTgBot.Data;
-using aaaTgBot.Data.Exceptions;
-using aaaTgBot.Handlers;
 using aaaTgBot.Services;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace aaaTgBot.Messages
@@ -22,11 +18,6 @@ namespace aaaTgBot.Messages
 
         public async Task SendStartMessage()
         {
-            var user = await TransientService.GetUsersService().Get(otherChatId ?? chatId);
-            if (user != null)
-            {
-
-            }
             var buttonsGenerator = new ButtonsGenerator();
             buttonsGenerator.SetInlineButtons(InlineButtonsTexts.Registration);
             await botService.SendMessage(Texts.StartMessage, buttonsGenerator.GetButtons());

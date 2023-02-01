@@ -4,7 +4,7 @@
     {
         public const string Registration = "Далее";
         public const string Write = "Написать 🎁";
-        public const string Rooms = "Заявки";
+        public const string Rooms = "Диалоги";
         public const string Menu = "Меню";
     }
 }

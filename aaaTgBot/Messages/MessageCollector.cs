@@ -1,5 +1,4 @@
-﻿using aaaSystemsCommon.Models;
-using aaaSystemsCommon.Models.Difinitions;
+﻿using aaaSystemsCommon.Models.Difinitions;
 using aaaTgBot.Data;
 using aaaTgBot.Data.Exceptions;
 using aaaTgBot.Handlers;
