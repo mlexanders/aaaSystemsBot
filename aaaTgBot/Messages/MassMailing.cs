@@ -1,4 +1,5 @@
 ﻿using aaaSystemsCommon.Utils;
+using aaaTgBot.Data;
 using aaaTgBot.Services;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -20,8 +21,8 @@ namespace aaaTgBot.Messages
             LogService.LogInfo(msg);
 
             var bg = new ButtonsGenerator();
-            bg.SetInlineButtons(($"↪ Загрузить диалог", $"SendMessagesRoom:{client.Id}"));
-            bg.SetInlineButtons(($"↪ Написать", $"JoinToRoom:{client.Id}"));
+            bg.SetInlineButtons(($"↪ Загрузить диалог", CallbackData.GetSendMessagesRoom(client.Id)));
+            bg.SetInlineButtons(($"↪ Написать", CallbackData.GetJoinToRoom(client.Id)));
 
             foreach (var chatId in chatIds)
             {

@@ -125,7 +125,7 @@ namespace aaaTgBot.Messages
                 foreach (var room in rooms)
                 {
                     user = await userService.Get(room.UserId);
-                    buttonGenerator.SetInlineButtons(($"↪ {user.Name} - {user.Phone}", $"SendMessagesRoom:{user.Id}"));
+                    buttonGenerator.SetInlineButtons(($"↪ {user.Name} - {user.Phone}", CallbackData.GetSendMessagesRoom(user.Id)));
                     msg += $"- {user.Name} \n";
                 }
 
@@ -156,7 +156,7 @@ namespace aaaTgBot.Messages
                     await botService.Forward(chatId, msg.UserId, msg.Id, true);
                 }
 
-                bg.SetInlineButtons((InlineButtonsTexts.Write, $"JoinToRoom:{clientChatId}")); // TODO: callback data
+                bg.SetInlineButtons((InlineButtonsTexts.Write, CallbackData.GetJoinToRoom(clientChatId)));
                 bg.SetGoBackButton(InlineButtonsTexts.Rooms);
 
                 var user = await userservice.Get(room.UserId);

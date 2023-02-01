@@ -43,8 +43,8 @@ namespace aaaTgBot.Handlers
 
             var clientChatId = Convert.ToInt64(string.Join("", data.Where(c => char.IsDigit(c))));
 
-            if (data.Contains("SendMessagesRoom")) return messageCollector.SendMessagesRoom(callbackQuery.Message.Chat.Id, clientChatId);
-            else if (data.Contains("JoinToRoom")) return messageCollector.JoinToRoom(callbackQuery.Message, clientChatId);
+            if (data.Contains(CallbackData.SendMessagesRoom)) return messageCollector.SendMessagesRoom(callbackQuery.Message.Chat.Id, clientChatId);
+            else if (data.Contains(CallbackData.JoinToRoom)) return messageCollector.JoinToRoom(callbackQuery.Message, clientChatId);
             else return Task.CompletedTask;
         }
     }
