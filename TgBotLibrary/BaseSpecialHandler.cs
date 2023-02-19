@@ -1,39 +1,35 @@
 ﻿using Telegram.Bot.Types;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TgBotLibrary
 {
-    public abstract class BaseSpecialHandler : ISpecialHandler
+    public abstract class BaseSepcialHandlerNew : ISpecialHandler
     {
-        protected Task currentTask;
-        protected CancellationTokenSource сancellationToken;
-        protected readonly IBotService bot;
+        private Task<Message>? currentMessage;
 
-        protected BaseSpecialHandler(IBotService bot)
+        protected Task StartProcessing()
         {
-            this.bot = bot;
+            return Task.Run(() =>
+            {
+                if (currentMessage == null) RegistrateProcessing().Start();
+            });
         }
 
         public virtual async Task ProcessMessage(Message message)
         {
-            if (сancellationToken == null) await Task.Run(() => RegistrateProcessing());
-            if (!сancellationToken!.IsCancellationRequested) currentTask.Start();
+            currentMessage = new Task<Message>(() => { return message; });
+            currentMessage.Start();
         }
 
-        protected abstract void RegistrateProcessing();
+        protected abstract Task RegistrateProcessing();
 
-        protected void AddProcessing(string message, Action action, Action completeAction = null, IReplyMarkup button = null)
+        protected async Task<Message> OnMessage()
         {
-            сancellationToken = new();
-            currentTask = new Task(() =>
-            {
-                action?.Invoke();
-                сancellationToken.Cancel();
-            });
-            bot.SendMessage(message, button);
-            currentTask.Wait();
+            while (currentMessage == null) { }
+            currentMessage.Wait();
 
-            completeAction?.Invoke();
+            var result = currentMessage.Result;
+            currentMessage = null;
+            return result;
         }
     }
 }

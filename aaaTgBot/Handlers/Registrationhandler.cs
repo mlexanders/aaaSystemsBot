@@ -3,44 +3,67 @@ using aaaTgBot.Data.Models;
 using aaaTgBot.Messages;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using TgBotLibrary;
 
 namespace aaaTgBot.Handlers
 {
-    public class RegistrationHandler : BaseSpecialHandler
+    public class RegistrationHandler : BaseSepcialHandlerNew
     {
-        private RegistrationModel model;
-        private string registrationMessage;
         private readonly long chatId;
+        private BotService bot;
+        private RegistrationModel model;
 
-        public RegistrationHandler(long chatId) : base(new BotService(chatId))
+        public RegistrationHandler(long chatId)
         {
-            model = new();
+            bot = new BotService(chatId);
             this.chatId = chatId;
+            model = new();
         }
 
-        public override async Task ProcessMessage(Message registrationMessage)
+        public override async Task ProcessMessage(Message message)
         {
-            this.registrationMessage = registrationMessage.Type switch
+            if (message.From.IsBot) { await StartProcessing(); }
+            await base.ProcessMessage(message);
+        }
+
+        protected override async Task RegistrateProcessing()
+        {
+            await SendRequestName();
+            await SendRequestPhone();
+            await CompleteRegistration();
+        }
+
+        private async Task SendRequestName()
+        {
+            await bot.SendMessage("Имя");
+            var name = await OnMessage();
+
+            while (name.Text.Length < 2)//TODO: валидация
             {
-                MessageType.Contact => registrationMessage.Contact!.PhoneNumber!,
-                MessageType.Text => registrationMessage.Text!,
-                _ => null!
-            };
+                await bot.SendMessage("Имя");
+                name = await OnMessage();
+            }
 
-            if (registrationMessage is null) currentTask.Start();
-            else await base.ProcessMessage(registrationMessage);
+            model.Name = name.Text;
         }
 
-        protected override void RegistrateProcessing()
+        private async Task SendRequestPhone()
         {
-            AddProcessing("Как к вам обращаться?", () => model.Name = registrationMessage);
-            AddProcessing("Контактный телефон", () => model.Phone = registrationMessage, CompleteRegistration, button: ButtonsGenerator.GetKeyboardButtonWithPhoneRequest("Отправить телефон"));
+            await bot.SendMessage("Номер");
+            var phone = await OnMessage();
+
+            while (phone.Text.Length < 10) //TODO: валидация
+            {
+                await bot.SendMessage("Номер");
+                phone = await OnMessage();
+            }
+
+            model.Phone = phone.Text;
+            await bot.SendMessage("Ok");
         }
 
-        private async void CompleteRegistration()
+        private async Task CompleteRegistration()
         {
             try
             {
