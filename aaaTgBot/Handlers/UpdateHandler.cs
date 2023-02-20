@@ -9,16 +9,10 @@ namespace aaaTgBot.Handlers
     {
         public static Dictionary<long, ISpecialHandler> BusyUsersIdAndService { get; set; } = new();
 
-        public static Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             LogService.LogUpdate(update);
 
-            _ = Task.Run(() => Handle(update));
-            return Task.CompletedTask;
-        }
-
-        private static async Task Handle(Update update)
-        {
             try
             {
                 if (update.Message is not null)

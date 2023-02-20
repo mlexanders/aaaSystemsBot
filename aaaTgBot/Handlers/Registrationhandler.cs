@@ -3,15 +3,17 @@ using aaaTgBot.Data.Models;
 using aaaTgBot.Messages;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using TgBotLibrary;
+using User = aaaSystemsCommon.Models.User;
 
 namespace aaaTgBot.Handlers
 {
-    public class RegistrationHandler : BaseSepcialHandlerNew
+    public class RegistrationHandler : BaseSepcialHandler
     {
         private readonly long chatId;
-        private BotService bot;
+        private readonly BotService bot;
         private RegistrationModel model;
 
         public RegistrationHandler(long chatId)
@@ -23,8 +25,14 @@ namespace aaaTgBot.Handlers
 
         public override async Task ProcessMessage(Message message)
         {
-            if (message.From.IsBot) { await StartProcessing(); }
-            await base.ProcessMessage(message);
+            if (message.From != null && message.From.IsBot)
+            {
+                StartProcessing();
+            }
+            else
+            {
+                await base.ProcessMessage(message);
+            }
         }
 
         protected override async Task RegistrateProcessing()
@@ -37,30 +45,35 @@ namespace aaaTgBot.Handlers
         private async Task SendRequestName()
         {
             await bot.SendMessage("Имя");
-            var name = await OnMessage();
+            model.Name = (await GetMessage()).Text;
 
-            while (name.Text.Length < 2)//TODO: валидация
+            while (!model.NameIsValid())
             {
-                await bot.SendMessage("Имя");
-                name = await OnMessage();
+                await bot.SendMessage("Введите имя еще раз");
+                model.Name = (await GetMessage()).Text;
             }
-
-            model.Name = name.Text;
         }
 
         private async Task SendRequestPhone()
         {
-            await bot.SendMessage("Номер");
-            var phone = await OnMessage();
+            await bot.SendMessage("Введите контактный телефон", ButtonsGenerator.GetKeyboardButtonWithPhoneRequest("Отправить телефон"));
+            SetPhone(await GetMessage());
 
-            while (phone.Text.Length < 10) //TODO: валидация
+            while (!model.PhoneIsValid())
             {
-                await bot.SendMessage("Номер");
-                phone = await OnMessage();
+                await bot.SendMessage("Введите номер телефона еще раз");
+                SetPhone(await GetMessage());
             }
 
-            model.Phone = phone.Text;
-            await bot.SendMessage("Ok");
+            void SetPhone(Message message)
+            {
+                model.Phone = message.Type switch
+                {
+                    MessageType.Text => message.Text,
+                    MessageType.Contact => message.Contact?.PhoneNumber,
+                    _ => null!
+                };
+            }
         }
 
         private async Task CompleteRegistration()
@@ -68,7 +81,7 @@ namespace aaaTgBot.Handlers
             try
             {
                 var usersService = TransientService.GetUsersService();
-                await usersService.Post(new aaaSystemsCommon.Models.User()
+                await usersService.Post(new User()
                 {
                     Id = chatId,
                     Name = model.Name,
@@ -80,7 +93,7 @@ namespace aaaTgBot.Handlers
             catch (HttpRequestException e)
             {
                 LogService.LogServerNotFound(e.Message);
-                await bot.SendMessage("Ошибка");
+                await bot.SendMessage(e.Message);
             }
             finally
             {

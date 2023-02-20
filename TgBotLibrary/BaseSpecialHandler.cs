@@ -2,34 +2,30 @@
 
 namespace TgBotLibrary
 {
-    public abstract class BaseSepcialHandlerNew : ISpecialHandler
+    public abstract class BaseSepcialHandler : ISpecialHandler
     {
-        private Task<Message>? currentMessage;
+        private Message? CurrentMessage;
+        private int numberOfMessage = 0;
+        private int numberOfReadings = 1;
 
-        protected Task StartProcessing()
+        protected void StartProcessing()
         {
-            return Task.Run(() =>
-            {
-                if (currentMessage == null) RegistrateProcessing().Start();
-            });
+            if (CurrentMessage == null) RegistrateProcessing();
         }
 
         public virtual async Task ProcessMessage(Message message)
         {
-            currentMessage = new Task<Message>(() => { return message; });
-            currentMessage.Start();
+            CurrentMessage = message;
+            numberOfMessage++;
         }
 
         protected abstract Task RegistrateProcessing();
 
-        protected async Task<Message> OnMessage()
+        protected Task<Message> GetMessage()
         {
-            while (currentMessage == null) { }
-            currentMessage.Wait();
-
-            var result = currentMessage.Result;
-            currentMessage = null;
-            return result;
+            while (CurrentMessage == null || numberOfMessage != numberOfReadings) { }
+            numberOfReadings++;
+            return Task.FromResult(CurrentMessage);
         }
     }
 }
