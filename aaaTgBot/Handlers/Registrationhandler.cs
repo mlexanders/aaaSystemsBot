@@ -37,7 +37,7 @@ namespace aaaTgBot.Handlers
         protected override void RegistrateProcessing()
         {
             AddProcessing("Как к вам обращаться?", () => model.Name = registrationMessage);
-            AddProcessing("Контактный телефон", () => model.Phone = registrationMessage, CompleteRegistration, button: ButtonsGenerator.GetKeyboardButtonWithPhoneRequest("Отправить телефон"));
+            AddProcessing("Введите контактный телефон", () => model.Phone = registrationMessage, CompleteRegistration, button: ButtonsGenerator.GetKeyboardButtonWithPhoneRequest("Отправить телефон"));
         }
 
         private async void CompleteRegistration()
@@ -52,7 +52,6 @@ namespace aaaTgBot.Handlers
                     Phone = model.Phone,
                     Role = Role.User
                 });
-                await new MessageCollectorBase(chatId).SendUserInfo(markup: new ReplyKeyboardRemove());
             }
             catch (HttpRequestException e)
             {
@@ -64,7 +63,7 @@ namespace aaaTgBot.Handlers
                 UpdateHandler.BusyUsersIdAndService.Remove(chatId);
 
                 var messageCollector = new MessageCollectorBase(chatId);
-                await messageCollector.SendMenu();
+                await messageCollector.EditToMenu();
             }
         }
     }

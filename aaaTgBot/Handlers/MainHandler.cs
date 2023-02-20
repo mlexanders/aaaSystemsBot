@@ -27,7 +27,7 @@ namespace aaaTgBot.Handlers
             Task response = callbackQuery.Data switch
             {
                 "@" + InlineButtonsTexts.Registration => messageCollector.TryToStartRegistration(),
-                "@" + InlineButtonsTexts.Menu => messageCollector.EditToMenu(),
+                "@" + InlineButtonsTexts.Menu => messageCollector.TryToStartRegistration(),
                 "@" + InlineButtonsTexts.Rooms => messageCollector.EditToRoomList(),
                 "@" + InlineButtonsTexts.Write => messageCollector.JoinToRoom(callbackQuery.Message, callbackQuery.Message.Chat.Id),
                 _ => SpecialProcessing(callbackQuery, messageCollector)

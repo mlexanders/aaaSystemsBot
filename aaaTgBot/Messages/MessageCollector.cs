@@ -35,12 +35,6 @@ namespace aaaTgBot.Messages
                 await EditToMenu(user);
             }
         }
-
-        public Task EditToMenu()
-        {
-            return TryToStartRegistration();
-        }
-
         private async Task EditToMenu(User user)
         {
             var bg = new ButtonsGenerator();
@@ -48,6 +42,7 @@ namespace aaaTgBot.Messages
             if (user.Role is Role.User)
             {
                 bg.SetInlineButtons(InlineButtonsTexts.Write);
+                bg.SetInlineButtons(InlineButtonsTexts.SendApplication);
                 await botService.EditMessage(messageId, Texts.SubmitAnApplication, bg.GetButtons());
             }
             else if (user.Role is Role.Admin)

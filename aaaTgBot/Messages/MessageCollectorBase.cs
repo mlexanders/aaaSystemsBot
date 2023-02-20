@@ -1,6 +1,8 @@
-﻿using aaaSystemsCommon.Utils;
+﻿using aaaSystemsCommon.Models.Difinitions;
+using aaaSystemsCommon.Utils;
 using aaaTgBot.Data;
 using aaaTgBot.Services;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace aaaTgBot.Messages
@@ -21,13 +23,6 @@ namespace aaaTgBot.Messages
             var buttonsGenerator = new ButtonsGenerator();
             buttonsGenerator.SetInlineButtons(InlineButtonsTexts.Registration);
             await botService.SendMessage(Texts.StartMessage, buttonsGenerator.GetButtons());
-        }
-
-        public async Task SendUserInfo(long? otherChatId = null, IReplyMarkup markup = null!)
-        {
-            var user = await TransientService.GetUsersService().Get(otherChatId ?? chatId);
-            var msg = user.GetInfo();
-            await botService.SendMessage(msg, markup);
         }
 
         public async Task SendMessage(string text)
@@ -52,6 +47,23 @@ namespace aaaTgBot.Messages
         public async Task SendMenu()
         {
             await SendStartMessage();
+        }
+        public async Task EditToMenu()
+        {
+            var user = await TransientService.GetUsersService().Get(chatId);
+            var bg = new ButtonsGenerator();
+
+            if (user.Role is Role.User)
+            {
+                bg.SetInlineButtons(InlineButtonsTexts.Write);
+                bg.SetInlineButtons(InlineButtonsTexts.SendApplication);
+                await botService.SendMessage(Texts.SubmitAnApplication, bg.GetButtons());
+            }
+            else if (user.Role is Role.Admin)
+            {
+                bg.SetInlineButtons(InlineButtonsTexts.Rooms);
+                await botService.SendMessage("Что бы вы хотели узнать?", bg.GetButtons());
+            }
         }
     }
 }
