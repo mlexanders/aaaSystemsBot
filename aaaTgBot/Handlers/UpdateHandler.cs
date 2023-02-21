@@ -1,5 +1,4 @@
-﻿using aaaTgBot.Services;
-using Telegram.Bot;
+﻿using Telegram.Bot;
 using Telegram.Bot.Types;
 using TgBotLibrary;
 

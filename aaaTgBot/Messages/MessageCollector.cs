@@ -4,6 +4,7 @@ using aaaTgBot.Data.Exceptions;
 using aaaTgBot.Handlers;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
+using TgBotLibrary;
 using User = aaaSystemsCommon.Models.User;
 
 namespace aaaTgBot.Messages

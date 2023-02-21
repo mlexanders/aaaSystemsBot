@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types;
 
-namespace TgBotLibrary
+namespace TelegramBotLib.Services
 {
     public static class LogService
     {
