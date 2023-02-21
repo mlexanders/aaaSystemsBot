@@ -21,14 +21,10 @@
             if (string.IsNullOrEmpty(Phone)) return false;
             if (Phone.Length < 10) return false;
 
-            var symbols = new char[] { '+', '-', '(', ')', ' ' };
+            var validСharacters = new char[] { '+', '-', '(', ')', ' ' };
 
             foreach (var c in Phone)
-                if (!char.IsDigit(c) & !symbols.Contains(c)) return false;
-            //{
-            //    var a = char.IsDigit(c);
-            //    var b = symbols.Contains(c);
-            //}    
+                if (!char.IsDigit(c) & !validСharacters.Contains(c)) return false;
 
             return true;
         }
