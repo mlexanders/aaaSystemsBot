@@ -21,7 +21,7 @@ namespace TelegramBotLib
             Client = new TelegramBotClient(botToken);
         }
 
-        public void Start()
+        public async Task Start()
         {
             var receiverOptions = new ReceiverOptions()
             {
@@ -33,6 +33,9 @@ namespace TelegramBotLib
                 pollingErrorHandler: HandlePollingErrorAsync,
                 receiverOptions: receiverOptions
             );
+
+            var me = await Client.GetMeAsync();
+            LogService.LogStart(me.Username!);
 
             var locker = new Task(() => LogService.LogInfo("End"));
             locker.Wait();
@@ -48,7 +51,7 @@ namespace TelegramBotLib
             }
             catch (Exception e)
             {
-                LogService.LogWarn(e.Message);
+                LogService.LogError(e.Message);
             }
         }
 

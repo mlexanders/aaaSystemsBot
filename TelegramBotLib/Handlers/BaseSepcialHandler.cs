@@ -1,8 +1,9 @@
 ﻿using Telegram.Bot.Types;
+using TelegramBotLib.Interfaces;
 
 namespace TelegramBotLib.Handlers
 {
-    public abstract class BaseSepcialHandler //: IBaseSpecialHandler TODO : refactoring and implementation
+    public abstract class BaseSepcialHandler : BaseHandler, IBaseSpecialHandler // TODO : refactoring and implementation
     {
         private Message? CurrentMessage;
         private int numberOfMessage = 0;
@@ -13,10 +14,15 @@ namespace TelegramBotLib.Handlers
             if (CurrentMessage == null) RegistrateProcessing();
         }
 
-        public virtual async Task ProcessMessage(Message message)
+        public override async Task ProcessMessage(Message message)
         {
             CurrentMessage = message;
             numberOfMessage++;
+        }
+
+        public override Task ProcessUpdate(Update update)
+        {
+            return base.ProcessUpdate(update);
         }
 
         protected abstract Task RegistrateProcessing();
