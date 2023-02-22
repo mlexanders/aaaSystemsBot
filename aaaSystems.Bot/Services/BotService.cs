@@ -1,9 +1,9 @@
 ﻿using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
-using TelegramBotLib.Services;
-using TelegramBotLib.Interfaces;
 using TelegramBotLib;
+using TelegramBotLib.Interfaces;
+using TelegramBotLib.Services;
 
 namespace aaaSystems.Bot.Services
 {

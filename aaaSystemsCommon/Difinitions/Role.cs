@@ -1,4 +1,4 @@
-﻿namespace aaaSystemsCommon.Models.Difinitions
+﻿namespace aaaSystemsCommon.Difinitions
 {
     public enum Role
     {

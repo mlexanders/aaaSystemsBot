@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types.ReplyMarkups;
 
-namespace aaaSystems.Bot.Messages
+namespace aaaSystems.Bot.Features
 {
     internal abstract class ExtendedMessages : CommonMessages
     {
@@ -9,7 +9,6 @@ namespace aaaSystems.Bot.Messages
         protected ExtendedMessages(long chatId, int? callbackMessageId = null, string callback = null!) : base(chatId)
         {
             this.callbackMessageId = callbackMessageId;
-            buttonsGenerator.SetGoBackButton(callback);
         }
 
         protected Task TryEdit(string text, IReplyMarkup markup = null!)

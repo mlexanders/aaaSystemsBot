@@ -1,7 +1,6 @@
 ﻿using aaaSystems.Bot.Data.Texts;
-using aaaSystems.Bot.Features.Administrator;
 
-namespace aaaSystems.Bot.Messages
+namespace aaaSystems.Bot.Features.Administrator
 {
     internal class AdminMessages : ExtendedMessages
     {

@@ -1,20 +1,24 @@
-﻿using aaaSystems.Bot.Data.Texts;
-
-namespace aaaSystems.Bot.Messages
+﻿namespace aaaSystems.Bot.Features.Client
 {
-    internal class CleintMessages : CommonMessages
+    internal class ClientMessages : ExtendedMessages
     {
-        public CleintMessages(long chatId) : base(chatId) { }
+        public ClientMessages(long chatId, int? callbackMessageId = null) : base(chatId, callbackMessageId) { }
 
         public override async Task SendStartMessage()
         {
-            //buttonsGenerator.SetInlineButtons();
-            await bot.SendMessage(Texts.StartMessage, buttonsGenerator.GetButtons());
+            buttonsGenerator.SetInlineButtons(ClientCallback.Good);
+            await bot.SendMessage(ClientText.StartMessage, buttonsGenerator.GetButtons());
         }
 
-        public override Task SendMenu()
+        public override async Task SendMenu()
         {
-            return SendStartMessage();
+            buttonsGenerator.SetInlineButtons(ClientCallback.Menu);
+            await bot.SendMessage(ClientText.InfoMessage, buttonsGenerator.GetButtons());
+        }
+
+        internal Task AddToRoom()
+        {
+            throw new NotImplementedException();
         }
     }
 }

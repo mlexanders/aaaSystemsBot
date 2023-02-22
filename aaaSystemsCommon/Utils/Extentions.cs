@@ -1,4 +1,4 @@
-﻿using aaaSystemsCommon.Models;
+﻿using aaaSystemsCommon.Entity;
 using System.Reflection;
 
 namespace aaaSystemsCommon.Utils

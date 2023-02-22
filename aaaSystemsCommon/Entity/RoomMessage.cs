@@ -1,7 +1,7 @@
 ﻿using aaaSystemsCommon.Interfaces;
 using aaaSystemsCommon.Utils;
 
-namespace aaaSystemsCommon.Models
+namespace aaaSystemsCommon.Entity
 {
     [EntityRoot("RoomMessages")]
     public class RoomMessage : IEntity<int>

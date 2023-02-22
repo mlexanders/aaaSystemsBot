@@ -1,16 +1,16 @@
 ﻿using aaaSystems.Bot.Data.Texts;
-using aaaSystems.Bot.Messages;
+using aaaSystems.Bot.Features.Unauthorize;
 using Telegram.Bot.Types;
 using TelegramBotLib.Handlers;
 
 namespace aaaSystems.Bot.Handlers
 {
-    internal class UnauthorizedHandler : BaseHandler
+    internal class UnAuthorizedHandler : BaseHandler
     {
         protected override Task ProcessMessage(Message message)
         {
             var messages = new UnauthorizedMessages(message.Chat.Id);
-            
+
             return message.Text switch
             {
                 "/start" => messages.SendStartMessage(),
@@ -24,7 +24,7 @@ namespace aaaSystems.Bot.Handlers
 
             return callbackQuery.Data switch
             {
-                "@" + InlineButtonsTexts.Registration => messages.Registration(),
+                "@" + CommonCallback.Registration => messages.Registration(),
                 _ => throw new NotImplementedException()
             };
         }

@@ -1,4 +1,4 @@
-﻿using aaaSystemsCommon.Models;
+﻿using aaaSystemsCommon.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace aaaSystemsApi

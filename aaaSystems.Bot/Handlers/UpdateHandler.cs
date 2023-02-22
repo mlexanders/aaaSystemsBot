@@ -1,4 +1,5 @@
 ﻿using aaaSystems.Bot.Data;
+using aaaSystems.Bot.Services;
 using Telegram.Bot.Types;
 using TelegramBotLib.Interfaces;
 
@@ -6,8 +7,7 @@ namespace aaaSystems.Bot.Handlers
 {
     internal class UpdateHandler : IBaseUpdateHandler
     {
-        public static Dictionary<long, IBaseSpecialHandler> HandlingSenders { get; set; } = new();
-        private static readonly IBaseHandler mainHandler = new UnauthorizedHandler(); //TODO : not good
+        internal static Dictionary<long, IBaseSpecialHandler> HandlingSenders { get; set; } = new();
 
         public async Task HandleUpdateAsync(Update update)
         {
@@ -17,7 +17,7 @@ namespace aaaSystems.Bot.Handlers
             }
             else
             {
-                await mainHandler.ProcessUpdate(update);
+                await DistributorService.ProcessUpdate(update);
             }
         }
     }

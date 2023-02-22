@@ -1,5 +1,5 @@
-﻿using aaaSystemsCommon.Interfaces;
-using aaaSystemsCommon.Models;
+﻿using aaaSystemsCommon.Entity;
+using aaaSystemsCommon.Interfaces;
 using aaaSystemsCommon.Services.Base;
 
 namespace aaaSystemsCommon.Services.CrudServices

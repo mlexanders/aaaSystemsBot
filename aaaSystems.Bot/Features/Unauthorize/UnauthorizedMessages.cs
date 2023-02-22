@@ -1,7 +1,7 @@
 ﻿using aaaSystems.Bot.Data.Texts;
 using aaaSystems.Bot.Handlers;
 
-namespace aaaSystems.Bot.Messages
+namespace aaaSystems.Bot.Features.Unauthorize
 {
     internal class UnauthorizedMessages : CommonMessages
     {
@@ -9,7 +9,7 @@ namespace aaaSystems.Bot.Messages
 
         public override async Task SendStartMessage()
         {
-            buttonsGenerator.SetInlineButtons(InlineButtonsTexts.Registration);
+            buttonsGenerator.SetInlineButtons(CommonCallback.Registration);
             await bot.SendMessage(Texts.StartMessage, buttonsGenerator.GetButtons());
         }
 

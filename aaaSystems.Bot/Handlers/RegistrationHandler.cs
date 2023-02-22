@@ -1,8 +1,12 @@
 ﻿using aaaSystems.Bot.Data;
+using aaaSystems.Bot.Features.Client;
 using aaaSystems.Bot.Services;
+using aaaSystemsCommon.Difinitions;
+using aaaSystemsCommon.Entity;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using TelegramBotLib.Handlers;
+using TelegramBotLib.Services;
 
 namespace aaaSystems.Bot.Handlers
 {
@@ -30,7 +34,7 @@ namespace aaaSystems.Bot.Handlers
         {
             await SendRequestName();
             await SendRequestPhone();
-            //await CompleteRegistration();
+            await CompleteRegistration();
         }
 
         private async Task SendRequestName()
@@ -67,32 +71,29 @@ namespace aaaSystems.Bot.Handlers
             }
         }
 
-        //private async Task CompleteRegistration()
-        //{
-        //    try
-        //    {
-        //        var usersService = TransientService.GetUsersService();
-        //        await usersService.Post(new User()
-        //        {
-        //            Id = chatId,
-        //            Name = model.Name,
-        //            Phone = model.Phone,
-        //            Role = Role.User
-        //        });
-        //        await new MessageCollectorBase(chatId).SendUserInfo(markup: new ReplyKeyboardRemove());
-        //    }
-        //    catch (HttpRequestException e)
-        //    {
-        //        LogService.LogServerNotFound(e.Message);
-        //        await bot.SendMessage(e.Message);
-        //    }
-        //    finally
-        //    {
-        //        UpdateHandler.BusyUsersIdAndService.Remove(chatId);
-
-        //        var messageCollector = new MessageCollectorBase(chatId);
-        //        await messageCollector.SendMenu();
-        //    }
-        //}
+        private async Task CompleteRegistration()
+        {
+            try
+            {
+                var sendersService = TransientService.GetSendersService();
+                await sendersService.Post(new Sender()
+                {
+                    Id = chatId,
+                    Name = model.Name,
+                    Phone = model.Phone,
+                    Role = Role.Client
+                });
+            }
+            catch (HttpRequestException e)
+            {
+                LogService.LogServerNotFound(e.Message);
+                await bot.SendMessage(e.Message);
+            }
+            finally
+            {
+                UpdateHandler.HandlingSenders.Remove(chatId);
+                await new ClientMessages(chatId).SendMenu();
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using aaaSystemsApi.Repository;
+using aaaSystemsCommon.Entity;
 using aaaSystemsCommon.Interfaces;
-using aaaSystemsCommon.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace aaaSystemsApi.Controllers

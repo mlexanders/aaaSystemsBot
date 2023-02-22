@@ -1,4 +1,4 @@
-﻿using aaaSystemsCommon.Models;
+﻿using aaaSystemsCommon.Entity;
 
 namespace aaaSystemsCommon.Interfaces
 {

@@ -1,5 +1,4 @@
 ﻿using aaaSystems.Bot.Features.Administrator;
-using aaaSystems.Bot.Messages;
 using Telegram.Bot.Types;
 using TelegramBotLib.Handlers;
 
@@ -14,7 +13,7 @@ namespace aaaSystems.Bot.Handlers
             return message.Text switch
             {
                 "/start" => messages.SendStartMessage(),
-                _ => throw new NotImplementedException()
+                _ => messages.SendUnknownMessage()
             };
         }
 
@@ -26,7 +25,7 @@ namespace aaaSystems.Bot.Handlers
             {
                 "@" + AdminCallback.Good => messages.SendMenu(),
                 "@" + AdminCallback.requests => messages.ShowRequests(),
-
+                "@" + AdminCallback.users => messages.ShowAllUsers(),
 
                 _ => throw new NotImplementedException()
             };

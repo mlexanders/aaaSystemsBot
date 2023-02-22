@@ -1,7 +1,7 @@
 ﻿using aaaSystems.Bot.Data.Interfaces;
 using Telegram.Bot.Types;
 
-namespace aaaSystems.Bot.Features.Other
+namespace aaaSystems.Bot.Other
 {
     internal abstract class BaseSender : ISender
     {

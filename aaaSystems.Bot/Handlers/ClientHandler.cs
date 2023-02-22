@@ -1,4 +1,6 @@
-﻿using Telegram.Bot.Types;
+﻿using aaaSystems.Bot.Data.Texts;
+using aaaSystems.Bot.Features.Client;
+using Telegram.Bot.Types;
 using TelegramBotLib.Handlers;
 
 namespace aaaSystems.Bot.Handlers
@@ -7,12 +9,27 @@ namespace aaaSystems.Bot.Handlers
     {
         protected override Task ProcessMessage(Message message)
         {
-            throw new NotImplementedException();
+            var messages = new ClientMessages(message.Chat.Id);
+
+            return message.Text switch
+            {
+                "/start" => messages.SendStartMessage(),
+                _ => messages.SendUnknownMessage()
+            };
         }
 
         protected override Task ProcessCallbackQuery(CallbackQuery callbackQuery)
         {
-            throw new NotImplementedException();
+            var messages = new ClientMessages(callbackQuery.Message!.Chat.Id, callbackQuery.Message!.MessageId);
+
+            return callbackQuery.Data switch
+            {
+                "@/start" => messages.SendStartMessage(),
+                "@" + ClientCallback.Good => messages.SendMenu(),
+                "@" + ClientCallback.Write => messages.AddToRoom(),
+                "@" + CommonCallback.Menu => messages.SendMenu(),
+                _ => throw new NotImplementedException()
+            };
         }
     }
 }

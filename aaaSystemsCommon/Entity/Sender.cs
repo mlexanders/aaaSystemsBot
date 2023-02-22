@@ -1,10 +1,10 @@
-﻿using aaaSystemsCommon.Interfaces;
-using aaaSystemsCommon.Models.Difinitions;
+﻿using aaaSystemsCommon.Difinitions;
+using aaaSystemsCommon.Interfaces;
 using aaaSystemsCommon.Utils;
 
-namespace aaaSystemsCommon.Models
+namespace aaaSystemsCommon.Entity
 {
-    [EntityRoot("Sender")]
+    [EntityRoot("Senders")]
     public class Sender : IEntity<long>
     {
         public long Id { get; set; }
