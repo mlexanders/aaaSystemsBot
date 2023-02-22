@@ -5,12 +5,12 @@ namespace aaaSystems.Bot.Handlers
 {
     internal class ClientHandler : BaseHandler
     {
-        public override Task ProcessMessage(Message message)
+        protected override Task ProcessMessage(Message message)
         {
             throw new NotImplementedException();
         }
 
-        public override Task ProcessCallbackQuery(CallbackQuery callbackQuery)
+        protected override Task ProcessCallbackQuery(CallbackQuery callbackQuery)
         {
             throw new NotImplementedException();
         }

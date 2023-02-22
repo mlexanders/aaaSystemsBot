@@ -16,4 +16,8 @@
     <ProjectReference Include="..\TgBotLibrary\TgBotLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Messages\" />
+  </ItemGroup>
+
 </Project>

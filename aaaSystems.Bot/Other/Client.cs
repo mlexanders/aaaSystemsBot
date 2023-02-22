@@ -1,13 +1,13 @@
 ﻿using aaaSystems.Bot.Data.Entity;
 using Telegram.Bot.Types;
 
-namespace aaaSystems.Bot.Features
+namespace aaaSystems.Bot.Features.Other
 {
-    internal class Administrator : BaseSender
+    internal class Client : BaseSender
     {
         private readonly SenderEntity sender;
 
-        public Administrator(SenderEntity sender)
+        public Client(SenderEntity sender)
         {
             this.sender = sender;
         }

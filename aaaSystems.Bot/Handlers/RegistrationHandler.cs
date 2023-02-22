@@ -24,7 +24,7 @@ namespace aaaSystems.Bot.Handlers
             return base.ProcessUpdate(update);
         }
 
-        public override Task ProcessCallbackQuery(CallbackQuery callbackQuery) => Task.CompletedTask; // ignore callBack
+        protected override Task ProcessCallbackQuery(CallbackQuery callbackQuery) => Task.CompletedTask; // ignore callBack
 
         protected override async Task RegistrateProcessing()
         {

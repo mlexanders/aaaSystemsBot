@@ -14,15 +14,10 @@ namespace TelegramBotLib.Handlers
             if (CurrentMessage == null) RegistrateProcessing();
         }
 
-        public override async Task ProcessMessage(Message message)
+        protected override async Task ProcessMessage(Message message)
         {
             CurrentMessage = message;
             numberOfMessage++;
-        }
-
-        public override Task ProcessUpdate(Update update)
-        {
-            return base.ProcessUpdate(update);
         }
 
         protected abstract Task RegistrateProcessing();

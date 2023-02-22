@@ -4,21 +4,20 @@ using TelegramBotLib.Interfaces;
 
 namespace TelegramBotLib.Handlers
 {
-    public abstract class BaseHandler : IAdvancedHandler
+    public abstract class BaseHandler : IBaseHandler
     {
         public virtual Task ProcessUpdate(Update update)
         {
-            Task process = update.Type switch
+            return update.Type switch
             {
                 UpdateType.Message => ProcessMessage(update.Message!),
                 UpdateType.CallbackQuery => ProcessCallbackQuery(update.CallbackQuery!),
                 _ => throw new NotImplementedException("Update type not processed")
             };
-            return process;
         }
 
-        public abstract Task ProcessMessage(Message message);
+        protected abstract Task ProcessMessage(Message message);
 
-        public abstract Task ProcessCallbackQuery(CallbackQuery callbackQuery);
+        protected abstract Task ProcessCallbackQuery(CallbackQuery callbackQuery);
     }
 }

@@ -31,5 +31,10 @@ namespace aaaSystems.Bot.Services
         }
 
         public void SetGoBackButton(string callback = "/start") => SetInlineButtons(("↪ Назад", callback));
+
+        internal void SetInlineButtons(object allUsers)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

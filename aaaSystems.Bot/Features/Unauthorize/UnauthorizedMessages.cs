@@ -5,9 +5,7 @@ namespace aaaSystems.Bot.Messages
 {
     internal class UnauthorizedMessages : CommonMessages
     {
-        public UnauthorizedMessages(long chatId) : base(chatId)
-        {
-        }
+        public UnauthorizedMessages(long chatId) : base(chatId) { }
 
         public override async Task SendStartMessage()
         {

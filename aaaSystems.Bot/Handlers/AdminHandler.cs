@@ -1,28 +1,35 @@
-﻿using Telegram.Bot.Types;
+﻿using aaaSystems.Bot.Features.Administrator;
+using aaaSystems.Bot.Messages;
+using Telegram.Bot.Types;
 using TelegramBotLib.Handlers;
 
 namespace aaaSystems.Bot.Handlers
 {
     internal class AdminHandler : BaseHandler
     {
-        public override Task ProcessMessage(Message message)
+        protected override Task ProcessMessage(Message message)
         {
-            Task action = message.Text switch
+            var messages = new AdminMessages(message!.Chat.Id);
+
+            return message.Text switch
             {
-                "/start" => new Task(() => Console.WriteLine()),
+                "/start" => messages.SendStartMessage(),
                 _ => throw new NotImplementedException()
             };
-            return action;
         }
 
-        public override Task ProcessCallbackQuery(CallbackQuery callbackQuery)
+        protected override Task ProcessCallbackQuery(CallbackQuery callbackQuery)
         {
-            Task action = callbackQuery.Data switch
+            var messages = new AdminMessages(callbackQuery.Message!.Chat.Id, callbackQuery.Message.MessageId);
+
+            return callbackQuery.Data switch
             {
-                "/start" => new Task(() => Console.WriteLine()),
+                "@" + AdminCallback.Good => messages.SendMenu(),
+                "@" + AdminCallback.requests => messages.ShowRequests(),
+
+
                 _ => throw new NotImplementedException()
             };
-            return action;
         }
     }
 }

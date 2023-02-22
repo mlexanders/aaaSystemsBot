@@ -5,37 +5,28 @@ using TelegramBotLib.Handlers;
 
 namespace aaaSystems.Bot.Handlers
 {
-    internal class MainHandler : BaseHandler
+    internal class UnauthorizedHandler : BaseHandler
     {
-        private UnauthorizedMessages messages;
-
-        public override async Task ProcessUpdate(Update update)
+        protected override Task ProcessMessage(Message message)
         {
-            await base.ProcessUpdate(update);
-        }
-
-        public override Task ProcessMessage(Message message)
-        {
-            messages = new UnauthorizedMessages(message.Chat.Id);
-
-            Task action = message.Text switch
+            var messages = new UnauthorizedMessages(message.Chat.Id);
+            
+            return message.Text switch
             {
                 "/start" => messages.SendStartMessage(),
                 _ => throw new NotImplementedException()
             };
-            return action;
         }
 
-        public override Task ProcessCallbackQuery(CallbackQuery callbackQuery)
+        protected override Task ProcessCallbackQuery(CallbackQuery callbackQuery)
         {
-            messages = new UnauthorizedMessages(callbackQuery.Message!.Chat.Id);
+            var messages = new UnauthorizedMessages(callbackQuery.Message!.Chat.Id);
 
-            Task action = callbackQuery.Data switch
+            return callbackQuery.Data switch
             {
-                "@" + InlineButtonsTexts.Registration =>  messages.Registration(),
+                "@" + InlineButtonsTexts.Registration => messages.Registration(),
                 _ => throw new NotImplementedException()
             };
-            return action;
         }
     }
 }

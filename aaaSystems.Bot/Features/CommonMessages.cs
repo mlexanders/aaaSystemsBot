@@ -1,19 +1,18 @@
 ﻿using aaaSystems.Bot.Data.Texts;
 using aaaSystems.Bot.Services;
+using TelegramBotLib.Interfaces;
 
 namespace aaaSystems.Bot.Messages
 {
     internal abstract class CommonMessages
     {
-        protected readonly BotService bot;
-        protected readonly long chatId;
+        protected readonly IBaseBotService bot;
         protected ButtonsGenerator buttonsGenerator;
 
         public CommonMessages(long chatId)
         {
             buttonsGenerator = new ();
             bot = new BotService(chatId);
-            this.chatId = chatId;
         }
 
         public abstract Task SendStartMessage();

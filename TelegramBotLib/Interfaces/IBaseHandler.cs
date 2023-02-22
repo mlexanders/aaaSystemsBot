@@ -2,7 +2,7 @@
 
 namespace TelegramBotLib.Interfaces
 {
-    public interface IAdvancedHandler : IBaseHandler
+    public interface IProcessHandler
     {
         Task ProcessCallbackQuery(CallbackQuery callbackQuery);
         Task ProcessMessage(Message message);

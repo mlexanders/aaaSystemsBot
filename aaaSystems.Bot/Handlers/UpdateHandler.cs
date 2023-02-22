@@ -7,7 +7,7 @@ namespace aaaSystems.Bot.Handlers
     internal class UpdateHandler : IBaseUpdateHandler
     {
         public static Dictionary<long, IBaseSpecialHandler> HandlingSenders { get; set; } = new();
-        private static readonly IAdvancedHandler mainHandler = new MainHandler();
+        private static readonly IBaseHandler mainHandler = new UnauthorizedHandler(); //TODO : not good
 
         public async Task HandleUpdateAsync(Update update)
         {
