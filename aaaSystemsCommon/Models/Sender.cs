@@ -4,8 +4,8 @@ using aaaSystemsCommon.Utils;
 
 namespace aaaSystemsCommon.Models
 {
-    [EntityRoot("Users")]
-    public class User : IEntity<long>
+    [EntityRoot("Sender")]
+    public class Sender : IEntity<long>
     {
         public long Id { get; set; }
         public string? Name { get; set; }

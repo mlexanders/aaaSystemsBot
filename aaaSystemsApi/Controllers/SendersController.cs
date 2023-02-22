@@ -8,12 +8,12 @@ namespace aaaSystemsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : BaseCrudController<User, long>, IUser
+    public class SendersController : BaseCrudController<Sender, long>, ISender
     {
-        public UsersController(UserRepository repository) : base(repository) { }
+        public SendersController(SenderRepository repository) : base(repository) { }
 
         [HttpGet("Admins")]
-        public async Task<List<User>> Admins()
+        public async Task<List<Sender>> Admins()
         {
             return await repository.Read(u => u.Role == Role.Admin);
         }

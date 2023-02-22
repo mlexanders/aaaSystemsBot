@@ -5,7 +5,7 @@ namespace aaaSystemsApi
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Sender> Senders { get; set; } = null!;
         public DbSet<Room> Rooms { get; set; } = null!;
         public DbSet<RoomMessage> RoomMessages { get; set; } = null!;
 
@@ -13,17 +13,17 @@ namespace aaaSystemsApi
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<Sender>()
                 .HasMany<Room>()
                 .WithOne()
                 .HasForeignKey(u => u.UserId);
 
             modelBuilder.Entity<RoomMessage>()
-                .HasOne<User>()
+                .HasOne<Sender>()
                 .WithMany()
                 .HasForeignKey(u => u.UserId);
 
-            modelBuilder.Entity<User>().Property(u => u.Id)
+            modelBuilder.Entity<Sender>().Property(u => u.Id)
                 .ValueGeneratedNever();
         }
     }

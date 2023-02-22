@@ -5,13 +5,13 @@
 namespace aaaSystemsApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class first : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Senders",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false),
@@ -21,7 +21,7 @@ namespace aaaSystemsApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Senders", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -36,9 +36,9 @@ namespace aaaSystemsApi.Migrations
                 {
                     table.PrimaryKey("PK_Rooms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Rooms_Users_UserId",
+                        name: "FK_Rooms_Senders_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "Senders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -65,9 +65,9 @@ namespace aaaSystemsApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RoomMessages_Users_UserId",
+                        name: "FK_RoomMessages_Senders_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "Senders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -98,7 +98,7 @@ namespace aaaSystemsApi.Migrations
                 name: "Rooms");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Senders");
         }
     }
 }

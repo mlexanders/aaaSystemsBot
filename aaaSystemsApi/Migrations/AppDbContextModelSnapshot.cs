@@ -63,7 +63,7 @@ namespace aaaSystemsApi.Migrations
                     b.ToTable("RoomMessages");
                 });
 
-            modelBuilder.Entity("aaaSystemsCommon.Models.User", b =>
+            modelBuilder.Entity("aaaSystemsCommon.Models.Sender", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -79,12 +79,12 @@ namespace aaaSystemsApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Senders");
                 });
 
             modelBuilder.Entity("aaaSystemsCommon.Models.Room", b =>
                 {
-                    b.HasOne("aaaSystemsCommon.Models.User", null)
+                    b.HasOne("aaaSystemsCommon.Models.Sender", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -99,7 +99,7 @@ namespace aaaSystemsApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("aaaSystemsCommon.Models.User", null)
+                    b.HasOne("aaaSystemsCommon.Models.Sender", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

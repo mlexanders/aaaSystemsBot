@@ -2,8 +2,8 @@
 
 namespace aaaSystemsCommon.Interfaces
 {
-    public interface IUser : ICrud<User, long>
+    public interface ISender : ICrud<Sender, long>
     {
-        Task<List<User>> Admins();
+        Task<List<Sender>> Admins();
     }
 }

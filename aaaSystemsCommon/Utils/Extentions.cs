@@ -8,7 +8,7 @@ namespace aaaSystemsCommon.Utils
         public static string GetRoot(this Type type) => type?
             .GetCustomAttribute<EntityRootAttribute>()?.Root ?? nameof(type);
 
-        public static string GetInfo(this User user)
+        public static string GetInfo(this Sender user)
         {
             return user != null ? GetFormatString("Имя", user.Name) +
                    GetFormatString("Номер", user.Phone) +
