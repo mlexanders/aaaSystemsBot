@@ -48,7 +48,7 @@ namespace aaaTgBot.Messages
         {
             await SendStartMessage();
         }
-        public async Task EditToMenu()
+        public async Task SendActionMenu()
         {
             var user = await TransientService.GetUsersService().Get(chatId);
             var bg = new ButtonsGenerator();

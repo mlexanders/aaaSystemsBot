@@ -32,23 +32,8 @@ namespace aaaTgBot.Messages
             }
             else
             {
-                await EditToMenu(user);
-            }
-        }
-        private async Task EditToMenu(User user)
-        {
-            var bg = new ButtonsGenerator();
-
-            if (user.Role is Role.User)
-            {
-                bg.SetInlineButtons(InlineButtonsTexts.Write);
-                bg.SetInlineButtons(InlineButtonsTexts.SendApplication);
-                await botService.EditMessage(messageId, Texts.SubmitAnApplication, bg.GetButtons());
-            }
-            else if (user.Role is Role.Admin)
-            {
-                bg.SetInlineButtons(InlineButtonsTexts.Rooms);
-                await botService.EditMessage(messageId, "Что бы вы хотели узнать?", bg.GetButtons());
+                var messagecollector = new MessageCollectorBase(chatId);
+                await messagecollector.SendActionMenu();
             }
         }
 

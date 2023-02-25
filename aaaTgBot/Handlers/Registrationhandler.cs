@@ -63,7 +63,7 @@ namespace aaaTgBot.Handlers
                 UpdateHandler.BusyUsersIdAndService.Remove(chatId);
 
                 var messageCollector = new MessageCollectorBase(chatId);
-                await messageCollector.EditToMenu();
+                await messageCollector.SendActionMenu();
             }
         }
     }
