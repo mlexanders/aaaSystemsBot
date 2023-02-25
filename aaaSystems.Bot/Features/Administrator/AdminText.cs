@@ -18,5 +18,20 @@
 
         internal readonly static (string, string)[] Menu = { ("Обращения", Requests), ("Пользователи", Users), ("Настройки", Settings) };
         internal const string Good = "Хорошо";
+
+        internal const string Write = "Написать";
+        internal const string LoadDialog = "Показать сообщения";
+        internal const string MoreDetails = "Подробнее";
+
+        internal static (string, string)[] GetNotificationMenu(long chatId)
+        {
+            (string, string)[] result =
+            {
+                (Write, Write),
+                (LoadDialog, LoadDialog),
+                (MoreDetails, $"{MoreDetails}:{chatId}")
+            };
+            return result;
+        }
     }
 }

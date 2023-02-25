@@ -9,9 +9,10 @@ namespace TelegramBotLib.Handlers
         private int numberOfMessage = 0;
         private int numberOfReadings = 1;
 
-        public void StartProcessing()
+        public Task StartProcessing()
         {
             if (CurrentMessage == null) RegistrateProcessing();
+            return Task.CompletedTask;
         }
 
         protected override async Task ProcessMessage(Message message)

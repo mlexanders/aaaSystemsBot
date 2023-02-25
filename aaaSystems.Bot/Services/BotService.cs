@@ -56,6 +56,11 @@ namespace aaaSystems.Bot.Services
             await SafelyExecute(bot.ForwardMessageAsync(chatId, fromChatId, messageId, disableNotification: disableNotification));
         }
 
+        public virtual async Task Forward(long fromChatId, int messageId, bool? disableNotification = null)
+        {
+            await SafelyExecute(bot.ForwardMessageAsync(this.chatId, fromChatId, messageId, disableNotification: disableNotification));
+        }
+
         public virtual async Task FromBotMessage(string text, IReplyMarkup markup)
         {
             await SafelyExecute(bot.SendTextMessageAsync(chatId, $"<b>От : {await bot.GetMeAsync()}</b> \n {text}", ParseMode.Html, replyMarkup: markup));

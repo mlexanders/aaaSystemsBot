@@ -6,8 +6,8 @@ namespace aaaSystems.Bot.Services
     public static class TransientService
     {
         public static SendersService GetSendersService() => new(AppSettings.BackRoot, GetClient());
-        public static DialogsService DialogsService => new(AppSettings.BackRoot, GetClient());
-        public static DialogMessagesService DialogMessagesService=> new(AppSettings.BackRoot, GetClient());
+        public static DialogsService GetDialogsService() => new(AppSettings.BackRoot, GetClient());
+        public static DialogMessagesService GetDialogMessagesService() => new(AppSettings.BackRoot, GetClient());
 
         public static HttpClient GetClient()
         {

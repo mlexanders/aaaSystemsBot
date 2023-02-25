@@ -2,6 +2,6 @@
 {
     public interface IBaseSpecialHandler : IBaseHandler
     {
-        void StartProcessing();
+        Task StartProcessing();
     }
 }
