@@ -8,6 +8,6 @@ namespace aaaSystemsCommon.Entity
     {
         public int Id { get; set; }
         public DateTime DateTime { get; set; }
-        public long ChatId { get; set; }
+        public long DialogId { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace aaaSystems.Bot.Handlers
                 "@/start" => messages.SendStartMessage(),
                 "@" + ClientCallback.Good => messages.SendMenu(),
                 "@" + CommonCallback.Menu => messages.SendMenu(),
-                "@" + ClientCallback.Write => messages.AddToRoom(),
+                "@" + ClientCallback.Write => messages.StartDialog(),
                 _ => throw new NotImplementedException()
             };
         }

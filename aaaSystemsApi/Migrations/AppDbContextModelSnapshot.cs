@@ -20,17 +20,19 @@ namespace aaaSystemsApi.Migrations
             modelBuilder.Entity("aaaSystemsCommon.Entity.Dialog", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("ChatId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsNeedAnswer")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("SenderId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SenderId");
+                    b.HasIndex("ChatId")
+                        .IsUnique();
 
                     b.ToTable("Dialogs");
                 });
@@ -40,15 +42,15 @@ namespace aaaSystemsApi.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("ChatId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("DialogId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatId");
+                    b.HasIndex("DialogId");
 
                     b.ToTable("DialogMessages");
                 });
@@ -76,18 +78,18 @@ namespace aaaSystemsApi.Migrations
 
             modelBuilder.Entity("aaaSystemsCommon.Entity.Dialog", b =>
                 {
-                    b.HasOne("aaaSystemsCommon.Entity.Sender", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId");
-
-                    b.Navigation("Sender");
+                    b.HasOne("aaaSystemsCommon.Entity.Sender", null)
+                        .WithOne()
+                        .HasForeignKey("aaaSystemsCommon.Entity.Dialog", "ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("aaaSystemsCommon.Entity.DialogMessage", b =>
                 {
                     b.HasOne("aaaSystemsCommon.Entity.Dialog", null)
                         .WithMany()
-                        .HasForeignKey("ChatId")
+                        .HasForeignKey("DialogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -13,7 +13,7 @@ namespace aaaSystemsApi
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region HasKey
+            #region P_Key
             modelBuilder.Entity<Sender>()
                 .HasKey(s => s.Id);
 
@@ -22,25 +22,21 @@ namespace aaaSystemsApi
 
             modelBuilder.Entity<DialogMessage>()
                 .HasKey(s => s.Id);
-
             #endregion
 
             modelBuilder.Entity<Dialog>()
                 .HasMany<DialogMessage>()
                 .WithOne()
-                .HasForeignKey(d => d.ChatId);
+                .HasForeignKey(d => d.DialogId);
 
-            //modelBuilder.Entity<Sender>()
-            //    .HasOne<Dialog>()
-            //    .WithOne()
-            //    .HasForeignKey<Sender>(s => s.Id);
+            modelBuilder.Entity<Sender>()
+                .HasOne<Dialog>()
+                .WithOne()
+                .HasForeignKey<Dialog>(d => d.ChatId);
 
             #region ValueGeneratedNever
             modelBuilder.Entity<Sender>().Property(s => s.Id)
                    .ValueGeneratedNever();
-
-            modelBuilder.Entity<Dialog>().Property(d => d.Id)
-                .ValueGeneratedNever();
 
             modelBuilder.Entity<DialogMessage>().Property(m => m.Id)
                 .ValueGeneratedNever();

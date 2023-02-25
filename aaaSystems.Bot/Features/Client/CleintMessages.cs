@@ -1,4 +1,6 @@
-﻿namespace aaaSystems.Bot.Features.Client
+﻿using aaaSystems.Bot.Handlers;
+
+namespace aaaSystems.Bot.Features.Client
 {
     internal class ClientMessages : ExtendedMessages
     {
@@ -16,9 +18,11 @@
             await bot.SendMessage(ClientText.InfoMessage, buttonsGenerator.GetButtons());
         }
 
-        internal Task AddToRoom()
+        internal Task StartDialog()
         {
-            throw new NotImplementedException();
+            var handler = new DialogHandler(chatId);
+            UpdateHandler.HandlingSenders.Add(chatId, handler);
+            return handler.StartProcessing();
         }
     }
 }

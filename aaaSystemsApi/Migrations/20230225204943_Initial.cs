@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -29,18 +28,20 @@ namespace aaaSystemsApi.Migrations
                 name: "Dialogs",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false),
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     IsNeedAnswer = table.Column<bool>(type: "INTEGER", nullable: false),
-                    SenderId = table.Column<long>(type: "INTEGER", nullable: true)
+                    ChatId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Dialogs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Dialogs_Senders_SenderId",
-                        column: x => x.SenderId,
+                        name: "FK_Dialogs_Senders_ChatId",
+                        column: x => x.ChatId,
                         principalTable: "Senders",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,28 +50,29 @@ namespace aaaSystemsApi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false),
                     DateTime = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ChatId = table.Column<long>(type: "INTEGER", nullable: false)
+                    DialogId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DialogMessages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DialogMessages_Dialogs_ChatId",
-                        column: x => x.ChatId,
+                        name: "FK_DialogMessages_Dialogs_DialogId",
+                        column: x => x.DialogId,
                         principalTable: "Dialogs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DialogMessages_ChatId",
+                name: "IX_DialogMessages_DialogId",
                 table: "DialogMessages",
-                column: "ChatId");
+                column: "DialogId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Dialogs_SenderId",
+                name: "IX_Dialogs_ChatId",
                 table: "Dialogs",
-                column: "SenderId");
+                column: "ChatId",
+                unique: true);
         }
 
         /// <inheritdoc />

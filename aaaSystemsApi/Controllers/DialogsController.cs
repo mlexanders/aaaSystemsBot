@@ -9,6 +9,14 @@ namespace aaaSystemsApi.Controllers
     [ApiController]
     public class DialogsController : BaseCrudController<Dialog, long>, IDialog
     {
-        public DialogsController(DialogRepository repository) : base(repository) { }
+        public DialogsController(DialogRepository repository) : base(repository)
+        {
+        }
+
+        [HttpGet("GetByChatId/{chatId}")]
+        public Task<Dialog> GetByChatId(long chatId)
+        {
+            return repository.ReadFirst(d => d.ChatId.Equals(chatId));
+        }
     }
 }

@@ -10,6 +10,8 @@ namespace aaaSystems.Bot.Handlers
     public class DialogHandler : BaseHandler, IBaseSpecialHandler
     {
         public Client Initiator { get; private set; } = null!;
+        public Dialog CurrentDialog { get; private set; }
+
         public readonly IParticipantFactory participants;
         private readonly long chatId;
 
@@ -22,6 +24,22 @@ namespace aaaSystems.Bot.Handlers
         public async Task StartProcessing()
         {
             Initiator = await participants.GetClient(chatId);
+            await TrySetDialog();
+            await Initiator.Notificate("infoMessage");
+        }
+
+        private async Task TrySetDialog()
+        {
+            var dialogs = TransientService.GetDialogsService();
+            try
+            {
+                CurrentDialog = await dialogs.GetByChatId(chatId);
+            }
+            catch
+            {
+                await dialogs.Post(new Dialog() { ChatId = chatId });
+                CurrentDialog = await dialogs.GetByChatId(chatId);
+            }
         }
 
         public override Task ProcessUpdate(Update update)
@@ -45,11 +63,7 @@ namespace aaaSystems.Bot.Handlers
         private Task PostMessage(Message message)
         {
             var dialogMessages = TransientService.GetDialogMessagesService();
-            return dialogMessages.Post(new DialogMessage()
-            {
-                ChatId = chatId,
-                Id = message.MessageId
-            });
+            return dialogMessages.PostByChatId(chatId, message.MessageId);
         }
     }
 
@@ -146,6 +160,11 @@ namespace aaaSystems.Bot.Handlers
         public override async Task Notificate(Message message)
         {
             await bot.SendMessage(message.Text!);
+        }
+
+        public async Task Notificate(string message)
+        {
+            await bot.SendMessage(message);
         }
 
         public override Task Remove()

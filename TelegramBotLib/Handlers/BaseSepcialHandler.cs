@@ -3,7 +3,7 @@ using TelegramBotLib.Interfaces;
 
 namespace TelegramBotLib.Handlers
 {
-    public abstract class BaseSepcialHandler : BaseHandler, IBaseSpecialHandler 
+    public abstract class BaseSepcialHandler : BaseHandler, IBaseSpecialHandler
     {
         private Message? CurrentMessage;
         private int numberOfMessage = 0;

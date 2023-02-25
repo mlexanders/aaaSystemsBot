@@ -1,7 +1,6 @@
 ﻿using aaaSystemsCommon.Difinitions;
 using aaaSystemsCommon.Interfaces;
 using aaaSystemsCommon.Utils;
-using System.Runtime.InteropServices;
 
 namespace aaaSystemsCommon.Entity
 {

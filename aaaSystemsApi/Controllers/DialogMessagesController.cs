@@ -9,6 +9,23 @@ namespace aaaSystemsApi.Controllers
     [ApiController]
     public class DialogMessagesController : BaseCrudController<DialogMessage, int>, IDialogMessage
     {
-        public DialogMessagesController(DialogMessageRepository repository) : base(repository) { }
+        private readonly DialogRepository dialogRepository;
+
+        public DialogMessagesController(DialogMessageRepository repository, DialogRepository dialogRepository) : base(repository)
+        {
+            this.dialogRepository = dialogRepository;
+        }
+
+        [HttpPost("PostByChatId/{chatId}")]
+        public virtual async Task PostByChatId(long chatId, [FromBody] int messageId)
+        {
+            var dialog = await dialogRepository.ReadFirst(d => d.ChatId.Equals(chatId)) ?? throw new();
+
+            await repository.Create(new DialogMessage()
+            {
+                Id = messageId,
+                DialogId = dialog.Id
+            });
+        }
     }
 }
