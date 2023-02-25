@@ -1,10 +1,10 @@
-﻿using aaaSystemsCommon.Entity;
+﻿using aaaSystemsCommon.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace aaaSystemsApi.Repository
 {
-    public class BaseCrudRepository<TEntity, TKey> where TEntity : Entity<TKey>
+    public class BaseCrudRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         private readonly AppDbContext dbContext;
         private readonly DbSet<TEntity> dbSet;
@@ -54,7 +54,7 @@ namespace aaaSystemsApi.Repository
 
         public virtual Task Delete(TKey id)
         {
-            return Delete(entity => entity.PK.Equals(id));
+            return Delete(entity => entity.Id.Equals(id));
         }
 
         public virtual async Task Delete(Func<TEntity, bool> query)

@@ -10,21 +10,21 @@ namespace aaaSystems.Bot.Features
         protected readonly IBaseBotService bot;
         protected ButtonsGenerator buttonsGenerator;
 
-        public CommonMessages(long chatId)
+        internal CommonMessages(long chatId)
         {
             buttonsGenerator = new();
             bot = new BotService(chatId);
             this.chatId = chatId;
         }
 
-        public abstract Task SendStartMessage();
+        internal abstract Task SendStartMessage();
 
-        public virtual async Task SendUnknownMessage()
+        internal virtual async Task SendUnknownMessage()
         {
             buttonsGenerator.SetInlineButtons(CommonCallback.Menu);
             await bot.SendMessage(Texts.UnknownMessage, buttonsGenerator.GetButtons());
         }
 
-        public abstract Task SendMenu();
+        internal abstract Task SendMenu();
     }
 }

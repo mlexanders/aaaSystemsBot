@@ -1,8 +1,6 @@
-﻿using aaaSystemsCommon.Entity;
-
-namespace aaaSystemsCommon.Interfaces
+﻿namespace aaaSystemsCommon.Interfaces
 {
-    public interface ICrud<TEntity, TKey> where TEntity : Entity<TKey>
+    public interface ICrud<TEntity, TKey> where TEntity : IEntity<TKey>
     {
         Task<List<TEntity>> Get();
         Task<TEntity> Get(TKey id);

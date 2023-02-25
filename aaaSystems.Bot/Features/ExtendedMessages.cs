@@ -6,12 +6,12 @@ namespace aaaSystems.Bot.Features
     {
         private int? callbackMessageId;
 
-        protected ExtendedMessages(long chatId, int? callbackMessageId = null, string callback = null!) : base(chatId)
+        internal ExtendedMessages(long chatId, int? callbackMessageId = null) : base(chatId)
         {
             this.callbackMessageId = callbackMessageId;
         }
 
-        protected Task TryEdit(string text, IReplyMarkup markup = null!)
+        internal Task TryEdit(string text, IReplyMarkup markup = null!)
         {
             try
             {

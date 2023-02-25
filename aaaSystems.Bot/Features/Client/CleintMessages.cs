@@ -2,15 +2,15 @@
 {
     internal class ClientMessages : ExtendedMessages
     {
-        public ClientMessages(long chatId, int? callbackMessageId = null) : base(chatId, callbackMessageId) { }
+        internal ClientMessages(long chatId, int? callbackMessageId = null) : base(chatId, callbackMessageId) { }
 
-        public override async Task SendStartMessage()
+        internal override async Task SendStartMessage()
         {
             buttonsGenerator.SetInlineButtons(ClientCallback.Good);
             await bot.SendMessage(ClientText.StartMessage, buttonsGenerator.GetButtons());
         }
 
-        public override async Task SendMenu()
+        internal override async Task SendMenu()
         {
             buttonsGenerator.SetInlineButtons(ClientCallback.Menu);
             await bot.SendMessage(ClientText.InfoMessage, buttonsGenerator.GetButtons());

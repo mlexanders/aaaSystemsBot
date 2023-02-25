@@ -1,5 +1,4 @@
-﻿using aaaSystemsCommon.Models.Difinitions;
-using aaaSystemsCommon.Services.CrudServices;
+﻿using aaaSystemsCommon.Services.CrudServices;
 using aaaTgBot.Data.Exceptions;
 using aaaTgBot.Handlers;
 
@@ -7,7 +6,7 @@ namespace aaaTgBot.Services
 {
     public class SendersFactory
     {
-        private readonly UsersService usersService;
+        private readonly SendersService usersService;
         private readonly RoomHandler handler;
         private Dictionary<long, Sender> senders;
         public Dictionary<long, Sender> Senders { get { return senders; } }
@@ -15,7 +14,7 @@ namespace aaaTgBot.Services
         public SendersFactory(RoomHandler handler)
         {
             senders = new();
-            usersService = TransientService.GetUsersService();
+            usersService = TransientService.GetSendersService();
             this.handler = handler;
         }
 
@@ -31,7 +30,7 @@ namespace aaaTgBot.Services
                 senders.Add(chatId, admin);
                 return admin;
             }
-            else if (user.Role is Role.User)
+            else if (user.Role is Role.Client)
             {
                 var client = new Client(user, handler);
                 senders.Add(chatId, client);

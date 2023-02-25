@@ -1,12 +1,13 @@
-﻿using aaaSystemsCommon.Utils;
+﻿using aaaSystemsCommon.Interfaces;
+using aaaSystemsCommon.Utils;
 
 namespace aaaSystemsCommon.Entity
 {
     [EntityRoot("Dialogs")]
-    public class Dialog : Entity<long>
+    public class Dialog : IEntity<long>
     {
-        public long ChatId { get; set; }
+        public long Id { get; set; }
         public bool IsNeedAnswer { get; set; }
-        public override long PK { get => ChatId; set => ChatId = value; }
+        public Sender? Sender { get; set; }
     }
 }

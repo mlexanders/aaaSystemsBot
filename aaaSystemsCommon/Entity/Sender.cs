@@ -6,12 +6,11 @@ using System.Runtime.InteropServices;
 namespace aaaSystemsCommon.Entity
 {
     [EntityRoot("Senders")]
-    public class Sender : Entity<long>
+    public class Sender : IEntity<long>
     {
-        public long ChatId { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; } = null!;
         public string Phone { get; set; } = null!;
         public Role Role { get; set; }
-        public override long PK { get => ChatId; set => ChatId = value; }
     }
 }

@@ -1,12 +1,10 @@
-﻿using aaaSystemsCommon.Models.Difinitions;
-using aaaTgBot.Data.Models;
+﻿using aaaTgBot.Data.Models;
 using aaaTgBot.Messages;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using TgBotLibrary;
-using User = aaaSystemsCommon.Models.User;
 
 namespace aaaTgBot.Handlers
 {
@@ -80,13 +78,13 @@ namespace aaaTgBot.Handlers
         {
             try
             {
-                var usersService = TransientService.GetUsersService();
+                var usersService = TransientService.GetSendersService();
                 await usersService.Post(new User()
                 {
                     Id = chatId,
                     Name = model.Name,
                     Phone = model.Phone,
-                    Role = Role.User
+                    Role = Role.Client
                 });
                 await new MessageCollectorBase(chatId).SendUserInfo(markup: new ReplyKeyboardRemove());
             }

@@ -5,7 +5,7 @@ namespace aaaTgBot.Services
 {
     public static class TransientService
     {
-        public static UsersService GetUsersService() => new(AppSettings.BackRoot, GetClient());
+        public static SendersService GetSendersService() => new(AppSettings.BackRoot, GetClient());
         public static RoomsService GetRoomsService() => new(AppSettings.BackRoot, GetClient());
         public static RoomMessagesService GetRoomMessagesService() => new(AppSettings.BackRoot, GetClient());
 

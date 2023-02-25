@@ -1,14 +1,9 @@
-﻿using aaaSystemsCommon.Models;
-using aaaSystemsCommon.Models.Difinitions;
-using aaaSystemsCommon.Services.CrudServices;
+﻿using aaaSystemsCommon.Services.CrudServices;
 using aaaTgBot.Data.Exceptions;
-using aaaTgBot.Messages;
-using aaaTgBot.Services;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using TgBotLibrary;
-using User = aaaSystemsCommon.Models.User;
 
 namespace aaaTgBot.Handlers
 {
@@ -30,7 +25,7 @@ namespace aaaTgBot.Handlers
         {
             try
             {
-                var sender = await sendersFactory.GetSender(message.Chat.Id);
+                Sender sender = await sendersFactory.GetSender(message.Chat.Id);
 
                 if (roomId == null) throw new RoomNotFound();
                 if (sender.user.Role is Role.Admin) sender.Add();
@@ -44,7 +39,7 @@ namespace aaaTgBot.Handlers
 
                 await processing;
                 await SaveMessage(message);
-                if (sender.user.Role == Role.User) await Notify(message);
+                if (sender.user.Role == Role.Client) await Notify(message);
             }
             catch (UserNotFound)
             {
@@ -58,7 +53,7 @@ namespace aaaTgBot.Handlers
 
         private async Task Notify(Message message)
         {
-            var usersService = TransientService.GetUsersService();
+            var usersService = TransientService.GetSendersService();
             var adminsIds = (await usersService.Admins()).Select(u => u.Id).Where(id => !UpdateHandler.BusyUsersIdAndService.ContainsKey(id)).ToList();
             var client = await usersService.Get(clientChatId);
 
@@ -103,11 +98,11 @@ namespace aaaTgBot.Handlers
     public abstract class Sender : ISender
     {
         protected readonly RoomHandler handler;
-        public readonly User user;
+        public readonly Sender user;
 
         protected long ChatId { get; set; }
 
-        protected Sender(User user, RoomHandler handler)
+        protected Sender(Sender user, RoomHandler handler)
         {
             this.user = user;
             ChatId = user.Id;
@@ -129,7 +124,7 @@ namespace aaaTgBot.Handlers
 
     public class Admin : Sender
     {
-        public Admin(User user, RoomHandler handler) : base(user, handler) { }
+        public Admin(Sender user, RoomHandler handler) : base(user, handler) { }
 
         public override Task Remove()
         {
@@ -165,7 +160,7 @@ namespace aaaTgBot.Handlers
 
     public class Client : Sender
     {
-        public Client(User user, RoomHandler handler) : base(user, handler) { }
+        public Client(Sender user, RoomHandler handler) : base(user, handler) { }
 
         public override Task Remove()
         {

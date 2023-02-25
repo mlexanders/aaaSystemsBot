@@ -1,11 +1,10 @@
 ﻿using aaaSystemsApi.Repository;
-using aaaSystemsCommon.Entity;
 using aaaSystemsCommon.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace aaaSystemsApi.Controllers
 {
-    public class BaseCrudController<TEntity, TKey> : ControllerBase, ICrud<TEntity, TKey> where TEntity : Entity<TKey>
+    public class BaseCrudController<TEntity, TKey> : ControllerBase, ICrud<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         protected readonly BaseCrudRepository<TEntity, TKey> repository;
 
@@ -39,7 +38,7 @@ namespace aaaSystemsApi.Controllers
         [HttpGet("{id}")]
         public virtual async Task<TEntity> Get(TKey id)
         {
-            return await repository.ReadFirst(entity => entity.PK.Equals(id));
+            return await repository.ReadFirst(entity => entity.Id.Equals(id));
         }
 
         [HttpPatch]

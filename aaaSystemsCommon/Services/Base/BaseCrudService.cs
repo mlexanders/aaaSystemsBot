@@ -1,14 +1,13 @@
-﻿using aaaSystemsCommon.Entity;
-using aaaSystemsCommon.Interfaces;
+﻿using aaaSystemsCommon.Interfaces;
 using aaaSystemsCommon.Utils;
 using System.Net;
 using System.Text;
 
 namespace aaaSystemsCommon.Services.Base
 {
-    public class BaseCRUDService<TEntity, TKey> : BaseService, ICrud<TEntity, TKey> where TEntity : Entity<TKey>
+    public class BaseCRUDService<TEntity, TKey> : BaseService, ICrud<TEntity, TKey> where TEntity : IEntity<TKey>
     {
-        public BaseCRUDService(string backRoot, HttpClient httpClient, string entityRoot = null) : base(entityRoot ?? typeof(TEntity).GetRoot(), backRoot, httpClient) { }
+        public BaseCRUDService(string backRoot, HttpClient httpClient, string entityRoot = null!) : base(entityRoot ?? typeof(TEntity).GetRoot(), backRoot, httpClient) { }
 
         public virtual async Task<TEntity> Get(TKey key)
         {
@@ -40,11 +39,11 @@ namespace aaaSystemsCommon.Services.Base
 
         public virtual async Task Patch(TEntity item)
         {
-            TEntity entity = await Get(item.PK);
+            TEntity entity = await Get(item.Id);
             if (entity == null) throw new ErrorResponseException(HttpStatusCode.NotFound, "Entity not found");
             var json = new StringContent(Serialize(item), Encoding.UTF8, "application/json");
 
-            var httpResponse = await httpClient.PatchAsync(Root + "/" + item.PK, json);
+            var httpResponse = await httpClient.PatchAsync(Root + "/" + item.Id, json);
             if (!httpResponse.IsSuccessStatusCode) throw new ErrorResponseException(httpResponse.StatusCode, await httpResponse.Content.ReadAsStringAsync());
         }
 

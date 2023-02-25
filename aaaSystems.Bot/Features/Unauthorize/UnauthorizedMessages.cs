@@ -7,13 +7,13 @@ namespace aaaSystems.Bot.Features.Unauthorize
     {
         public UnauthorizedMessages(long chatId) : base(chatId) { }
 
-        public override async Task SendStartMessage()
+        internal override async Task SendStartMessage()
         {
             buttonsGenerator.SetInlineButtons(CommonCallback.Registration);
             await bot.SendMessage(Texts.StartMessage, buttonsGenerator.GetButtons());
         }
 
-        public override Task SendMenu()
+        internal override Task SendMenu()
         {
             return SendStartMessage();
         }

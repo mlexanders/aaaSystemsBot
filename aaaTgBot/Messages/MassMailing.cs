@@ -4,7 +4,7 @@ using aaaTgBot.Services;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using TgBotLibrary;
-using User = aaaSystemsCommon.Models.User;
+using Sender = aaaSystemsCommon.Models.Sender;
 
 namespace aaaTgBot.Messages
 {
@@ -12,7 +12,7 @@ namespace aaaTgBot.Messages
     {
         private static readonly TelegramBotClient bot = TgBotClient.BotClient;
 
-        public static async Task SendNotificateMessage(List<long> chatIds, User client, Message message)
+        public static async Task SendNotificateMessage(List<long> chatIds, Sender client, Message message)
         {
             var msg = $" Обращение \n" +
                       $"{client.GetInfo()} \n" +

@@ -6,13 +6,13 @@ namespace aaaSystems.Bot.Features.Administrator
     {
         public AdminMessages(long chatId, int? callbackMessageId = null) : base(chatId, callbackMessageId) { }
 
-        public override async Task SendStartMessage()
+        internal override async Task SendStartMessage()
         {
             buttonsGenerator.SetInlineButtons(AdminCallback.Good);
             await bot.SendMessage(Texts.StartMessage, buttonsGenerator.GetButtons());
         }
 
-        public override async Task SendMenu()
+        internal override async Task SendMenu()
         {
             buttonsGenerator.SetInlineButtons(AdminCallback.Menu);
             await TryEdit(AdminText.Menu);

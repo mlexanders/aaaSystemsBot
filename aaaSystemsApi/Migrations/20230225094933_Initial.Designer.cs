@@ -11,7 +11,7 @@ using aaaSystemsApi;
 namespace aaaSystemsApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230225000425_Initial")]
+    [Migration("20230225094933_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -22,20 +22,25 @@ namespace aaaSystemsApi.Migrations
 
             modelBuilder.Entity("aaaSystemsCommon.Entity.Dialog", b =>
                 {
-                    b.Property<long>("ChatId")
+                    b.Property<long>("Id")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsNeedAnswer")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ChatId");
+                    b.Property<long?>("SenderId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Dialogs");
                 });
 
             modelBuilder.Entity("aaaSystemsCommon.Entity.DialogMessage", b =>
                 {
-                    b.Property<int>("MessageId")
+                    b.Property<int>("Id")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("ChatId")
@@ -44,7 +49,7 @@ namespace aaaSystemsApi.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("MessageId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ChatId");
 
@@ -53,15 +58,12 @@ namespace aaaSystemsApi.Migrations
 
             modelBuilder.Entity("aaaSystemsCommon.Entity.Sender", b =>
                 {
-                    b.Property<long>("ChatId")
+                    b.Property<long>("Id")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<long>("PK")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -70,12 +72,18 @@ namespace aaaSystemsApi.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ChatId");
-
-                    b.HasIndex("PK")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.ToTable("Senders");
+                });
+
+            modelBuilder.Entity("aaaSystemsCommon.Entity.Dialog", b =>
+                {
+                    b.HasOne("aaaSystemsCommon.Entity.Sender", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("aaaSystemsCommon.Entity.DialogMessage", b =>
@@ -83,15 +91,6 @@ namespace aaaSystemsApi.Migrations
                     b.HasOne("aaaSystemsCommon.Entity.Dialog", null)
                         .WithMany()
                         .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("aaaSystemsCommon.Entity.Sender", b =>
-                {
-                    b.HasOne("aaaSystemsCommon.Entity.Dialog", null)
-                        .WithOne()
-                        .HasForeignKey("aaaSystemsCommon.Entity.Sender", "PK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

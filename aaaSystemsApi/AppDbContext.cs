@@ -15,13 +15,13 @@ namespace aaaSystemsApi
         {
             #region HasKey
             modelBuilder.Entity<Sender>()
-                .HasKey(s => s.ChatId);
+                .HasKey(s => s.Id);
 
             modelBuilder.Entity<Dialog>()
-                .HasKey(s => s.ChatId);
+                .HasKey(s => s.Id);
 
             modelBuilder.Entity<DialogMessage>()
-                .HasKey(s => s.MessageId);
+                .HasKey(s => s.Id);
 
             #endregion
 
@@ -30,31 +30,20 @@ namespace aaaSystemsApi
                 .WithOne()
                 .HasForeignKey(d => d.ChatId);
 
-            modelBuilder.Entity<Sender>()
-                .HasOne<Dialog>()
-                .WithOne()
-                .HasForeignKey<Sender>(s => s.PK);
+            //modelBuilder.Entity<Sender>()
+            //    .HasOne<Dialog>()
+            //    .WithOne()
+            //    .HasForeignKey<Sender>(s => s.Id);
 
             #region ValueGeneratedNever
-            modelBuilder.Entity<Sender>().Property(s => s.ChatId)
+            modelBuilder.Entity<Sender>().Property(s => s.Id)
                    .ValueGeneratedNever();
 
-            modelBuilder.Entity<Dialog>().Property(d => d.ChatId)
+            modelBuilder.Entity<Dialog>().Property(d => d.Id)
                 .ValueGeneratedNever();
 
-            modelBuilder.Entity<DialogMessage>().Property(m => m.MessageId)
+            modelBuilder.Entity<DialogMessage>().Property(m => m.Id)
                 .ValueGeneratedNever();
-            #endregion
-
-            #region Ignore
-            modelBuilder.Entity<Sender>()
-        .Ignore(e => e.PK);
-
-            modelBuilder.Entity<Dialog>()
-                .Ignore(e => e.PK);
-
-            modelBuilder.Entity<DialogMessage>()
-                .Ignore(e => e.PK); 
             #endregion
         }
     }

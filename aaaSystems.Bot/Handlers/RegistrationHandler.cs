@@ -2,7 +2,6 @@
 using aaaSystems.Bot.Features.Client;
 using aaaSystems.Bot.Services;
 using aaaSystemsCommon.Difinitions;
-using aaaSystemsCommon.Entity;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using TelegramBotLib.Handlers;

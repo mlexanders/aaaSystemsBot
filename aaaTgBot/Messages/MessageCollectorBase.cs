@@ -25,7 +25,7 @@ namespace aaaTgBot.Messages
 
         public async Task SendUserInfo(long? otherChatId = null, IReplyMarkup markup = null!)
         {
-            var user = await TransientService.GetUsersService().Get(otherChatId ?? chatId);
+            var user = await TransientService.GetSendersService().Get(otherChatId ?? chatId);
             var msg = user.GetInfo();
             await botService.SendMessage(msg, markup);
         }

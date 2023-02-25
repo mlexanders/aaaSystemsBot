@@ -11,12 +11,12 @@
     internal static class AdminCallback
     {
         #region Menu
-        internal const string requests = "requests";
-        internal const string users = "users";
-        internal const string settings = "settings";
+        internal const string Requests = "requests";
+        internal const string Users = "Users";
+        internal const string Settings = "Settings";
         #endregion
 
-        internal readonly static (string, string)[] Menu = { ("Обращения", requests), ("Пользователи", users), ("Настройки", settings) };
+        internal readonly static (string, string)[] Menu = { ("Обращения", Requests), ("Пользователи", Users), ("Настройки", Settings) };
         internal const string Good = "Хорошо";
     }
 }

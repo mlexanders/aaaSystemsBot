@@ -24,8 +24,8 @@ namespace aaaSystems.Bot.Handlers
             return callbackQuery.Data switch
             {
                 "@" + AdminCallback.Good => messages.SendMenu(),
-                "@" + AdminCallback.requests => messages.ShowRequests(),
-                "@" + AdminCallback.users => messages.ShowAllUsers(),
+                "@" + AdminCallback.Requests => messages.ShowRequests(),
+                "@" + AdminCallback.Users => messages.ShowAllUsers(),
 
                 _ => throw new NotImplementedException()
             };

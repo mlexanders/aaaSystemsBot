@@ -1,11 +1,9 @@
-﻿using aaaSystemsCommon.Models.Difinitions;
-using aaaTgBot.Data;
+﻿using aaaTgBot.Data;
 using aaaTgBot.Data.Exceptions;
 using aaaTgBot.Handlers;
 using aaaTgBot.Services;
 using Telegram.Bot.Types;
 using TgBotLibrary;
-using User = aaaSystemsCommon.Models.User;
 
 namespace aaaTgBot.Messages
 {
@@ -25,7 +23,7 @@ namespace aaaTgBot.Messages
 
         public async Task TryToStartRegistration()
         {
-            var user = await TransientService.GetUsersService().Get(chatId);
+            var user = await TransientService.GetSendersService().Get(chatId);
 
             if (user == null)
             {
@@ -42,11 +40,11 @@ namespace aaaTgBot.Messages
             return TryToStartRegistration();
         }
 
-        private async Task EditToMenu(User user)
+        private async Task EditToMenu(Sender user)
         {
             var bg = new ButtonsGenerator();
 
-            if (user.Role is Role.User)
+            if (user.Role is Role.Client)
             {
                 bg.SetInlineButtons(InlineButtonsTexts.Write);
                 await botService.EditMessage(messageId, Texts.SubmitAnApplication, bg.GetButtons());
@@ -62,7 +60,7 @@ namespace aaaTgBot.Messages
         {
             try
             {
-                var usersService = TransientService.GetUsersService();
+                var usersService = TransientService.GetSendersService();
                 var user = await usersService.Get(chatId) ?? throw new UserNotFound(chatId);
 
                 await botService.DeleteMessage(messageId);
@@ -79,7 +77,7 @@ namespace aaaTgBot.Messages
                         await botService.SendMessage("Собеседник завершил диалог");
                     }
                 }
-                else if (user.Role is Role.User)
+                else if (user.Role is Role.Client)
                 {
                     await botService.SendMessage(Texts.InfoMessage);
 
@@ -113,7 +111,7 @@ namespace aaaTgBot.Messages
         public async Task EditToRoomList()
         {
             var roomService = TransientService.GetRoomsService();
-            var userService = TransientService.GetUsersService();
+            var userService = TransientService.GetSendersService();
             var buttonGenerator = new ButtonsGenerator();
 
             var rooms = await roomService.Get();
@@ -121,7 +119,7 @@ namespace aaaTgBot.Messages
             if (rooms.Any())
             {
                 var msg = string.Empty;
-                User user;
+                Sender user;
 
                 foreach (var room in rooms)
                 {
@@ -145,7 +143,7 @@ namespace aaaTgBot.Messages
             {
                 var bg = new ButtonsGenerator();
                 var roomService = TransientService.GetRoomsService();
-                var userservice = TransientService.GetUsersService();
+                var userservice = TransientService.GetSendersService();
                 var room = await roomService.GetByChatId(clientChatId) ?? throw new RoomNotFound("Комната не найдена");
 
                 if (!(room.RoomMessages != null && room.RoomMessages.Any())) throw new MessageNotFound("Сообщений пока нет");
