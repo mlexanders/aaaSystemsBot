@@ -2,6 +2,7 @@
 
 namespace aaaSystemsCommon.Interfaces
 {
-    public interface IRoomMessage : ICrud<RoomMessage, int>
-    { }
+    public interface IDialog : ICrud<Dialog, long>
+    {
+    }
 }

@@ -16,8 +16,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 //DI
 builder.Services.AddTransient<SenderRepository>();
-builder.Services.AddTransient<RoomRepository>();
-builder.Services.AddTransient<RoomMessageRepository>();
+builder.Services.AddTransient<DialogRepository>();
+builder.Services.AddTransient<DialogMessageRepository>();
 
 var app = builder.Build();
 

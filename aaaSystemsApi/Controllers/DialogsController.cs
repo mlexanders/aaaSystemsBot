@@ -7,8 +7,8 @@ namespace aaaSystemsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoomMessagesController : BaseCrudController<RoomMessage, int>, IRoomMessage
+    public class DialogsController : BaseCrudController<Dialog, long>, IDialog
     {
-        public RoomMessagesController(RoomMessageRepository repository) : base(repository) { }
+        public DialogsController(DialogRepository repository) : base(repository) { }
     }
 }
