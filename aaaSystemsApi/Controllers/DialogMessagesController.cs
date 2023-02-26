@@ -16,6 +16,12 @@ namespace aaaSystemsApi.Controllers
             this.dialogRepository = dialogRepository;
         }
 
+        [HttpGet("GetByDialogId/{dialogId}")]
+        public Task<List<DialogMessage>> GetByDialogId(long dialogId)
+        {
+            return repository.Read(m => m.DialogId.Equals(dialogId));
+        }
+
         [HttpPost("PostByChatId/{chatId}")]
         public virtual async Task PostByChatId(long chatId, [FromBody] int messageId)
         {

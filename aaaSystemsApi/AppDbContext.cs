@@ -31,7 +31,7 @@ namespace aaaSystemsApi
 
             modelBuilder.Entity<Sender>()
                 .HasOne<Dialog>()
-                .WithOne()
+                .WithOne(d => d.Sender)
                 .HasForeignKey<Dialog>(d => d.ChatId);
 
             #region ValueGeneratedNever

@@ -12,6 +12,12 @@ namespace aaaSystemsCommon.Services.CrudServices
         {
         }
 
+        public async Task<List<DialogMessage>> GetByDialogId(long dialogId)
+        {
+            HttpResponseMessage httpResponse = await httpClient.GetAsync($"{Root}/GetByDialogId/{dialogId}");
+            return await Deserialize<List<DialogMessage>>(httpResponse);
+        }
+
         public async Task PostByChatId(long chatId, int messageId)
         {
             var json = Serialize(messageId);

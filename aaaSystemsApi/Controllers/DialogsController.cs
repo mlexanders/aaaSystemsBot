@@ -13,10 +13,20 @@ namespace aaaSystemsApi.Controllers
         {
         }
 
+        public override Task<Dialog> Get(long id)
+        {
+            return repository.ReadFirst(d => d.Id.Equals(id), d => d.Sender!);
+        }
+
+        public override Task<List<Dialog>> Get()
+        {
+            return repository.Read(includedProperties: d => d.Sender!);
+        }
+
         [HttpGet("GetByChatId/{chatId}")]
         public Task<Dialog> GetByChatId(long chatId)
         {
-            return repository.ReadFirst(d => d.ChatId.Equals(chatId));
+            return repository.ReadFirst(d => d.ChatId.Equals(chatId), d => d.Sender!);
         }
     }
 }
