@@ -7,13 +7,13 @@ namespace aaaSystems.Bot.Features
     internal abstract class CommonMessages
     {
         protected readonly long chatId;
-        protected readonly IBaseBotService bot;
+        protected readonly BotService bot;
         protected ButtonsGenerator buttonsGenerator;
 
         internal CommonMessages(long chatId)
         {
             buttonsGenerator = new();
-            bot = new BotService(chatId);
+            bot = new (chatId);
             this.chatId = chatId;
         }
 

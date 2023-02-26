@@ -16,22 +16,32 @@ namespace aaaSystemsApi.Controllers
             this.dialogRepository = dialogRepository;
         }
 
-        [HttpGet("GetByDialogId/{dialogId}")]
         public Task<List<DialogMessage>> GetByDialogId(long dialogId)
         {
-            return repository.Read(m => m.DialogId.Equals(dialogId));
+            throw new NotImplementedException();
         }
 
-        [HttpPost("PostByChatId/{chatId}")]
-        public virtual async Task PostByChatId(long chatId, [FromBody] int messageId)
+        public Task PostByChatId(long chatId, int messageId)
         {
-            var dialog = await dialogRepository.ReadFirst(d => d.ChatId.Equals(chatId)) ?? throw new();
-
-            await repository.Create(new DialogMessage()
-            {
-                Id = messageId,
-                DialogId = dialog.Id
-            });
+            throw new NotImplementedException();
         }
+
+        //[HttpGet("GetByDialogId/{dialogId}")]
+        //public Task<List<DialogMessage>> GetByDialogId(long dialogId)
+        //{
+        //    return repository.Read(m => m.DialogId.Equals(dialogId));
+        //}
+
+        //[HttpPost("PostByChatId/{chatId}")]
+        //public virtual async Task PostByChatId(long chatId, [FromBody] int messageId)
+        //{
+        //    var dialog = await dialogRepository.ReadFirst(d => d.ChatId.Equals(chatId)) ?? throw new();
+
+        //    await repository.Create(new DialogMessage()
+        //    {
+        //        Id = messageId,
+        //        DialogId = dialog.Id
+        //    });
+        //}
     }
 }

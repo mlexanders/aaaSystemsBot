@@ -1,4 +1,7 @@
 ﻿using aaaSystems.Bot.Data.Texts;
+using aaaSystems.Bot.Handlers;
+using aaaSystems.Bot.Services;
+using aaaSystemsCommon.Entity;
 
 namespace aaaSystems.Bot.Features.Administrator
 {
@@ -18,23 +21,59 @@ namespace aaaSystems.Bot.Features.Administrator
             await TryEdit(AdminText.Menu);
         }
 
-        public async Task ShowRequests()
+        internal async Task ShowDialogs()
         {
-            buttonsGenerator.SetInlineButtons("user1", "user2", "ratatyi"); // TODO : инфа об обращениях, в кнопках калбеки на диалог с клиентом.
-            await TryEdit(AdminText.AllRequestsMessage);
+            var dialogsService = TransientService.GetDialogsService();
+            var dialogs = await dialogsService.Get();
+
+            foreach (var dialog in dialogs)
+            {
+                buttonsGenerator.SetInlineButtons(AdminCallback.GetDialogCallback(dialog));
+            }
+            buttonsGenerator.SetGoBackButton();
+
+            await TryEdit(AdminText.InfoMessage);
         }
 
-        public async Task ShowAllUsers()
+        internal async Task StartDialog(long chatId)
+        {
+            if (UpdateHandler.HandlingSenders.TryGetValue(chatId, out var handler))
+            {
+                UpdateHandler.HandlingSenders.Add(this.chatId, handler);
+            }
+            await TryEdit(AdminText.InfoMessage);
+        }
+
+        internal async Task LoadDialog(long dialogId)
+        {
+            var dialogMessagesService = TransientService.GetDialogMessagesService();
+
+            var messages = await dialogMessagesService.GetByDialogId(dialogId);
+
+            new Thread(() =>
+            {
+                foreach (var message in messages)
+                {
+                    bot.Forward
+                }
+            });
+        }
+
+        #region Senders
+
+        public async Task ShowAllSenders()
         {
             buttonsGenerator.SetInlineButtons(AdminText.AllUsers); // TODO : вывести список пользователей. => где после выбора можно будет посмотреть более детальную инфу
             await TryEdit(AdminText.AllUsers);
         }
 
         // TODO : вывод детальной информации, изменение роли.
-        public async Task ShowUserInfo()
+        public async Task ShowSenderInfo()
         {
             buttonsGenerator.SetInlineButtons(AdminText.AllUsers);
             await TryEdit(AdminText.AllUsers);
         }
+
+        #endregion
     }
 }

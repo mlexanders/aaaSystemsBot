@@ -41,7 +41,7 @@ namespace aaaSystems.Bot.Services
             }
         }
 
-        private Task SendNotificationMessage(long adminId, Message message, Sender sender) // переделать
+        private Task SendNotificationMessage(long adminId, Message message, Sender sender) // TODO : переделать
         {
             var buttons = new ButtonsGenerator();
             buttons.SetInlineButtons(AdminCallback.GetNotificationMenu(message.Chat.Id));

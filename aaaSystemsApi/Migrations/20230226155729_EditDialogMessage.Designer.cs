@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using aaaSystemsApi;
 
@@ -10,9 +11,11 @@ using aaaSystemsApi;
 namespace aaaSystemsApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230226155729_EditDialogMessage")]
+    partial class EditDialogMessage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
@@ -48,9 +51,12 @@ namespace aaaSystemsApi.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<long>("DialogId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatId");
+                    b.HasIndex("DialogId");
 
                     b.ToTable("DialogMessages");
                 });
@@ -89,9 +95,9 @@ namespace aaaSystemsApi.Migrations
 
             modelBuilder.Entity("aaaSystemsCommon.Entity.DialogMessage", b =>
                 {
-                    b.HasOne("aaaSystemsCommon.Entity.Sender", null)
+                    b.HasOne("aaaSystemsCommon.Entity.Dialog", null)
                         .WithMany()
-                        .HasForeignKey("ChatId")
+                        .HasForeignKey("DialogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

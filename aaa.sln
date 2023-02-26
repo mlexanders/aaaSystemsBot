@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aaaSystemsCommon", "aaaSyst
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aaaSystemsApi", "aaaSystemsApi\aaaSystemsApi.csproj", "{0768D25F-F495-417F-BF9E-E75DA47F63DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaaSystems.Bot", "aaaSystems.Bot\aaaSystems.Bot.csproj", "{53C811F3-72A6-4A8D-B384-5E7A1304DA80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aaaSystems.Bot", "aaaSystems.Bot\aaaSystems.Bot.csproj", "{53C811F3-72A6-4A8D-B384-5E7A1304DA80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramBotLib", "TelegramBotLib\TelegramBotLib.csproj", "{423B6D30-AB37-4769-AF39-D36360F48186}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBotLib", "TelegramBotLib\TelegramBotLib.csproj", "{423B6D30-AB37-4769-AF39-D36360F48186}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aaaSystemsApiTests", "aaaSystemsApiTests\aaaSystemsApiTests.csproj", "{B6C15DCC-7FF5-4742-9208-B7F0A5A335E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{423B6D30-AB37-4769-AF39-D36360F48186}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{423B6D30-AB37-4769-AF39-D36360F48186}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{423B6D30-AB37-4769-AF39-D36360F48186}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6C15DCC-7FF5-4742-9208-B7F0A5A335E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6C15DCC-7FF5-4742-9208-B7F0A5A335E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6C15DCC-7FF5-4742-9208-B7F0A5A335E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6C15DCC-7FF5-4742-9208-B7F0A5A335E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

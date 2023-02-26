@@ -24,10 +24,10 @@ namespace aaaSystemsApi
                 .HasKey(s => s.Id);
             #endregion
 
-            modelBuilder.Entity<Dialog>()
+            modelBuilder.Entity<Sender>()
                 .HasMany<DialogMessage>()
                 .WithOne()
-                .HasForeignKey(d => d.DialogId);
+                .HasForeignKey(m => m.ChatId);
 
             modelBuilder.Entity<Sender>()
                 .HasOne<Dialog>()

@@ -24,11 +24,35 @@ namespace aaaSystems.Bot.Handlers
             return callbackQuery.Data switch
             {
                 "@" + AdminCallback.Good => messages.SendMenu(),
-                "@" + AdminCallback.Requests => messages.ShowRequests(),
-                "@" + AdminCallback.Users => messages.ShowAllUsers(),
+                "@" + AdminCallback.Requests => messages.ShowDialogs(),
+                "@" + AdminCallback.Users => messages.ShowAllSenders(),
 
-                _ => throw new NotImplementedException()
+                _ => ProcessSpecialCallback(messages, callbackQuery),
             };
+        }
+
+        private Task ProcessSpecialCallback(AdminMessages messages, CallbackQuery callbackQuery)
+        {
+            if (string.IsNullOrWhiteSpace(callbackQuery.Data)) return Task.CompletedTask;
+            var data = callbackQuery.Data;
+
+            var id = Convert.ToInt64(string.Join("", data.Where(c => char.IsDigit(c))));
+
+            if (data.Contains(AdminCallback.Write))
+            {
+                return messages.StartDialog(id);
+            }
+
+            if (data.Contains(AdminCallback.LoadDialog))
+            {
+                return messages.LoadDialog(id);
+            }
+
+            if (data.Contains(AdminCallback.MoreDetails))
+            {
+                return messages.LoadDialog(id);
+            }
+
         }
     }
 }
